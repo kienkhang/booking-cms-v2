@@ -1,0 +1,48 @@
+/* Turn on custom 8px wide scrollbar */
+::-webkit-scrollbar
+  width 10px /* 1px wider than Lion. */
+  /* This is more usable for users trying to click it. */
+  background-color transparent
+  -webkit-border-radius 100px
+
+/* hover effect for both scrollbar area, and scrollbar 'thumb' */
+::-webkit-scrollbar:hover
+  background-color #f6f6f6
+
+/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
+.scrollbar::-webkit-scrollbar-thumb:vertical,
+.scrollbar:hover::-webkit-scrollbar-thumb:vertical,
+::-webkit-scrollbar-thumb:vertical
+  background #babac0
+  -webkit-border-radius 100px
+  background-clip padding-box
+  border 2px solid rgba(0, 0, 0, 0)
+  min-height 10px /* Prevent it from getting too small */
+
+::-webkit-scrollbar-thumb:vertical:active
+  background rgba(0, 0, 0, 0.61) /* Some darker color when you click it */
+  -webkit-border-radius 100px
+
+.scrollbar::-webkit-scrollbar-thumb:vertical
+  background transparent
+
+.scrollbar:hover::-webkit-scrollbar-thumb
+  background #babac0
+
+.scrollbar-slim::-webkit-scrollbar
+  width 9px
+
+.scroll-none
+  @media (max-width: 767px)
+    overflow hidden !important
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scroll-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
