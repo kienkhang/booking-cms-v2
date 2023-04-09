@@ -1,6 +1,6 @@
 import { usePost } from '@/composables/useHttp'
 
-const uploadFiles = (files: File[]) => {
+const uploadFiles = (files: FormData) => {
   const url = 'upload/files'
   return usePost({
     url,
