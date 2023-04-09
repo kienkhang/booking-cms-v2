@@ -28,7 +28,7 @@ const doSubmit = async () => {
     // console.log('🐔🦢 ~ files:', files.value)
 
     for (let i = 0; i < files.value.length; i++) {
-      formData.append(`images[${i}]`, files.value[i])
+      formData.append(`images`, files.value[i])
     }
     const { execute, data: res } = uploadFiles(formData)
     await execute()
