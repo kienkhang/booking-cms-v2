@@ -1,7 +1,5 @@
 <template lang="pug">
-div
-  RouterView
-  | Hello
+RouterView
 </template>
 
 <script setup lang="ts"></script>
