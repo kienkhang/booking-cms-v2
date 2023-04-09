@@ -36,7 +36,12 @@ export default defineConfig({
       ],
       dts: 'src/auto-imports.d.ts',
       dirs: ['src/composables', 'src/stores'],
-      vueTemplate: true
+      vueTemplate: true,
+      eslintrc: {
+        enabled: true, // Default `false`
+        filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
+        globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
+      }
     }),
 
     // https://github.com/hannoeru/vite-plugin-pages

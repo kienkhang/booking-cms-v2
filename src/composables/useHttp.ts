@@ -5,17 +5,17 @@ import instance from '@/apis/instance'
 const { getToken } = useAuthStorage()
 
 const useGet = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
-  let fullHeaders = { ...headers }
+  const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 
-  const usedGet = useAxios(url, { params, headers: fullHeaders, method: 'GET' }, instance, {
+  const usedGet = useAxios(url, { data, params, headers: fullHeaders, method: 'GET' }, instance, {
     immediate: false
   })
   return usedGet
 }
 const usePost = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
-  let fullHeaders = { ...headers }
+  const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 
@@ -25,7 +25,7 @@ const usePost = ({ url = '', data = {}, params = {}, headers = {}, requiredToken
   return usedPost
 }
 const useDelete = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
-  let fullHeaders = { ...headers }
+  const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 
@@ -40,7 +40,7 @@ const useDelete = ({ url = '', data = {}, params = {}, headers = {}, requiredTok
   return usedDelete
 }
 const usePut = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
-  let fullHeaders = { ...headers }
+  const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 
@@ -50,7 +50,7 @@ const usePut = ({ url = '', data = {}, params = {}, headers = {}, requiredToken 
   return usedPut
 }
 const usePatch = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
-  let fullHeaders = { ...headers }
+  const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 

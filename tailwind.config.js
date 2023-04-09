@@ -1,4 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
+
+const formkitTheme = require('@formkit/themes/tailwindcss')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
@@ -35,5 +37,5 @@ module.exports = {
       }
     }
   },
-  plugins: [require('@tailwindcss/line-clamp'), require('@formkit/themes/tailwindcss')]
+  plugins: [formkitTheme]
 }
