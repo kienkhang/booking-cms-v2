@@ -21,7 +21,10 @@ const customIconPath = path.resolve(__dirname, 'src/assets/icons/')
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      include: [/\.vue$/, /\.md$/],
+      reactivityTransform: true
+    }),
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
       imports: [
