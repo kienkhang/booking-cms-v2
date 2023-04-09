@@ -15,20 +15,21 @@ div
 <script setup lang="ts">
 import { uploadFiles } from '@/apis/file'
 
-const files = ref<File[]>([])
+const files = ref<FileList[]>([])
 
 const fileRef = ref()
 const doSelectFiles = () => {
   // console.log('🐔🦢 ~ fileRef:', fileRef.value.files)
   files.value = fileRef.value.files
-  console.log('🐔🦢 ~ files:', files.value)
 }
 const doSubmit = async () => {
   let formData = new FormData()
   if (files.value) {
-    files.value.forEach((file, indx) => {
-      formData.append(`images[${indx}]`, file[indx])
-    })
+    // console.log('🐔🦢 ~ files:', files.value)
+
+    for (let i = 0; i < files.value.length; i++) {
+      formData.append(`images[${i}]`, files.value[i])
+    }
     const { execute, data: res } = uploadFiles(formData)
     await execute()
     console.log('🐔🦢 ~ doSubmit ~ response:', res.value)
