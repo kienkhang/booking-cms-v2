@@ -41,11 +41,12 @@ export default defineConfig({
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
-      extensions: ['vue', 'md']
+      extensions: ['vue', 'md'],
+      resolver: 'vue'
     }),
 
     // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
-    Layouts(),
+    Layouts({}),
     Icons({
       compiler: 'vue3',
       autoInstall: true,
