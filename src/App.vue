@@ -2,6 +2,8 @@
 RouterView
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import './styles/main.styl'
+</script>
 
 <style scoped></style>
