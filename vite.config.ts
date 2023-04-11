@@ -16,6 +16,8 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+// NaiveUI
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
 const customIconPath = path.resolve(__dirname, 'src/assets/icons/')
 // https://vitejs.dev/config/
@@ -34,7 +36,8 @@ export default defineConfig({
         '@vueuse/head',
         '@vueuse/core',
         {
-          pinia: ['storeToRefs', 'defineStore']
+          pinia: ['storeToRefs', 'defineStore'],
+          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar']
         }
       ],
       dts: 'src/auto-imports.d.ts',
@@ -66,8 +69,12 @@ export default defineConfig({
       extensions: ['vue', 'md'],
       // allow auto import and register components used in markdown
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
-      dts: './src/components.d.ts',
-      resolvers: [IconsResolver({ prefix: 'icon', customCollections: ['custom'] })]
+      dts: true,
+      dirs: ['./src/components'],
+      resolvers: [
+        IconsResolver({ prefix: 'icon', customCollections: ['custom'] }),
+        NaiveUiResolver()
+      ]
     }),
     // https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n
     VueI18nPlugin({
