@@ -7,7 +7,7 @@ nav.rounded-lg.py-4.px-6.flex.flex-items.gap-3.cursor-pointer.select-none(:class
 </template>
 
 <script setup lang="ts">
-const { page } = defineProps({
+const props = defineProps({
   activated: {
     type: Boolean,
     default: false,
@@ -28,7 +28,7 @@ const { page } = defineProps({
 const router = useRouter()
 
 const navigate = () => {
-  router.push({ name: page })
+  router.push({ name: props.page })
 }
 </script>
 
