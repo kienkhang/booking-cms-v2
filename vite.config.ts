@@ -19,7 +19,8 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 // NaiveUI
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
-const customIconPath = path.resolve(__dirname, 'src/assets/icons/')
+const customIconPathA = path.resolve(__dirname, 'src/assets/icons/')
+const customIconPathB = path.resolve(__dirname, 'src/assets/icons/color')
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -58,7 +59,10 @@ export default defineConfig({
       autoInstall: true,
       // defaultClass: 'w-6 h-6',
       customCollections: {
-        custom: FileSystemIconLoader(customIconPath, (svg) =>
+        custom: FileSystemIconLoader(customIconPathA, (svg) =>
+          svg.replace(/^<svg /, '<svg fill="currentColor" ')
+        ),
+        color: FileSystemIconLoader(customIconPathB, (svg) =>
           svg.replace(/^<svg /, '<svg fill="currentColor" ')
         )
       }
@@ -71,7 +75,7 @@ export default defineConfig({
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
       dts: './src/components.d.ts',
       resolvers: [
-        IconsResolver({ prefix: 'icon', customCollections: ['custom'] }),
+        IconsResolver({ prefix: 'icon', customCollections: ['custom', 'color'] }),
         NaiveUiResolver()
       ]
     }),
