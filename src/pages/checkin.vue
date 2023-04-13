@@ -1,5 +1,6 @@
 <template lang="pug">
-| Hello
+div
+  | This is checkin page
 </template>
 
 <script setup lang="ts"></script>

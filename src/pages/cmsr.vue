@@ -1,10 +1,9 @@
 <template lang="pug">
-| Hello
+div
+  | This is comission rate
 </template>
 
 <script setup lang="ts"></script>
-
-<style scoped></style>
 
 <route lang="yaml">
 meta:
