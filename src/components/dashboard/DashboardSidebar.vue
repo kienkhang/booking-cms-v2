@@ -16,6 +16,9 @@
     SidebarItem(:activated='route.name==="report"' label='Thống kê' page='report')
       template(#icon)
         icon-custom-money.w-6.h-6
+    SidebarItem(:activated='route.name==="test"' label='Upload file' page='test')
+      template(#icon)
+        icon-custom-error.w-6.h-6
 
 </template>
 
