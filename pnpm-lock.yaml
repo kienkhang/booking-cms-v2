@@ -4,6 +4,7 @@ specifiers:
   '@formkit/i18n': ^0.16.4
   '@formkit/themes': ^0.16.4
   '@formkit/vue': ^0.16.4
+  '@iconify-json/ph': ^1.1.5
   '@intlify/unplugin-vue-i18n': ^0.10.0
   '@rushstack/eslint-patch': ^1.2.0
   '@tailwindcss/line-clamp': ^0.4.4
@@ -60,6 +61,7 @@ dependencies:
   vue-i18n: 9.2.2_vue@3.2.47
 
 devDependencies:
+  '@iconify-json/ph': 1.1.5
   '@rushstack/eslint-patch': 1.2.0
   '@types/node': 18.15.11
   '@vitejs/plugin-vue': 4.1.0_vite@4.2.1+vue@3.2.47
@@ -490,6 +492,12 @@ packages:
 
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    dev: true
+
+  /@iconify-json/ph/1.1.5:
+    resolution: {integrity: sha512-iLXq3nohfGge22gL2tZmQ2WHBKkKkIbGWrkuyC8arckS4PWaONyh4A+uDPtSek9QbYDvi9AE2+NxWkNZhANotA==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify/types/2.0.0:
