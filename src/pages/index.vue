@@ -1,10 +1,13 @@
 <template lang="pug">
 div.h-full.w-full
-  .flex.items-center.justify-between.mb-3.h-12
+  .flex.items-center.justify-between.h-12
     .page-title.font-bold.text-2xl Hotel
     Button(@press="hi()" color='text-white' bgcolor='bg-green-500' size='large')
       .font-bold Hello
-  .p-3.rounded-lg.shadow-md.bg-white.w-full.overflow-auto(class='h-[calc(100%-64px)]')
+  .flex.items-center.mb-2.cursor-pointer.select-none.text-roman-silver.w-max
+    icon-custom-left-arrow.h-4.w-auto
+    span.text-sm.font-semibold Trở về
+  .p-3.rounded-lg.shadow-md.bg-white.w-full.overflow-auto(class='h-[calc(100%-72px)]')
     div This is hotel page
 </template>
 
