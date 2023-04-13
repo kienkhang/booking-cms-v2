@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+.p-3.rounded-md.shadow-md.bg-white.h-full.w-full.overflow-auto
   | This is checkin page
 </template>
 

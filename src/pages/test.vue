@@ -34,5 +34,5 @@ const doSubmit = async () => {
 
 <route lang="yaml">
 meta:
-  layout: default
+  layout: dashboard
 </route>
