@@ -2,8 +2,7 @@
 n-tabs.siphoria-tab(
     type="line"
     size='large'
-    :default-value='String(route?.name)'
-    @update:value='update'
+    default-value='login'
     :bar-width="500"
     justify-content='space-evenly'
     :tab-style='tabStyle'
@@ -21,12 +20,10 @@ n-tabs.siphoria-tab(
 import { NTabs, NTabPane } from 'naive-ui'
 import { type CSSProperties } from 'vue'
 
-const router = useRouter()
-const route = useRoute()
+// const update = (name: string) => {
+//   tabValue.value = name
 
-const update = (name: string) => {
-  router.push({ name })
-}
+// }
 
 const tabStyle = computed<CSSProperties>(() => ({
   width: '200px',
