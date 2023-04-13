@@ -1,7 +1,10 @@
 <template lang="pug">
 .bg-white.w-full.h-full.px-3.py-6
   .flex.flex-col.gap-2
-    SidebarItem(:activated='route.name==="index"' label='Khách sạn' page='index')
+    SidebarItem(:activated='route.name==="index"' label='Tổng quan' page='index')
+      template(#icon)
+        icon-custom-app.w-6.h-6
+    SidebarItem(:activated='route.name==="hotel"' label='Khách sạn' page='hotel')
       template(#icon)
         icon-custom-hotel.w-6.h-6
     SidebarItem(:activated='route.name==="checkin"' label='Checkin' page='checkin')
