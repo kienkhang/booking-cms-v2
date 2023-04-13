@@ -69,8 +69,7 @@ export default defineConfig({
       extensions: ['vue', 'md'],
       // allow auto import and register components used in markdown
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
-      dts: true,
-      dirs: ['./src/components'],
+      dts: './src/components.d.ts',
       resolvers: [
         IconsResolver({ prefix: 'icon', customCollections: ['custom'] }),
         NaiveUiResolver()
@@ -88,5 +87,12 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    hmr: true,
+    port: 3096
+  },
+  css: {
+    devSourcemap: true
   }
 })
