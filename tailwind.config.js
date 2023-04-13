@@ -12,11 +12,11 @@ module.exports = {
         'black-olive': '#3f3f3f',
         'eerie-black': '#181818',
         'bright-gray': '#ECECF1',
-        'green-crayola': '#10A37F',
-        'green-ufo': '#22C55E',
         'sonic-silver': '#6E6E80',
+        'roman-silver': '#808191',
         onyx: '#353740',
-        'onyx-shade': '#c2c3c6'
+        'onyx-shade': '#c2c3c6',
+        cultured: '#F4F4F4'
       },
       fontFamily: {
         sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
