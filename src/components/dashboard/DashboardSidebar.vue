@@ -1,5 +1,5 @@
 <template lang="pug">
-.bg-white.w-full.h-full.px-3.py-6
+.bg-white.w-full.h-full.px-3.py-6(class='hidden md:block')
   .flex.flex-col.gap-2
     SidebarItem(:activated='route.name==="index"' label='Tổng quan' page='index')
       template(#icon)

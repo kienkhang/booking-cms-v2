@@ -42,7 +42,7 @@ export default defineConfig({
         }
       ],
       dts: 'src/auto-imports.d.ts',
-      dirs: ['src/composables', 'src/stores'],
+      dirs: ['src/composables/**', 'src/stores/**'],
       vueTemplate: true
     }),
 
@@ -70,10 +70,10 @@ export default defineConfig({
     // https://github.com/antfu/unplugin-vue-components
     Components({
       // allow auto load markdown components under `./src/components/`
-      extensions: ['vue', 'md'],
       // allow auto import and register components used in markdown
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
-      dts: './src/components.d.ts',
+      dts: 'src/components.d.ts',
+      dirs: ['src/components/**'],
       resolvers: [
         IconsResolver({ prefix: 'icon', customCollections: ['custom', 'color'] }),
         NaiveUiResolver()
