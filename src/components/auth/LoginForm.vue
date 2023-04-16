@@ -6,6 +6,9 @@
     FormKit(type='text' label='Email' name="email" placeholder='Nhập email của bạn' validation="required|email")
     FormKit(type="password" label='Password' name='password' placeholder='Nhập mật khẩu của bạn' validation="required|length:6")
     FormKit.block.w-full(type="submit" name='login' input-class='bg-green-500') Login
+    FormKit.block.w-full(type="button" input-class='bg-red-500' @click='refresh().execute()') Refresh
+    FormKit.block.w-full(type="button" input-class='bg-purple-500' @click='getMe().execute()') Details
+    
 
 </template>
 
@@ -15,7 +18,7 @@ const loginData = reactive({
   email: '',
   password: ''
 })
-const { login } = useAuth()
+const { login, refresh, getMe } = useAuth()
 const { execute } = login({})
 const doLogin = () => execute({ data: { ...loginData } })
 </script>
