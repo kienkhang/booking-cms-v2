@@ -10,6 +10,7 @@ const useAuth = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
+        console.log('🐔🦢 ~ login ~ data:', data.value)
         setToken(data.value?.access_token)
         setRToken(data.value?.refresh_token)
       })
@@ -23,6 +24,7 @@ const useAuth = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
+        console.log('🐔🦢 ~ signup ~ data:', data.value)
         setToken(data.value?.access_token)
         setRToken(data.value?.refresh_token)
       })
@@ -40,6 +42,7 @@ const useAuth = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
+        console.log('🐔🦢 ~ refresh ~ data:', data.value)
         setToken(data.value?.access_token)
         setRToken(data.value?.refresh_token)
       })
@@ -49,6 +52,13 @@ const useAuth = () => {
   }
   const getMe = () => {
     const usedDetails = usersApi.details()
+    const { isFinished, data } = usedDetails
+
+    until(isFinished)
+      .toBeTruthy()
+      .then(() => {
+        console.log('🐔🦢 ~ getMe ~ data:', data.value)
+      })
     return {
       ...usedDetails
     }
