@@ -32,7 +32,7 @@ const useAuth = () => {
       executeAPI: () => execute({ data: { email, password, first_name, last_name } })
     }
   }
-  const refresh = (refresh_token: string) => {
+  const refresh = ({ refresh_token = '' }) => {
     const usedRefresh = authApi.refresh({ refresh_token })
 
     const { isFinished, data } = usedRefresh
