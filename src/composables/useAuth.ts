@@ -34,8 +34,8 @@ const useAuth = () => {
       executeAPI: () => execute({ data: { email, password, first_name, last_name } })
     }
   }
-  const refresh = ({ refresh_token = '' }) => {
-    const usedRefresh = authApi.refresh({ refresh_token })
+  const refresh = () => {
+    const usedRefresh = authApi.refresh({})
 
     const { isFinished, data } = usedRefresh
 
@@ -43,8 +43,10 @@ const useAuth = () => {
       .toBeTruthy()
       .then(() => {
         console.log('🐔🦢 ~ refresh ~ data:', data.value)
-        setToken(data.value?.access_token)
-        setRToken(data.value?.refresh_token)
+        if (data.value) {
+          setToken(data.value?.access_token)
+          setRToken(data.value?.refresh_token)
+        }
       })
     return {
       ...usedRefresh

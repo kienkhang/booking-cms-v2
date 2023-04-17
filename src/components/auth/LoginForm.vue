@@ -24,7 +24,7 @@ const { login, refresh, getMe } = useAuth()
 
 const { execute } = login({})
 const doLogin = () => execute({ data: { ...loginData } })
-const doRefresh = () => refresh({ refresh_token: refreshToken }).execute()
+const doRefresh = () => refresh().execute({ data: { refresh_token: refreshToken } })
 const doGetMe = () => getMe().execute()
 </script>
 
