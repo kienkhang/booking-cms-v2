@@ -6,9 +6,9 @@ type SelectOptions = {
 }
 
 const useProvinces = () => {
-  const province = ref(0)
-  const district = ref(0)
-  const ward = ref(0)
+  const province = ref<number>()
+  const district = ref<number>()
+  const ward = ref<number>()
   const pOptions = ref<SelectOptions[]>([])
   const dOptions = ref<SelectOptions[]>([])
   const wOptions = ref<SelectOptions[]>([])
@@ -20,35 +20,46 @@ const useProvinces = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        console.log('🐔🦢 ~ selectProvince ~ data:', data.value)
+        pOptions.value = data.value.map((p) => ({
+          value: p.code,
+          label: p.name
+        }))
       })
     return {
       ...usedGetProvince,
       executeAPI: () => execute()
     }
   }
-  const selectDistrict = () => {
-    const usedGetDistrict = provinceApi.getDistricts(province.value + '')
+  const selectDistrict = (p: string | number) => {
+    const usedGetDistrict = provinceApi.getDistricts(p)
     const { isFinished, data, execute } = usedGetDistrict
 
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        console.log('🐔🦢 ~ selectDistrict ~ data:', data.value)
+        const districts = data.value.districts
+        dOptions.value = districts.map((p) => ({
+          value: p.code,
+          label: p.name
+        }))
       })
     return {
       ...usedGetDistrict,
       executeAPI: () => execute()
     }
   }
-  const selectWard = () => {
-    const usedGetWard = provinceApi.getWards(district.value + '')
+  const selectWard = (d: string | number) => {
+    const usedGetWard = provinceApi.getWards(d)
     const { isFinished, data, execute } = usedGetWard
 
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        console.log('🐔🦢 ~ selectProvince ~ data:', data.value)
+        const wards = data.value.wards
+        wOptions.value = wards.map((p) => ({
+          value: p.code,
+          label: p.name
+        }))
       })
     return {
       ...usedGetWard,
@@ -58,11 +69,14 @@ const useProvinces = () => {
 
   // Tỉnh thay đổi thì reset huyện/thành phố với phường/xã
   watch([province], () => {
+    district.value = undefined
+    ward.value = undefined
     dOptions.value = []
     wOptions.value = []
   })
   // Huyện/thành phố thay đổi thì reset phường/xã
   watch([district], () => {
+    ward.value = undefined
     wOptions.value = []
   })
   return {
