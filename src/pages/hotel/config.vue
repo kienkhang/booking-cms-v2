@@ -6,7 +6,8 @@ n-tabs.config-tab(
     :bar-width="500"
     justify-content='space-evenly'
     :tab-style='tabStyle'
-    style='width:400px'
+    style='max-width:700px'
+    class="mx-auto"
     animated
   )
   //- tab label của Tab, name là value của Tab
