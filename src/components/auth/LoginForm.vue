@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import useAuth from '@/composables/useAuth'
-const loginData = reactive({
+const loginData = ref({
   email: '',
   password: ''
 })
@@ -22,10 +22,13 @@ const { getRToken } = useAuthStorage()
 const refreshToken = getRToken()
 const { login, refresh, getMe } = useAuth()
 
-const { execute } = login({})
-const doLogin = () => execute({ data: { ...loginData } })
-const doRefresh = () => refresh().execute({ data: { refresh_token: refreshToken } })
-const doGetMe = () => getMe().execute()
+const { executeAPI: exeLogin } = login(loginData.value)
+const { executeAPI: exeRefresh } = refresh({ refresh_token: refreshToken })
+const { executeAPI: exeGetMe } = getMe()
+
+const doLogin = () => exeLogin()
+const doRefresh = () => exeRefresh()
+const doGetMe = () => exeGetMe()
 </script>
 
 <style scoped></style>
