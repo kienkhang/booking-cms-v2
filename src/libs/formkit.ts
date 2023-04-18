@@ -26,7 +26,7 @@ export const themeClass = {
     help: 'mb-2 mt-1.5',
     input: 'absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none peer',
     label: '$reset text-sm text-gray-700 mt-1 select-none',
-    wrapper: 'flex items-center justify-center mb-1 w-full'
+    wrapper: 'flex items-center justify-start mb-1 w-full'
   },
   'family:button': {
     input:
