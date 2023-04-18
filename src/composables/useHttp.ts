@@ -4,27 +4,53 @@ import instance from '@/apis/instance'
 
 const { getToken } = useAuthStorage()
 
-const useGet = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
+const useGet = ({
+  url = '',
+  data = {},
+  params = {},
+  headers = {},
+  requiredToken = false,
+  instanceC = instance
+}) => {
   const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 
-  const usedGet = useAxios(url, { data, params, headers: fullHeaders, method: 'GET' }, instance, {
+  const usedGet = useAxios(url, { data, params, headers: fullHeaders, method: 'GET' }, instanceC, {
     immediate: false
   })
   return usedGet
 }
-const usePost = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
+const usePost = ({
+  url = '',
+  data = {},
+  params = {},
+  headers = {},
+  requiredToken = false,
+  instanceC = instance
+}) => {
   const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 
-  const usedPost = useAxios(url, { data, params, headers: fullHeaders, method: 'POST' }, instance, {
-    immediate: false
-  })
+  const usedPost = useAxios(
+    url,
+    { data, params, headers: fullHeaders, method: 'POST' },
+    instanceC,
+    {
+      immediate: false
+    }
+  )
   return usedPost
 }
-const useDelete = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
+const useDelete = ({
+  url = '',
+  data = {},
+  params = {},
+  headers = {},
+  requiredToken = false,
+  instanceC = instance
+}) => {
   const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
@@ -32,24 +58,38 @@ const useDelete = ({ url = '', data = {}, params = {}, headers = {}, requiredTok
   const usedDelete = useAxios(
     url,
     { data, params, headers: fullHeaders, method: 'DELETE' },
-    instance,
+    instanceC,
     {
       immediate: false
     }
   )
   return usedDelete
 }
-const usePut = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
+const usePut = ({
+  url = '',
+  data = {},
+  params = {},
+  headers = {},
+  requiredToken = false,
+  instanceC = instance
+}) => {
   const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
 
-  const usedPut = useAxios(url, { data, params, headers: fullHeaders, method: 'PUT' }, instance, {
+  const usedPut = useAxios(url, { data, params, headers: fullHeaders, method: 'PUT' }, instanceC, {
     immediate: false
   })
   return usedPut
 }
-const usePatch = ({ url = '', data = {}, params = {}, headers = {}, requiredToken = false }) => {
+const usePatch = ({
+  url = '',
+  data = {},
+  params = {},
+  headers = {},
+  requiredToken = false,
+  instanceC = instance
+}) => {
   const fullHeaders = { ...headers }
 
   requiredToken && (fullHeaders['Authorization'] = `Bearer ${getToken()}`)
@@ -57,7 +97,7 @@ const usePatch = ({ url = '', data = {}, params = {}, headers = {}, requiredToke
   const usedPatch = useAxios(
     url,
     { data, params, headers: fullHeaders, method: 'PATCH' },
-    instance,
+    instanceC,
     {
       immediate: false
     }
