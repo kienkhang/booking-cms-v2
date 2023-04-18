@@ -11,12 +11,13 @@ n-tabs.config-tab(
   )
   //- tab label của Tab, name là value của Tab
   n-tab-pane(name="basic" tab="Basic")
-    | Basic
+    hotel-config-form
   n-tab-pane(name="additional" tab="Additional")
     | Additional
 </template>
 
 <script setup lang="ts">
+import HotelConfigForm from '@/components/hotel/HotelConfigForm.vue'
 import { NTabs, NTabPane } from 'naive-ui'
 import { type CSSProperties } from 'vue'
 
