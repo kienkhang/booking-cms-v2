@@ -2,7 +2,13 @@ import axios from 'axios'
 const provinceInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_PROVINCE_API,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true,
+    Accept: '*',
+    'Access-Control-Allow-Headers':
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+    'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT'
   }
 })
 class ProvincesAPI {
