@@ -14,11 +14,12 @@ n-tabs.config-tab(
   n-tab-pane(name="basic" tab="Basic")
     hotel-config-form
   n-tab-pane(name="additional" tab="Additional")
-    | Additional
+    hotel-additional-form
 </template>
 
 <script setup lang="ts">
 import HotelConfigForm from '@/components/hotel/HotelConfigForm.vue'
+import HotelAdditionalForm from '@/components/hotel/HotelAdditionalForm.vue'
 import { NTabs, NTabPane } from 'naive-ui'
 import { type CSSProperties } from 'vue'
 
