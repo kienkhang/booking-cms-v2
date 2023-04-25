@@ -55,6 +55,17 @@ const useAuth = () => {
       executeAPI: () => execute({ data: { ...form } })
     }
   }
+
+  const reset = (form: { new_password: string; token: string }) => {
+    const usedRefresh = authApi.reset({})
+
+    const { execute } = usedRefresh
+
+    return {
+      ...usedRefresh,
+      executeAPI: () => execute({ data: { ...form } })
+    }
+  }
   const getMe = () => {
     const usedDetails = usersApi.details()
     const { isFinished, data, execute } = usedDetails
@@ -74,6 +85,7 @@ const useAuth = () => {
     login,
     signup,
     refresh,
+    reset,
     getMe
   }
 }

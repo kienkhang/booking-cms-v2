@@ -15,6 +15,11 @@ class Auth {
     const url = path + 'refresh-token'
     return usePost({ url, data, requiredToken: true })
   }
+
+  reset = (data: any | {}) => {
+    const url = path + 'reset'
+    return usePost({ url, data })
+  }
 }
 const authApi = new Auth()
 
