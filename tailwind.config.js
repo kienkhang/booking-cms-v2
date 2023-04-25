@@ -16,7 +16,9 @@ module.exports = {
         'roman-silver': '#808191',
         onyx: '#353740',
         'onyx-shade': '#c2c3c6',
-        cultured: '#F4F4F4'
+        cultured: '#F4F4F4',
+        'green-crayola': '#10A37F',
+        'green-ufo': '#22C55E'
       },
       fontFamily: {
         sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
