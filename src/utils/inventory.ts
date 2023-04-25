@@ -51,7 +51,11 @@ const ratepackages: IRatePackageCell[] = [
 // filter list theo năm tháng
 
 // Hàm truyền vào bao gồm (year, month, roomnight)
-const renderRoomNights = (realYear: number, realMonth: number, roomNight: IRoomNightCell[]) => {
+const renderRoomNights = (
+  realYear: number,
+  realMonth: number,
+  roomNight: IRoomNightCell[]
+): IRoomNightCell[] => {
   // Tính số ngày trong tháng
   const dayOfMonth = dayjs().year(realYear).month(realMonth).daysInMonth()
   // Lấy ngày đầu tiên của tháng đó, năm đó
@@ -90,7 +94,7 @@ const renderRatePakages = (
   realYear: number,
   realMonth: number,
   ratePackage: IRatePackageCell[]
-) => {
+): IRatePackageCell[] => {
   // Tính số ngày trong tháng
   const dayOfMonth = dayjs().year(realYear).month(realMonth).daysInMonth()
   // Lấy ngày đầu tiên của tháng đó, năm đó
