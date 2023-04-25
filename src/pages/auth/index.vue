@@ -1,12 +1,7 @@
 <template lang="pug">
-router-view
+AuthForm
 </template>
 
 <script setup lang="ts"></script>
 
 <style scoped></style>
-
-<route lang="yaml">
-meta:
-  layout: authen
-</route>
