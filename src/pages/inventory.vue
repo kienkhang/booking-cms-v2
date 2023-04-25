@@ -3,10 +3,12 @@ div.h-full.w-full
   .flex.items-center.mb-2.cursor-pointer.select-none.text-roman-silver.w-max
     icon-custom-left-arrow.h-4.w-auto
     router-link.text-sm.font-semibold(to='/hotel') Trở về
-  .p-6.rounded-lg.shadow-md.bg-white.w-full.overflow-auto(class='h-[calc(100%-72px)]' ref='animate')
+  .p-6.rounded-lg.shadow-md.bg-white.w-full.overflow-auto.space-y-6(class='h-[calc(100%-72px)]' ref='animate')
     InventorySelected
-    .mt-6
     InventoryTable
+    div
+      span.font-bold.text-red-600  Hướng dẫn: 
+      span.font-semibold.text-blue-600.text-xs  Giữ shift và lăn chuột để cuộn ngang
 </template>
 
 <script setup lang="ts">
