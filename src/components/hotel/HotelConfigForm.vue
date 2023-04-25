@@ -1,8 +1,8 @@
 <template lang="pug">
 div
-  FormKit(type='form' name='config_form' id='config_form' :actions='false' style='width: 100%; padding: 16px;')
+  FormKit(type='form' name='config_form' id='config_form' @submit='doSubmit' :actions='false' style='width: 100%; padding: 16px;')
     .hotel_basic_info.flex.flex-col.gap-3
-      .text-3xl.font-bold Cơ bản
+      .text-3xl.font-semibold Cơ bản
       hr
       //- Activate
       .flex.flex-col.gap-1.justify-start
@@ -19,7 +19,7 @@ div
               name="province"
               placeholder="Chọn tỉnh thành"
               validation='required'
-              :options='pOptions||[]'
+              :options='pOptions||[{ label: "Không có dữ liệu", value: "nodata", attrs: { disabled: true } }]'
               @focus='doFocusProvince()'
               )
       //- Address - District
@@ -29,7 +29,7 @@ div
               name="district"
               placeholder="Chọn huyện/thành phố"
               validation='required'
-              :options='dOptions||[]'
+              :options='dOptions||[{ label: "Không có dữ liệu", value: "nodata", attrs: { disabled: true } }]'
               @focus='doFocusDistrict()'
               )
       //- Address - Ward
@@ -39,11 +39,13 @@ div
               name="ward"
               placeholder="Chọn xã/thị trấn"
               validation='required'
-              :options='wOptions||[]'
+              :options='wOptions||[{ label: "Không có dữ liệu", value: "nodata", attrs: { disabled: true } }]'
               @focus='doFocusWard()'
               )
+      FormKit(v-model='raw_address' label='Địa chỉ' name='raw_address' type='text' validation='required|length:6')
+      
     .hotel_bank_info.flex.flex-col.gap-3
-      .text-3xl.font-bold Tài khoản nhận tiền
+      .text-3xl.font-semibold Tài khoản nhận tiền
         hr
       FormKit(v-model='bankName' label='Ngân hàng' name='bank_name' type='select' validation='required')
         option(v-for='bank in VIETNAM_BANKING_LIST' :value='bank.code' class='flex items-center gap-2 uppercase')
@@ -54,41 +56,98 @@ div
 
     
     .hotel_additional_info.flex.flex-col.gap-3
-      .text-3xl.font-bold Hình ảnh
+      .text-3xl.font-semibold Mô hình kinh doanh
         hr
-      div
-        FormKit(v-model='bussinessLicense' label='Giấy phép kinh doanh' name='bussiness_license' type='file' input-class='uppercase' validation='required')
-        NImage(width="200" :src='imgss')
-
+      .grid.grid-cols-3.gap-3
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Khách sạn' name='hotel' v-model='hotel')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Căn hộ' name='apartment' v-model='apartment')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Resort' name='resort' v-model='resort')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Villa' name='villa' v-model='villa')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Cắm trại' name='camping' v-model='camping')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Nhà nghỉ' name='motel' v-model='motel')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Home Stay' name='homestay' v-model='homestay')
+    .hotel_basic_info.flex.flex-col.gap-3
+      .text-3xl.font-semibold Tiện ích
+      hr
+      .grid.grid-cols-3.gap-3
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bãi biển' name='beach' v-model='beach')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Hồ bơi' name='pool' v-model='pool')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Quầy bar' name='bar' v-model='bar')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Phòng không hút thuốc' name='no_smoking_room' v-model='no_smoking_room')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Phòng thể hình' name='fitness' v-model='fitness')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bồn tắm' name='bath' v-model='bath')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Wifi' name='wifi' v-model='wifi')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Breakfast' name='breakfast' v-model='breakfast')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Casio' name='casio' v-model='casio')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bãi đỗ xe' name='parking' v-model='parking')
+    FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end') Cập nhật
 </template>
 
 <script setup lang="ts">
-import { NSwitch, NImage } from 'naive-ui'
+import { NSwitch } from 'naive-ui'
 import EditorQuill from '../shared/EditorQuill.vue'
 import { VIETNAM_BANKING_LIST } from '@/constant/bank'
-import imgss from '@/assets/images/home.jpg'
+
 // ---------------------- HOTEL INFO ----------------------
+const hotelInfo = reactive({
+  name: '',
+  overview: '',
+  activate: true,
+  photos: '',
+  raw_address: '',
+  bankAccount: 0,
+  bankName: '',
+  bankBeneficiary: ''
+})
 const {
   activate,
   bankAccount,
   bankBeneficiary,
   bankName,
-  bussinessLicense,
   name,
-  overview
+  overview,
+  raw_address
   // photos
-} = toRefs(
-  reactive({
-    name: '',
-    overview: '',
-    activate: true,
-    photos: '',
-    bankAccount: 0,
-    bankName: '',
-    bankBeneficiary: '',
-    bussinessLicense: ''
-  })
-)
+} = toRefs(hotelInfo)
+// ---------------------- HOTEL ADDITIONAL ----------------------
+const hotelAdditional = reactive({
+  hotel: false,
+  apartment: false,
+  resort: false,
+  villa: false,
+  camping: false,
+  motel: false,
+  homestay: false,
+  beach: false,
+  pool: false,
+  bar: false,
+  no_smoking_room: false,
+  fitness: false,
+  bath: false,
+  wifi: false,
+  breakfast: false,
+  casio: false,
+  parking: false
+})
+const {
+  hotel,
+  apartment,
+  bar,
+  bath,
+  beach,
+  breakfast,
+  camping,
+  homestay,
+  casio,
+  fitness,
+  motel,
+  no_smoking_room,
+  parking,
+  pool,
+  resort,
+  villa,
+  wifi
+} = toRefs(hotelAdditional)
 
 // ---------------------- ADDRESS ----------------------
 const {
@@ -103,6 +162,9 @@ const {
   ward
 } = useProvinces()
 
+const { executeAPI: getDistrict } = selectDistrict(province.value)
+const { executeAPI: getWard } = selectWard(district.value)
+
 const doFocusProvince = async () => {
   // Khi focus province select, kiểm tra xem pOptions đã có hay chưa
   // Nếu chưa thì get
@@ -114,15 +176,21 @@ const doFocusDistrict = async () => {
   // Khi focus district select, kiểm tra xem dOptions đã có hay chưa
   // Nếu chưa thì get
   if (!dOptions.value.length && province.value) {
-    selectDistrict(province.value).executeAPI()
+    getDistrict()
   }
 }
 const doFocusWard = async () => {
   // Khi focus ward select, kiểm tra xem wOptions đã có hay chưa
   // Nếu chưa thì get
   if (!wOptions.value.length && district.value) {
-    selectWard(district.value).executeAPI()
+    getWard()
   }
+}
+
+// ---------------------- HANDLE SUBMIT FORM ----------------------
+const doSubmit = () => {
+  const data = { ...hotelInfo, ...hotelAdditional, district, province, ward }
+  console.log('🐔🦢 ~ doSubmit ~ data:', data)
 }
 </script>
 
