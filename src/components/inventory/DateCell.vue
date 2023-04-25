@@ -1,5 +1,5 @@
 <template lang="pug">
-.flex.justify-center.items-center.border.flex-shrink-0(class='w-16 h-10 bg-red-50')
+.flex.justify-center.items-center.border.flex-shrink-0.select-none(class='w-20 h-10 bg-red-50')
   .font-medium {{ label }}
 </template>
 
