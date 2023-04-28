@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@floating-ui/vue": "^0.2.1",
+    "@fontsource/manrope": "^4.5.13",
     "@formkit/auto-animate": "1.0.0-beta.6",
     "@formkit/i18n": "^0.16.4",
     "@formkit/themes": "^0.16.4",
@@ -58,6 +59,7 @@
     "tailwindcss": "^3.3.1",
     "typescript": "~4.8.4",
     "unplugin-auto-import": "^0.15.2",
+    "unplugin-fonts": "^1.0.3",
     "unplugin-icons": "^0.16.1",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.1.4",

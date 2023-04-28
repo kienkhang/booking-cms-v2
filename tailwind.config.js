@@ -21,8 +21,8 @@ module.exports = {
         'green-ufo': '#22C55E'
       },
       fontFamily: {
-        sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
-        montserrat: ['Montserrat', ...defaultTheme.fontFamily.sans]
+        manrope: ['Manrope', ...defaultTheme.fontFamily.serif],
+        sans: ['Montserrat', ...defaultTheme.fontFamily.sans]
       },
       keyframes: {
         scale: {

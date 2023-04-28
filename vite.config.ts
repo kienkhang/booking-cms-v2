@@ -19,6 +19,9 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 // NaiveUI
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
+// Font
+import Unfonts from 'unplugin-fonts/vite'
+
 const customIconPathA = path.resolve(__dirname, 'src/assets/icons/')
 const customIconPathB = path.resolve(__dirname, 'src/assets/icons/color')
 // https://vitejs.dev/config/
@@ -85,6 +88,16 @@ export default defineConfig({
       compositionOnly: true,
       fullInstall: true,
       include: [path.resolve(__dirname, 'locales/**')]
+    }),
+    Unfonts({
+      fontsource: {
+        families: [
+          {
+            name: 'Manrope',
+            weights: [400, 500, 600, 700, 800]
+          }
+        ]
+      }
     })
   ],
   resolve: {

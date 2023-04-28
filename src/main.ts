@@ -5,8 +5,8 @@ import App from './App.vue'
 import type { UserModule } from './types'
 
 import './styles/main.css'
-
-// import 'uno.css'
+// Unplugin font
+import 'unfonts.css'
 
 const routes = setupLayouts(generatedRoutes)
 
