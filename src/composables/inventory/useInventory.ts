@@ -70,12 +70,6 @@ const useInventory = () => {
   const setYear = (value: number) => (year.value = value)
   const setRoom = (value: string) => (room.value = value)
 
-  // if mode change [ free or dayOfWeek ] -> reset all selected
-  watch([mode], () => {
-    selectedRatePackage.value = []
-    selectedRoomNight.value = []
-  })
-
   return {
     mode,
     room,
