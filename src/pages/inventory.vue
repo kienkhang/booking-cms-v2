@@ -5,6 +5,7 @@ div.h-full.w-full
     router-link.text-sm.font-semibold(to='/hotel') Trở về
   .p-6.rounded-lg.shadow-md.bg-white.w-full.overflow-auto.space-y-6(class='h-[calc(100%-72px)]' ref='animate')
     InventorySelected
+    InventoryMode
     InventoryTable
     div
       span.font-bold.text-red-600  Hướng dẫn: 
@@ -12,6 +13,7 @@ div.h-full.w-full
 </template>
 
 <script setup lang="ts">
+import InventoryMode from '@/components/inventory/InventoryMode.vue'
 import InventorySelected from '@/components/inventory/InventorySelected.vue'
 import InventoryTable from '@/components/inventory/InventoryTable.vue'
 </script>
