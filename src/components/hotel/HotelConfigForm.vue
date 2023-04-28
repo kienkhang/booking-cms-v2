@@ -162,9 +162,6 @@ const {
   ward
 } = useProvinces()
 
-const { executeAPI: getDistrict } = selectDistrict(province.value)
-const { executeAPI: getWard } = selectWard(district.value)
-
 const doFocusProvince = async () => {
   // Khi focus province select, kiểm tra xem pOptions đã có hay chưa
   // Nếu chưa thì get
@@ -176,14 +173,14 @@ const doFocusDistrict = async () => {
   // Khi focus district select, kiểm tra xem dOptions đã có hay chưa
   // Nếu chưa thì get
   if (!dOptions.value.length && province.value) {
-    getDistrict()
+    selectDistrict(province.value).execute()
   }
 }
 const doFocusWard = async () => {
   // Khi focus ward select, kiểm tra xem wOptions đã có hay chưa
   // Nếu chưa thì get
   if (!wOptions.value.length && district.value) {
-    getWard()
+    selectWard(district.value).execute()
   }
 }
 
