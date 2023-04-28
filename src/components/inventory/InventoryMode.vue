@@ -63,41 +63,35 @@ const rateplanOptions = [
 ]
 
 // Value day of week
+// dow: day of week
 const d = reactive([
   {
     dow: 0,
-    check: false,
-    dates: selectMultipleDate(0, month.value, year.value)
+    check: false
   },
   {
     dow: 1,
-    check: false,
-    dates: selectMultipleDate(1, month.value, year.value)
+    check: false
   },
   {
     dow: 2,
-    check: false,
-    dates: selectMultipleDate(2, month.value, year.value)
+    check: false
   },
   {
     dow: 3,
-    check: false,
-    dates: selectMultipleDate(3, month.value, year.value)
+    check: false
   },
   {
     dow: 4,
-    check: false,
-    dates: selectMultipleDate(4, month.value, year.value)
+    check: false
   },
   {
     dow: 5,
-    check: false,
-    dates: selectMultipleDate(5, month.value, year.value)
+    check: false
   },
   {
     dow: 6,
-    check: false,
-    dates: selectMultipleDate(6, month.value, year.value)
+    check: false
   }
 ])
 // day of week remove
