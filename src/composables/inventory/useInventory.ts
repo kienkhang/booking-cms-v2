@@ -15,6 +15,8 @@ const useInventory = () => {
   // Rate package or room night
   const adjustRate = ref(false)
   const toggleAdjustRate = () => (adjustRate.value = !adjustRate.value)
+  // rateplan choosen when select rate in dayOfWeek mode
+  const rateplan = ref('rateplan1')
   // Select room type & rate package
   const selectedRoomNight = ref<
     {
@@ -30,11 +32,14 @@ const useInventory = () => {
       price: number
     }[]
   >([])
+  // check exist room room night or rate pakage
   const exist = (date: string, target: any[]) => target.findIndex((i) => i.date === date) !== -1
+  // select room night
   const selectRoomNight = ({ date, roomType }: { date: string; roomType: string }) => {
+    // If adjusting rate -> return
     if (adjustRate.value) return
+    // check exist && toggle
     if (!exist(date, selectedRoomNight.value)) {
-      console.log('khong ton tai room night')
       selectedRoomNight.value.push({
         date,
         roomType,
@@ -42,11 +47,15 @@ const useInventory = () => {
       })
       return
     }
-    selectedRoomNight.value = selectedRoomNight.value.filter((d) => d.date !== date)
   }
-  const selectRatePackage = ({ date, ratePlan }: { date: string; ratePlan: string }) => {
+  const removeSelected = (date: string, target: Ref<any[]>) => {
+    target.value = target.value.filter((d) => d.date !== date)
+  }
+  // select rate package
+  const selectRate = ({ date, ratePlan }: { date: string; ratePlan: string }) => {
+    // if adjusting room night -> return
     if (!adjustRate.value) return
-
+    // check exist && toggle
     if (!exist(date, selectedRatePackage.value)) {
       selectedRatePackage.value.push({
         date,
@@ -55,16 +64,22 @@ const useInventory = () => {
       })
       return
     }
-    selectedRatePackage.value = selectedRatePackage.value.filter((d) => d.date !== date)
   }
 
   const setMonth = (value: number) => (month.value = value)
   const setYear = (value: number) => (year.value = value)
   const setRoom = (value: string) => (room.value = value)
 
+  // if mode change [ free or dayOfWeek ] -> reset all selected
+  watch([mode], () => {
+    selectedRatePackage.value = []
+    selectedRoomNight.value = []
+  })
+
   return {
     mode,
     room,
+    rateplan,
     month,
     year,
     selectedRoomNight,
@@ -76,7 +91,8 @@ const useInventory = () => {
     toggleMode,
     toggleAdjustRate,
     selectRoomNight,
-    selectRatePackage,
+    selectRate,
+    removeSelected,
     exist
   }
 }
