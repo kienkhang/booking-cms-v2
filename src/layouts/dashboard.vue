@@ -9,6 +9,18 @@ DashboardHeader
 
 <script setup lang="ts">
 import DashboardHeader from '@/components/dashboard/DashboardHeader.vue'
+
+// Guard if no hotel selected
+const { hotelId } = useHotelStorage()
+
+const router = useRouter()
+
+onBeforeMount(() => {
+  // Check exist hotel -> exist -> go to app
+  if (!!hotelId.value === false) {
+    router.push({ name: 'select' })
+  }
+})
 </script>
 
 <style scoped></style>
