@@ -12,6 +12,9 @@ NPopover(:show='show' trigger='click' @clickoutside="close")
     .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='close()')
       icon-material-symbols:lock-open-outline.w-4.h-4.flex-shrink-0
       span Mở khóa
+    .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='close()')
+      icon-material-symbols:edit.w-4.h-4.flex-shrink-0
+      span Chỉnh sửa
 
 </template>
 

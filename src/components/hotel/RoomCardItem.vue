@@ -13,11 +13,11 @@
         span.px-2.py-1.bg-green-100.text-green-600.font-medium River
       RoomCardAction
     //- Title and description
-    .title.font-semibold.text-lg(class='cursor-pointer') Metro Jayakarta Hotel & Spa
+    .title.font-semibold.text-lg(class='cursor-pointer' @click='gotoDetails()') Metro Jayakarta Hotel & Spa
     n-popover(width='trigger')
       template(#trigger)
-        span.description.text-roman-silver.text-sm.line-clamp-none(class='md:line-clamp-2') {{ content }}
-      span {{ content }}
+        span.description.text-roman-silver.text-sm.line-clamp-none(class='md:line-clamp-2') {{ data.content }}
+      span {{ data.content }}
     .flex.items-center.gap-2.mt-auto.text-sm
       .flex.items-center(class='gap-1')
         icon-custom-bath.flex-shrink-0
@@ -30,9 +30,23 @@
 <script setup lang="ts">
 import RoomCardAction from './RoomCardAction.vue'
 import { NPopover } from 'naive-ui'
-const content = ref(
-  'Kích thước phòng: 38 m² / 409 ft². Không hút thuốc. Vòi hoa sen. Wifi miễn phí Wifi miễn phí Wifi miễn phí Wifi miễn phí'
-)
+
+interface IRoomData {
+  id: string
+  content: string
+}
+
+const props = defineProps<{
+  data: IRoomData
+}>()
+
+const router = useRouter()
+const route = useRoute()
+const gotoDetails = () => {
+  router.push(`room/${props.data.id}`)
+  console.log('🐔🦢 ~ gotoDetails ~ props.data.id:', props.data.id)
+  console.log('TTTT')
+}
 </script>
 
 <style scoped></style>
