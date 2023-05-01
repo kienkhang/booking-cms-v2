@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
-
+import _some from 'lodash-es/some'
+import _remove from 'lodash-es/remove'
 type IMode = 'free' | 'dayOfWeek'
 const useInventory = () => {
   // Get room type , month, year
@@ -32,14 +33,20 @@ const useInventory = () => {
       price: number
     }[]
   >([])
-  // check exist room room night or rate pakage
-  const exist = (date: string, target: any[]) => target.findIndex((i) => i.date === date) !== -1
+  // Check exist RoomNight with date & roomtype
+  const existRoomNight = (date: string, roomType: string) => {
+    return _some(selectedRoomNight.value, { date, roomType })
+  }
+  // Check exist RatePackage with date & rateplan
+  const existRatePackage = (date: string, ratePlan: string) => {
+    return _some(selectedRatePackage.value, { date, ratePlan })
+  }
   // select room night
   const selectRoomNight = ({ date, roomType }: { date: string; roomType: string }) => {
     // If adjusting rate -> return
     if (adjustRate.value) return
     // check exist && toggle
-    if (!exist(date, selectedRoomNight.value)) {
+    if (!existRoomNight(date, roomType)) {
       selectedRoomNight.value.push({
         date,
         roomType,
@@ -48,15 +55,19 @@ const useInventory = () => {
       return
     }
   }
-  const removeSelected = (date: string, target: Ref<any[]>) => {
-    target.value = target.value.filter((d) => d.date !== date)
+  // remove room night
+  const removeRoom = ({ date, roomType }: { date: string; roomType: string }) => {
+    _remove(selectedRoomNight.value, (rp) => {
+      return rp.date === date && rp.roomType === roomType
+    })
   }
+
   // select rate package
   const selectRate = ({ date, ratePlan }: { date: string; ratePlan: string }) => {
     // if adjusting room night -> return
     if (!adjustRate.value) return
     // check exist && toggle
-    if (!exist(date, selectedRatePackage.value)) {
+    if (!existRatePackage(date, ratePlan)) {
       selectedRatePackage.value.push({
         date,
         ratePlan,
@@ -64,6 +75,12 @@ const useInventory = () => {
       })
       return
     }
+  }
+  // remove rate package
+  const removeRate = ({ date, ratePlan }: { date: string; ratePlan: string }) => {
+    _remove(selectedRatePackage.value, (rp) => {
+      return rp.date === date && rp.ratePlan === ratePlan
+    })
   }
 
   const setMonth = (value: number) => (month.value = value)
@@ -86,8 +103,10 @@ const useInventory = () => {
     toggleAdjustRate,
     selectRoomNight,
     selectRate,
-    removeSelected,
-    exist
+    removeRoom,
+    removeRate,
+    existRoomNight,
+    existRatePackage
   }
 }
 export default defineStore('inventory__useInventory', useInventory)

@@ -12,9 +12,9 @@ div.grid.grid-cols-12.text-center.select-none
     .flex.items-center.font-bold(class='text-xs')
       RoomNightCell(v-for='cell in roomNightDatas' :data='cell')
     .flex.items-center.font-bold(class='text-xs')
-      RatePackageCell(v-for='cell in ratePackageDatas' :data='cell' rateplan='rateplan1')
+      RatePackageCell(v-for='cell in ratePackageDatas' :data='cell' ratePlan='rateplan1')
     .flex.items-center.font-bold(class='text-xs')
-      RatePackageCell(v-for='cell in ratePackageDatas' :data='cell' rateplan='rateplan2')
+      RatePackageCell(v-for='cell in ratePackageDatas' :data='cell' ratePlan='rateplan2')
       
 
 

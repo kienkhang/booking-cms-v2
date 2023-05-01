@@ -10,34 +10,30 @@ import dayjs from 'dayjs'
 
 const props = defineProps<{
   data: IRatePackageCell
-  rateplan: string
+  ratePlan: string
 }>()
 
 // push message
 const message = useMessage()
 
 // useInventory
-const { selectedRatePackage, adjustRate, mode, rateplan } = storeToRefs(useInventory())
-const { exist, selectRate, removeSelected } = useInventory()
+const { adjustRate, mode } = storeToRefs(useInventory())
+const { selectRate, removeRate, existRatePackage } = useInventory()
 
 const doSelect = () => {
   if (mode.value === 'dayOfWeek') {
     message.error('Bạn không ở chế độ chọn tự do')
     return
   }
-  if (!exist(props.data.availability_at, selectedRatePackage.value)) {
-    selectRate({ date: props.data.availability_at, ratePlan: props.rateplan })
+  if (!existRatePackage(props.data.availability_at, props.ratePlan)) {
+    selectRate({ date: props.data.availability_at, ratePlan: props.ratePlan })
     return
   }
-  removeSelected(props.data.availability_at, selectedRatePackage)
+  removeRate({ date: props.data.availability_at, ratePlan: props.ratePlan })
 }
 
 // is selected cell
-const selected = computed(
-  () =>
-    exist(props.data.availability_at, selectedRatePackage.value) &&
-    rateplan.value === props.rateplan
-)
+const selected = computed(() => existRatePackage(props.data.availability_at, props.ratePlan))
 // Label of content
 const label = computed(() => VND.format(props.data.price))
 // Check cell no value

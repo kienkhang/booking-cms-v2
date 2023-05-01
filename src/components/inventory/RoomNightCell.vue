@@ -16,8 +16,8 @@ const props = defineProps<{
 const message = useMessage()
 
 // useInventory
-const { selectedRoomNight, room, adjustRate, mode } = storeToRefs(useInventory())
-const { exist, selectRoomNight, removeSelected } = useInventory()
+const { room, adjustRate, mode } = storeToRefs(useInventory())
+const { existRoomNight, selectRoomNight, removeRoom } = useInventory()
 
 const doSelect = () => {
   if (mode.value === 'dayOfWeek') {
@@ -25,16 +25,16 @@ const doSelect = () => {
     return
   }
 
-  if (!exist(props.data.availability_at, selectedRoomNight.value)) {
+  if (!existRoomNight(props.data.availability_at, room.value)) {
     selectRoomNight({ date: props.data.availability_at, roomType: room.value })
     return
   }
-  removeSelected(props.data.availability_at, selectedRoomNight)
+  removeRoom({ date: props.data.availability_at, roomType: room.value })
 }
 
 // RENDER CONDITIONAL
 // is selected cell
-const selected = computed(() => exist(props.data.availability_at, selectedRoomNight.value))
+const selected = computed(() => existRoomNight(props.data.availability_at, room.value))
 // Label of cell
 const label = computed(() => props.data.quantity)
 // check no data

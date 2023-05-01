@@ -13,7 +13,7 @@
       NCheckbox(v-model:checked='d[5].check' :key='d[5].dow') Thứ 6
       NCheckbox(v-model:checked='d[6].check' :key='d[6].dow') Thứ 7
       NCheckbox(v-model:checked='d[0].check' :key='d[0].dow') Chủ nhật
-    .flex.flex-col.gap-2(v-if='mode==="dayOfWeek"')
+    .flex.flex-col.gap-2(v-if='mode==="dayOfWeek" && adjustRate')
       label.font-semibold.select-none Chọn rate plan
       NSelect(v-model:value="rateplan"
             title="Chọn rate plan"
@@ -64,7 +64,7 @@ const rateplanOptions = [
 
 // Value day of week
 // dow: day of week
-const d = reactive([
+const d = ref([
   {
     dow: 0,
     check: false
@@ -96,7 +96,7 @@ const d = reactive([
 ])
 // day of week remove
 const unselectedDates = computed(() => {
-  const check = d.map((item) => {
+  const check = d.value.map((item) => {
     if (!item.check) {
       return { ...item, dates: selectMultipleDate(item.dow, month.value, year.value) }
     }
@@ -112,7 +112,7 @@ const unselectedDates = computed(() => {
 })
 // All day choosen
 const selectedDates = computed(() => {
-  const check = d.map((item) => {
+  const check = d.value.map((item) => {
     if (item.check) {
       return { ...item, dates: selectMultipleDate(item.dow, month.value, year.value) }
     }
@@ -128,6 +128,7 @@ const selectedDates = computed(() => {
 })
 // watch([unselectedDates], () => {})
 
+// When selected dates change -> remove room night or remove rateplan
 watch([unselectedDates], () => {
   if (adjustRate.value) {
     unselectedDates.value.forEach((date) => {
@@ -142,6 +143,7 @@ watch([unselectedDates], () => {
   }
 })
 
+// When selected dates change -> select room night or select rateplan
 watch([selectedDates], () => {
   if (adjustRate.value) {
     selectedDates.value.forEach((date) => {
@@ -153,10 +155,30 @@ watch([selectedDates], () => {
     })
   }
 })
+// When rateplan change -> reset rate package and reset d check
+watch([rateplan, room], () => {
+  selectedRatePackage.value = []
+  selectedRoomNight.value = []
+  d.value = d.value.map((i) => ({ ...i, check: false }))
+})
 
 // ------------- UPDATE TABLE --------------
 const doSubmit = (data: any) => {
-  console.log(data)
+  // update room night
+  if (!adjustRate.value) {
+    const selectedDate = selectedRoomNight.value.map((rn) => rn.date)
+    const submitData = {
+      room_type_id: room.value,
+      selected_date: JSON.stringify(selectedDate),
+      quantity: data?.quanity
+    }
+    console.log('🐔🦢 ~ doSubmit ~ submitData:', submitData)
+  }
+  // update rate package
+  else {
+    const submitData = [...selectedRatePackage.value].map((rp) => ({ ...rp, price: data?.price }))
+    console.log('🐔🦢 ~ doSubmit ~ submitData:', submitData)
+  }
 }
 
 // make animation for mode
