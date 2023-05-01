@@ -1,13 +1,12 @@
 <template lang="pug">
-Modal(:show="show" @mask-click='closeModal')
+Modal(:show="show" @mask-click='closeModal()')
   .absolute.right-2.top-2 
     icon-ph:x-bold.w-4.h-4.cursor-pointer(@click='closeModal()')
-  div(class='w-[750px] bg-white h-[600px] rounded-10 p-8 mb-2 overflow-auto')
-    EditorQuill
+  div(class='w-[750px] bg-white h-[600px] rounded-10 p-8 mb-2 overflow-auto scroll-hide')
+    RoomForm
 </template>
 
 <script setup lang="ts">
-import EditorQuill from '../EditorQuill.vue'
 import Modal from './Modal.vue'
 
 defineProps<{
