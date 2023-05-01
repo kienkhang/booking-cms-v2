@@ -1,5 +1,11 @@
 <template lang="pug">
 div.h-full.w-full
+  .flex.items-center.justify-between.h-12
+    NBreadcrumb
+      NBreadcrumbItem
+        router-link.page-title.font-bold.text-2xl(to='/hotel') Khách sạn
+      NBreadcrumbItem
+        .page-title.font-bold.text-2xl Lịch & Giá 
   .flex.items-center.mb-2.cursor-pointer.select-none.text-roman-silver.w-max
     icon-custom-left-arrow.h-4.w-auto
     router-link.text-sm.font-semibold(to='/hotel') Trở về

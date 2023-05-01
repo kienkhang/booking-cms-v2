@@ -1,7 +1,9 @@
 <template lang="pug">
 div.h-full.w-full
   .flex.items-center.justify-between.h-12
-    .page-title.font-bold.text-2xl Hotel
+    NBreadcrumb
+      NBreadcrumbItem
+        .page-title.font-bold.text-2xl Hotel
     Button(@press="open" color='text-white' bgcolor='bg-purple-600' size='medium')
       icon-ic:round-plus.w-6.h-6.flex-shrink-0
       .font-bold Add hotel
@@ -16,7 +18,11 @@ div.h-full.w-full
 <script setup lang="ts">
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
 // Components
+import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui'
 const HotelModal = defineAsyncComponent(() => import('@/components/shared/modal/HotelModal.vue'))
+
+// Route & Router
+// const route = useRoute()
 
 // Add room modal
 const show = ref(false)
