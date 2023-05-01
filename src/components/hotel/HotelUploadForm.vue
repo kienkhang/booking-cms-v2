@@ -19,7 +19,6 @@ div
 
 <script setup lang="ts">
 import { NImage } from 'naive-ui'
-// import UploadImageForm from '../shared/UploadImageForm.vue'
 import { type IFormKitFile } from '@/dtos/shared'
 
 // -------- Bussiness License File ------------

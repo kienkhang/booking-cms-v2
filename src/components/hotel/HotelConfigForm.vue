@@ -77,7 +77,7 @@ div
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Phòng thể hình' name='fitness' v-model='fitness')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bồn tắm' name='bath' v-model='bath')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Wifi' name='wifi' v-model='wifi')
-        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Breakfast' name='breakfast' v-model='breakfast')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Ăn sáng' name='breakfast' v-model='breakfast')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Casio' name='casio' v-model='casio')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bãi đỗ xe' name='parking' v-model='parking')
     FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end') Cập nhật
