@@ -81,7 +81,7 @@ const renderRoomNights = (
   const calculateSource = renderSource.map((cell) => {
     const rn = filteredRoomNight.find((r) => r.availability_at === cell.availability_at)
     // Nếu rn tồn tại, tức là có ngày đó trong mảng thì thay cả phần tử đó lun
-    if (!!rn) {
+    if (rn) {
       return rn
     }
     // Không thì return cell luôn
@@ -122,7 +122,7 @@ const renderRatePakages = (
     // find cell matched data
     const rn = filteredRoomNight.find((r) => r.availability_at === cell.availability_at)
     // if rn exist -> assign data to this cell
-    if (!!rn) {
+    if (rn) {
       return rn
     }
     // else return cell
