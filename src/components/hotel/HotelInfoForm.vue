@@ -2,7 +2,7 @@
 div
   FormKit(type='form' name='config_form' id='config_form' @submit='doSubmit' :actions='false' style='width: 100%; padding: 16px;')
     .hotel_basic_info.flex.flex-col.gap-3
-      .text-3xl.font-semibold Cơ bản
+      .text-2xl.font-semibold Thông tin chung
       hr
       //- Activate
       .flex.flex-col.gap-1.justify-start
@@ -45,7 +45,7 @@ div
       FormKit(v-model='raw_address' label='Địa chỉ' name='raw_address' type='text' validation='required|length:6')
       
     .hotel_bank_info.flex.flex-col.gap-3
-      .text-3xl.font-semibold Tài khoản nhận tiền
+      .text-2xl.font-semibold Tài khoản nhận tiền
         hr
       FormKit(v-model='bankName' label='Ngân hàng' name='bank_name' type='select' validation='required')
         option(v-for='bank in VIETNAM_BANKING_LIST' :value='bank.code' class='flex items-center gap-2 uppercase')
@@ -56,7 +56,7 @@ div
 
     
     .hotel_additional_info.flex.flex-col.gap-3
-      .text-3xl.font-semibold Mô hình kinh doanh
+      .text-2xl.font-semibold Mô hình kinh doanh
         hr
       .grid.grid-cols-3.gap-3
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Khách sạn' name='hotel' v-model='hotel')
@@ -67,7 +67,7 @@ div
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Nhà nghỉ' name='motel' v-model='motel')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Home Stay' name='homestay' v-model='homestay')
     .hotel_basic_info.flex.flex-col.gap-3
-      .text-3xl.font-semibold Tiện ích
+      .text-2xl.font-semibold Tiện ích
       hr
       .grid.grid-cols-3.gap-3
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bãi biển' name='beach' v-model='beach')
@@ -80,13 +80,16 @@ div
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Ăn sáng' name='breakfast' v-model='breakfast')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Casio' name='casio' v-model='casio')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bãi đỗ xe' name='parking' v-model='parking')
-    FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end') Cập nhật
+    FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end') {{isEditForm ?'Cập nhật':'Tạo'}}
 </template>
 
 <script setup lang="ts">
 import { NSwitch } from 'naive-ui'
 import EditorQuill from '../shared/EditorQuill.vue'
 import { VIETNAM_BANKING_LIST } from '@/constant/bank'
+
+const route = useRoute()
+const isEditForm = computed(() => route.meta?.crud === 'edit-hotel')
 
 // ---------------------- HOTEL INFO ----------------------
 const hotelInfo = reactive({
