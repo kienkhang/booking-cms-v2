@@ -4,25 +4,24 @@ div.h-full.w-full
     NBreadcrumb
       NBreadcrumbItem
         .page-title.font-bold.text-2xl Hotel
-    Button(@press="open" color='text-white' bgcolor='bg-purple-600' size='medium')
-      icon-ic:round-plus.w-6.h-6.flex-shrink-0
-      .font-bold Add hotel
+    Button(@press="open" color='text-white' bgcolor='bg-orange-600' size='medium' @click='gotoSelect()')
+      icon-ic:round-keyboard-return.w-6.h-6.flex-shrink-0
+      .font-bold Chọn khách sạn
   .flex.items-center.mb-2.cursor-pointer.select-none.text-roman-silver.w-max
     icon-custom-left-arrow.h-4.w-auto
     router-link.text-sm.font-semibold(to='/hotel') Trở về
-  .p-6.rounded-lg.shadow-md.bg-white.w-full.overflow-auto(class='h-[calc(100%-72px)]' ref='animate')
+  .p-6.rounded-lg.shadow-md.bg-white.w-full.overflow-auto.scrollbar-gradient(class='h-[calc(100%-72px)]' ref='animate')
     router-view
-  HotelModal(v-model:show='show')
 </template>
 
 <script setup lang="ts">
 import { useAutoAnimate } from '@formkit/auto-animate/vue'
 // Components
 import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui'
-const HotelModal = defineAsyncComponent(() => import('@/components/shared/modal/HotelModal.vue'))
 
 // Route & Router
-// const route = useRoute()
+const router = useRouter()
+const gotoSelect = () => router.push({ name: 'select' })
 
 // Add room modal
 const show = ref(false)
