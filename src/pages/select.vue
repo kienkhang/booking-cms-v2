@@ -32,4 +32,5 @@ const content = computed(() => {
 <route lang="yaml">
 meta:
   layout: empty
+  requiredAuth: true
 </route>

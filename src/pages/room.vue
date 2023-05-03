@@ -53,4 +53,5 @@ const [animate] = useAutoAnimate({})
 <route lang="yaml">
 meta:
   layout: dashboard
+  requiredAuth: true
 </route>

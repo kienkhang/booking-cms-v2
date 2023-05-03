@@ -20,4 +20,5 @@ const hi = () => console.log('HI')
 <route lang="yaml">
 meta:
   layout: dashboard
+  requiredAuth: true
 </route>

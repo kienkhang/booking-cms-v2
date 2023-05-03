@@ -1,5 +1,6 @@
 import { authApi } from '@/apis/auth'
 import { usersApi } from '@/apis/users'
+import accountStore from '@/stores/account'
 
 const useAuth = () => {
   const { setToken, setRToken } = useAuthStorage()
@@ -74,6 +75,7 @@ const useAuth = () => {
       .toBeTruthy()
       .then(() => {
         console.log('🐔🦢 ~ getMe ~ data:', data.value)
+        accountStore().setAccount(data.value)
       })
     return {
       ...usedDetails,

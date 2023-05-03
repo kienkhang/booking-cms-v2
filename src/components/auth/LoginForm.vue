@@ -14,6 +14,10 @@
 
 <script setup lang="ts">
 import useAuth from '@/composables/useAuth'
+
+const router = useRouter()
+
+// Login Form
 const loginData = ref({
   email: '',
   password: ''
@@ -26,7 +30,12 @@ const { executeAPI: exeLogin } = login(loginData.value)
 const { executeAPI: exeRefresh } = refresh({ refresh_token: refreshToken })
 const { executeAPI: exeGetMe } = getMe()
 
-const doLogin = () => exeLogin()
+const doLogin = () =>
+  exeLogin().then((resp) => {
+    if (resp.data.value) {
+      router.push('/')
+    }
+  })
 const doRefresh = () => exeRefresh()
 const doGetMe = () => exeGetMe()
 </script>

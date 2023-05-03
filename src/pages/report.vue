@@ -10,4 +10,5 @@ div
 <route lang="yaml">
 meta:
   layout: dashboard
+  requiredAuth: true
 </route>
