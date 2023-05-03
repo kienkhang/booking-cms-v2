@@ -57,16 +57,24 @@ div
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Khăn tắm' name='towels' v-model='towels')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Rượu' name='wine' v-model='wine')
 
-    FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end') Cập nhật
+    FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end')
+      span {{ isEdit ? 'Cập nhật':'Tạo mới' }}
 
 </template>
 
 <script setup lang="ts">
+import type { IRoom } from '@/dtos/room'
+
+const props = defineProps<{
+  room?: IRoom
+}>()
+
+const isEdit = computed(() => !!props.room)
 // ============= ROOM INFO ==================
 const { hotelId } = useHotelStorage()
 const roomInfo = reactive({
-  name: 'King',
-  description: 'Phong 35m2 rong rai view bien',
+  name: '',
+  description: '',
   bed_nums: 0,
   bathroom_nums: 0,
   activated: false,
@@ -136,7 +144,9 @@ const {
 
 const doSubmit = () => {
   const data = { ...roomInfo, ...roomViews, ...roomFacilities, hotel_id: hotelId.value }
-  console.log('🐔🦢 ~ data:', data)
+  if (isEdit.value) {
+    console.log('🐔🦢 ~ data:', data)
+  }
 }
 </script>
 
