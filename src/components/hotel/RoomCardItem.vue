@@ -1,7 +1,7 @@
 <template lang="pug">
 .flex.flex-col(class='gap-2.5 md:flex-row select-none mx-auto')
   div.rounded-10.overflow-hidden(class='w-56 h-[125px]')
-    img(src="@/assets/images/hotela.jpg", alt="Hinh anh hotel", srcset="@/assets/images/hotela.jpg" class='object-cover cursor-pointer')
+    img(src="@/assets/images/hotela.jpg", alt="Hinh anh hotel", srcset="@/assets/images/hotela.jpg" class='object-cover cursor-pointer' @click='gotoDetails()')
   .flex.flex-col.justify-between(class='w-56 h-full md:w-72 md:h-[125px]')
     //- Price & action
     .flex.items-center.justify-between
@@ -44,8 +44,6 @@ const router = useRouter()
 const route = useRoute()
 const gotoDetails = () => {
   router.push(`room/${props.data.id}`)
-  console.log('🐔🦢 ~ gotoDetails ~ props.data.id:', props.data.id)
-  console.log('TTTT')
 }
 </script>
 
