@@ -3,7 +3,7 @@ import { usersApi } from '@/apis/users'
 import accountStore from '@/stores/account'
 
 const useAuth = () => {
-  const { setToken, setRToken } = useAuthStorage()
+  const { setToken, setRToken, removeToken } = useAuthStorage()
   const login = (form: { email: string; password: string }) => {
     const usedLogin = authApi.login({})
     const { execute, isFinished, data } = usedLogin
@@ -82,13 +82,19 @@ const useAuth = () => {
       executeAPI: () => execute()
     }
   }
+  const logout = () => {
+    return new Promise((resolve) => {
+      resolve(removeToken())
+    })
+  }
 
   return {
     login,
     signup,
     refresh,
     reset,
-    getMe
+    getMe,
+    logout
   }
 }
 

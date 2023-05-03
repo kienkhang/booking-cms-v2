@@ -12,7 +12,10 @@ const useAuthStorage = () => {
   const setToken = (value: string) => set(token, value, { path: '/' })
   const setRToken = (value: string) => set(refresh, value, { path: '/' })
 
-  const removeToken = () => remove(token)
+  const removeToken = () => {
+    remove(token)
+    remove(refresh)
+  }
 
   const isLoggedIn = () => !!getToken()
 
