@@ -4,6 +4,11 @@ div Thông tin chi tiết của room đổ ra theo thứ tự là Tên, thông t
 </template>
 
 <script setup lang="ts">
+import type { IRoom } from '@/dtos/room'
+
+const props = defineProps<{
+  room: IRoom
+}>()
 const route = useRoute()
 const roomId = computed(() => route.params?.id)
 </script>
