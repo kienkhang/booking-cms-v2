@@ -1,5 +1,5 @@
 <template lang="pug">
-button.inline-flex.items-center.gap-2.rounded-md.transition-all(:class='["active:focus:scale-95 hover:bg-opacity-90",bgcolor,color,btnClass,{ "py-1 px-3":size==="small"},{ "py-2 px-4":size==="medium"},{ "py-3 px-6":size==="large"}]' @click='$emit("press")')
+button.inline-flex.items-center.rounded-md.transition-all(:class='["active:focus:scale-95 hover:bg-opacity-90",bgcolor,color,btnClass,{ "py-1 px-3 gap-1":size==="small"},{ "py-2 px-4 gap-1":size==="medium"},{ "py-3 px-6 gap-2":size==="large"}]' @click='$emit("press")')
   slot
 
 </template>
