@@ -1,50 +1,65 @@
 <template lang="pug">
-FormKit(type='form' :actions='false' )
-  FormKit(type='text' v-model='name' name='name' label='Tên gói', placeholder='Nhập tên gói giá')
-  //- Activate
-  .flex.flex-col.gap-1.justify-start
-    label.font-bold Kích hoạt
-    NSwitch.w-full(v-model:value='activated' style="width:max-content")
-  FormKit(v-model="type"
-              type="select"
-              label="Loại gói"
-              name="type"
-              placeholder="Chọn gói giá"
-              validation='required'
-              :options='typeOptions||[{ label: "Không có dữ liệu", value: "nodata", attrs: { disabled: true } }]'
-              )
-  FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bữa ăn sáng' name='free_breakfast' v-model='free_breakfast')
-  FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bữa ăn trưa' name='free_dinner' v-model='free_dinner')
-  FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bữa ăn tối' name='free_lunch' v-model='free_lunch')
-  FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end')
-    span {{isEditForm ?'Cập nhật':'Tạo'}}
+FormKit(type='form' v-model:model-value='form' name='signup_form' id='signup_form' @submit="doSubmit" :actions='false' style='width: 100%;')
+    FormKit(type='text' label='Email' name="email" placeholder='Nhập email của bạn' validation="required|email" v-if='formType==="add"')
+    FormKit(type='select' :options='roleOptions' label='Quyền' name="role" placeholder='Chọn trạng thái' validation="required" v-if='formType==="add"')
+    FormKit(type='select' :options='statusOptions' label='Trạng thái' name="status" placeholder='Chọn trạng thái' validation="required" v-else)
+    FormKit(type='text' label='Họ' name="first_name" placeholder='Nhập họ của bạn' validation="required")
+    FormKit(type='text' label='Tên' name="last_name" placeholder='Nhập tên của bạn' validation="required")
+    FormKit(type="password" label='Mật khẩu' name='password' placeholder='Nhập mật khẩu của bạn' validation="required|length:6")
+    FormKit.block.w-full(type="submit" name='Signup' input-class='bg-green-500')
+      span {{ formType ==='add'? 'Tạo':'Cập nhật' }}
 </template>
 
 <script setup lang="ts">
+import { SYSTEM_ROLE } from '@/constant/role'
+import type { User } from '@/dtos/user'
+
 const props = defineProps<{
   formType: 'add' | 'edit'
+  user?: User
 }>()
 const isEditForm = computed(() => props.formType === 'edit')
-const form = reactive({
-  name: '',
-  type: 0,
-  activated: false,
-  free_breakfast: false,
-  free_lunch: false,
-  free_dinner: false
+const form = isEditForm
+  ? reactive({
+      first_name: props?.user?.first_name || '',
+      last_name: props?.user?.last_name || '',
+      status: props?.user?.status || '',
+      password: ''
+    })
+  : reactive({
+      email: '',
+      first_name: '',
+      last_name: '',
+      role: 2,
+      password: ''
+    })
+// Select Role
+const roleOptions = computed(() => {
+  const roles = []
+  for (let role in SYSTEM_ROLE) {
+    if (!['1', '66'].includes(role))
+      roles.push({
+        label: SYSTEM_ROLE[role],
+        value: role
+      })
+  }
+  return roles
 })
-const { activated, free_breakfast, free_dinner, free_lunch, name, type } = toRefs(form)
-
-const typeOptions = ref([
+// Select Status
+const statusOptions = ref([
   {
-    label: 'Hoàn tiền',
+    label: 'Mở khóa',
     value: 1
   },
   {
-    label: 'Không hoàn tiền',
+    label: 'Khóa',
     value: 2
   }
 ])
+// Submit data
+const doSubmit = (data) => {
+  console.log('🐔🦢 ~ doSubmit ~ data:', data)
+}
 </script>
 
 <style scoped></style>
