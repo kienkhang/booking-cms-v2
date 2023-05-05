@@ -1,4 +1,4 @@
-import { User } from '@/dtos/user'
+import type { User } from '@/dtos/user'
 
 const accountStore = () => {
   const account = ref<User>()
