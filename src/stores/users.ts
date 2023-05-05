@@ -1,8 +1,8 @@
 import { usersApi } from '@/apis/users'
-import { User } from '@/dtos/user'
+import { IUser } from '@/dtos/user'
 
 const useUsersStore = () => {
-  const users = ref<User[]>([])
+  const users = ref<IUser[]>([])
   const paging = ref<{
     limit?: number
     page?: number

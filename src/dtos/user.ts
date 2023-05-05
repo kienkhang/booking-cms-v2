@@ -1,4 +1,4 @@
-interface User {
+interface IUser {
   id: string
   avatar: string
   email: string
@@ -15,7 +15,7 @@ interface User {
   password?: string
 }
 
-type AddUser = Pick<User, 'first_name' | 'last_name' | 'email' | 'role' | 'password'>
-type UpdateUser = Pick<User, 'first_name' | 'last_name' | 'status' | 'password'>
+type IAddUser = Pick<IUser, 'first_name' | 'last_name' | 'email' | 'role' | 'password'>
+type IUpdateUser = Pick<IUser, 'first_name' | 'last_name' | 'status' | 'password'>
 
-export { User, AddUser, UpdateUser }
+export { IUser, IAddUser, IUpdateUser }

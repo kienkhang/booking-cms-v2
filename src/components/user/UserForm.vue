@@ -14,24 +14,24 @@ FormKit(type='form' v-model:model-value='form' name='signup_form' id='signup_for
 <script setup lang="ts">
 import useUsers from '@/composables/user/useUsers'
 import { SYSTEM_ROLE } from '@/constant/role'
-import type { User, AddUser, UpdateUser } from '@/dtos/user'
+import type { IUser, IAddUser, IUpdateUser } from '@/dtos/user'
 
 // ================== PROPS =====================
 const props = defineProps<{
   formType: 'add' | 'edit'
-  user?: User
+  user?: IUser
 }>()
 
 // ================== HANDLE FORM ========================
 const isEditForm = computed(() => props.formType === 'edit')
 const form = isEditForm
-  ? ref<UpdateUser>({
+  ? ref<IUpdateUser>({
       first_name: props?.user?.first_name || '',
       last_name: props?.user?.last_name || '',
       status: props?.user?.status || 1,
       password: ''
     })
-  : ref<AddUser>({
+  : ref<IAddUser>({
       email: '',
       first_name: '',
       last_name: '',
@@ -64,8 +64,8 @@ const statusOptions = ref([
 
 // ================== CALL API ========================
 const { createUser } = useUsers()
-const { executeApi: exeCreate, isLoading: isCLoading } = createUser(form as Ref<AddUser>)
-// const {executeApi:exeUpdate} = updateUser(form as Ref<UpdateUser>)
+const { executeApi: exeCreate, isLoading: isCLoading } = createUser(form as Ref<IAddUser>)
+// const {executeApi:exeUpdate} = IUpdateUser(form as Ref<IUpdateUser>)
 const isLoading = computed(() => isCLoading.value)
 // Submit data
 const doSubmit = async () => {

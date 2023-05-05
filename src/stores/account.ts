@@ -1,7 +1,7 @@
-import type { User } from '@/dtos/user'
+import type { IUser } from '@/dtos/user'
 
 const accountStore = () => {
-  const account = ref<User>()
+  const account = ref<IUser>()
 
   const role = computed(() => {
     if (+account.value.role === 1) return 'CUSTOMER'
@@ -13,7 +13,7 @@ const accountStore = () => {
     else if (+account.value.role === 66) return 'SUPPERADMIN'
   })
 
-  const setAccount = (acc: User) => {
+  const setAccount = (acc: IUser) => {
     account.value = acc
   }
 

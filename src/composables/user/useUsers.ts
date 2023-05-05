@@ -1,5 +1,5 @@
 import { usersApi } from '@/apis/users'
-import type { AddUser, UpdateUser } from '@/dtos/user'
+import type { IAddUser, IUpdateUser } from '@/dtos/user'
 import { useUsersStore } from '@/stores'
 
 const useUsers = () => {
@@ -15,7 +15,7 @@ const useUsers = () => {
   })
 
   // handle create user
-  const createUser = (form: Ref<AddUser>) => {
+  const createUser = (form: Ref<IAddUser>) => {
     // call api
     const usedCreateUser = usersApi.createAccount(form.value)
     // destructuring useAxios struct
@@ -35,7 +35,7 @@ const useUsers = () => {
     }
   }
   // handle create user
-  const updateUser = (form: Ref<UpdateUser>) => {
+  const updateUser = (form: Ref<IUpdateUser>) => {
     // call api
     const usedUpdateUser = usersApi.createAccount(form.value)
     // destructuring useAxios struct
