@@ -7,26 +7,31 @@ FormKit(type='form' v-model:model-value='form' name='signup_form' id='signup_for
     FormKit(type='text' label='Tên' name="last_name" placeholder='Nhập tên của bạn' validation="required")
     FormKit(type="password" label='Mật khẩu' name='password' placeholder='Nhập mật khẩu của bạn' validation="required|length:6")
     FormKit.block.w-full(type="submit" name='Signup' input-class='bg-green-500')
-      span {{ formType ==='add'? 'Tạo':'Cập nhật' }}
+      span(v-if='!isLoading') {{ formType ==='add'? 'Tạo':'Cập nhật' }}
+      icon-custom-load.w-4.h-4.animate-spin(v-else)
 </template>
 
 <script setup lang="ts">
+import useUsers from '@/composables/user/useUsers'
 import { SYSTEM_ROLE } from '@/constant/role'
-import type { User } from '@/dtos/user'
+import type { User, AddUser, UpdateUser } from '@/dtos/user'
 
+// ================== PROPS =====================
 const props = defineProps<{
   formType: 'add' | 'edit'
   user?: User
 }>()
+
+// ================== HANDLE FORM ========================
 const isEditForm = computed(() => props.formType === 'edit')
 const form = isEditForm
-  ? reactive({
+  ? ref<UpdateUser>({
       first_name: props?.user?.first_name || '',
       last_name: props?.user?.last_name || '',
-      status: props?.user?.status || '',
+      status: props?.user?.status || 1,
       password: ''
     })
-  : reactive({
+  : ref<AddUser>({
       email: '',
       first_name: '',
       last_name: '',
@@ -56,9 +61,17 @@ const statusOptions = ref([
     value: 2
   }
 ])
+
+// ================== CALL API ========================
+const { createUser } = useUsers()
+const { executeApi: exeCreate, isLoading: isCLoading } = createUser(form as Ref<AddUser>)
+// const {executeApi:exeUpdate} = updateUser(form as Ref<UpdateUser>)
+const isLoading = computed(() => isCLoading.value)
 // Submit data
-const doSubmit = (data) => {
-  console.log('🐔🦢 ~ doSubmit ~ data:', data)
+const doSubmit = async () => {
+  if (!isEditForm.value) {
+    await exeCreate()
+  }
 }
 </script>
 
