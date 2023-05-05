@@ -23,7 +23,7 @@ const signupData = reactive({
 })
 
 const { signup } = useAuth()
-const { execute } = signup({})
+const { execute } = signup(signupData)
 
 const doSignup = () => execute({ data: { ...signupData } })
 </script>
