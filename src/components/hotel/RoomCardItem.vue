@@ -11,7 +11,7 @@
         span.px-2.py-1.bg-green-100.text-green-600.font-medium Garden
         span.px-2.py-1.bg-green-100.text-green-600.font-medium Mountain
         span.px-2.py-1.bg-green-100.text-green-600.font-medium River
-      RoomCardAction
+      RoomCardAction(:id='data.id')
     //- Title and description
     .title.font-semibold.text-lg(class='cursor-pointer' @click='gotoDetails()') Metro Jayakarta Hotel & Spa
     n-popover(width='trigger')
