@@ -13,6 +13,9 @@
     SidebarItem(:activated='route.name==="voucher"' label='Voucher' page='voucher')
       template(#icon)
         icon-custom-voucher.w-6.h-6
+    SidebarItem(:activated='route.name==="user"' label='User' page='user')
+      template(#icon)
+        icon-mdi:user.w-6.h-6
     SidebarItem(:activated='route.name==="cmsr"' label='Tỉ lệ hoa hồng' page='cmsr')
       template(#icon)
         icon-custom-rate.w-6.h-6
