@@ -17,7 +17,6 @@ instance.interceptors.response.use(
     return resp
   },
   async (error) => {
-    console.log('Response Error', error)
     const { refresh } = useAuth()
     // Get status code
     const status = error?.response.status
@@ -34,8 +33,8 @@ instance.interceptors.response.use(
       // After execute -> Return preConfig with new access token
       console.log({ data: data.value })
       const newAccessToken = data.value?.access_token
-      preConfig['Authorization'] = `Bearer ${newAccessToken}`
-      return preConfig
+      preConfig.headers['Authorization'] = `Bearer ${newAccessToken}`
+      return instance(preConfig)
     }
     return Promise.reject(error)
   }
@@ -45,7 +44,7 @@ instance.interceptors.request.use(
     return req
   },
   (error) => {
-    console.log('Request Error', error)
+    return error
   }
 )
 
