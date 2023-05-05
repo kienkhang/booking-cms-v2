@@ -9,7 +9,7 @@
       Button(@press="openModal()" color='text-white' bgcolor='bg-green-crayola' size='small' class='gap-1')
         icon-ic:round-plus.w-6.h-6.flex-shrink-0
         .font-bold Thêm
-  NDataTable(:columns='columns' :data='data' :bordered='true' :pagination='pagination')
+  NDataTable(:columns='columns' :data='users' :bordered='true' :pagination='pagination')
   UserModal(type='add' v-model:show="showModal")
 </template>
 
@@ -21,6 +21,7 @@ import { SYSTEM_ROLE } from '@/constant/role'
 import UserAction from './UserAction.vue'
 import Button from '../shared/button/Button.vue'
 import UserModal from './UserModal.vue'
+import useUsers from '@/composables/user/useUsers'
 // ============= MODAL ADD USER ====================
 // open close modal
 const showModal = ref(false)
@@ -56,11 +57,6 @@ const roleOptions = computed(() => {
   }
   return roles
 })
-//
-
-const doSubmit = () => {
-  console.log('🐔🦢 ~ doSubmit ~ data:', { ...input.value })
-}
 
 // ========== TABLE DATA ===============
 // Pagination
@@ -109,7 +105,10 @@ const createColumns = (): DataTableColumns<User> => {
       key: 'role',
       resizable: true,
       minWidth: 50,
-      maxWidth: 100
+      maxWidth: 100,
+      render(data) {
+        return h('span', { class: 'font-medium' }, SYSTEM_ROLE[data.role])
+      }
     },
     {
       title: 'Hành động',
@@ -124,218 +123,21 @@ const createColumns = (): DataTableColumns<User> => {
 
 const columns = createColumns()
 // Data
-const data = ref<User[]>([
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
-  },
-  {
-    id: '123',
-    avatar: '',
-    created_at: '123',
-    email: 'trankienkhang2210@gmail.com',
-    first_name: 'Khang',
-    last_name: 'Tran',
-    full_name: 'Khang Tran',
-    gender: false,
-    phone: '0912874401',
-    role: '1',
-    status: 1,
-    updated_at: '123',
-    user_key_firebase: ''
+const { users, getUsers, paging } = useUsers()
+
+onBeforeMount(() => {
+  getUsers()
+})
+// Submit with params paging
+const doSubmit = () => {
+  console.log('🐔🦢 ~ doSubmit ~ data:', { ...input.value })
+  paging.value = {
+    page: pagination.page,
+    search: input.value.searchInput,
+    role: input.value.roleInput,
+    litmit: 10
   }
-])
+}
 </script>
 
 <style scoped></style>
