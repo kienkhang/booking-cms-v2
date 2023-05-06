@@ -8,6 +8,7 @@ div
       .flex.flex-col.gap-1.justify-start
         label.font-bold Kích hoạt
         NSwitch.w-full(v-model:value='activate' style="width:max-content")
+      NAutoComplete(v-model:value='email'  :input-props="{autocomplete: 'disabled'}" :options='hotelierOptions' style='width: 300px;' placeholder='Nhập email cần tìm')
       //- name
       FormKit(type='text' v-model='name' label='Tên khách sạn' name="name" placeholder='Nhập tên khách sạn bạn' validation="required")
       //- overview
@@ -87,18 +88,53 @@ div
 import { NSwitch } from 'naive-ui'
 import EditorQuill from '../shared/EditorQuill.vue'
 import { VIETNAM_BANKING_LIST } from '@/constant/bank'
+import type { IHotelAdd } from '@/dtos/hotel'
+import { useAccountsStore } from '@/stores'
+import useUsers from '@/composables/user/useUsers'
 
 const route = useRoute()
-const isEditForm = computed(() => route.meta?.crud === 'edit-hotel')
+const isEditForm = computed(() => route.name === 'hotel-settings')
+// ========================= HOTELIER ID ======================
+const { account, isHotelier } = storeToRefs(useAccountsStore())
+const { paging, users } = useUsers()
 
+const email = ref('')
+const hotelierOptions = computed(() => {
+  return users.value.map((user) => ({
+    label: user.email,
+    value: user.email
+  }))
+})
+
+const hotelier_id = computed(() => {
+  if (isHotelier.value) {
+    return account.value.id
+  } else {
+    const foundedAccount = users.value.find((user) => user.email === email.value)
+    return foundedAccount.id
+  }
+})
+
+watchDebounced(
+  email,
+  () => {
+    paging.value = {
+      search: email.value,
+      limit: 10,
+      page: 1,
+      role: 2
+    }
+  },
+  { debounce: 500 }
+)
 // ---------------------- HOTEL INFO ----------------------
-const hotelInfo = reactive({
+const hotelInfo = ref({
   name: '',
   overview: '',
   activate: true,
   photos: '',
   raw_address: '',
-  bankAccount: 0,
+  bankAccount: '',
   bankName: '',
   bankBeneficiary: ''
 })
@@ -111,9 +147,9 @@ const {
   overview,
   raw_address
   // photos
-} = toRefs(hotelInfo)
+} = toRefs(hotelInfo.value)
 // ---------------------- HOTEL ADDITIONAL ----------------------
-const hotelAdditional = reactive({
+const hotelAdditional = ref({
   hotel: false,
   apartment: false,
   resort: false,
@@ -150,7 +186,7 @@ const {
   resort,
   villa,
   wifi
-} = toRefs(hotelAdditional)
+} = toRefs(hotelAdditional.value)
 
 // ---------------------- ADDRESS ----------------------
 const {
@@ -189,7 +225,38 @@ const doFocusWard = async () => {
 
 // ---------------------- HANDLE SUBMIT FORM ----------------------
 const doSubmit = () => {
-  const data = { ...hotelInfo, ...hotelAdditional, district, province, ward }
+  const data: IHotelAdd = {
+    activate: activate.value,
+    apartment: apartment.value,
+    bankAccount: bankAccount.value,
+    bankBeneficiary: bankBeneficiary.value,
+    bankName: bankName.value,
+    bar: bar.value,
+    bath: bath.value,
+    beach: beach.value,
+    breakfast: breakfast.value,
+    camping: camping.value,
+    casio: casio.value,
+    fitness: fitness.value,
+    homestay: homestay.value,
+    hotel: hotel.value,
+    motel: motel.value,
+    name: name.value,
+    no_smoking_room: no_smoking_room.value,
+    overview: overview.value,
+    parking: parking.value,
+    photos: '',
+    pool: pool.value,
+    raw_address: raw_address.value,
+    resort: resort.value,
+    villa: villa.value,
+    wifi: wifi.value,
+    district: district.value,
+    province: province.value,
+    ward: ward.value,
+    hotelier_id: hotelier_id.value,
+    bussiness_license: ''
+  }
   console.log('🐔🦢 ~ doSubmit ~ data:', data)
 }
 </script>
