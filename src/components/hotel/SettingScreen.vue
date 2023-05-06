@@ -1,9 +1,9 @@
 <template lang="pug">
 .grid.grid-cols-1.gap-8(class='max-w-3xl mx-auto lg:grid-cols-2')
   //- .flex(class='flex flex-wrap')
-  SettingCardItem(title='Thiết lập' path='/hotel/config' description='Giúp bạn thiết lập thông tin chung và mô tả cho khách hàng thấy về khách sạn của mình nhanh chóng' @goto='goto("/hotel/config")')
+  SettingCardItem(title='Thiết lập' path='/hotel/config' description='Giúp bạn thiết lập thông tin chung và mô tả cho khách hàng thấy về khách sạn của mình nhanh chóng' @goto='goto("/hotel/settings")')
     template(#icon)
-      icon-color-hotel.w-28.h-28.cursor-pointer(@click='goto("/hotel/config")')
+      icon-color-hotel.w-28.h-28.cursor-pointer(@click='goto("/hotel/settings")')
   SettingCardItem(title='Phòng' path='/room' description='Giúp bạn thiết lập và quản lý các loại phòng trong khách sạn'  @goto='goto("/room")')
     template(#icon)
       icon-color-room.w-28.h-28.cursor-pointer(@click='goto("/room")')

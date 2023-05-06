@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/dtos/user'
+import type { IUser } from '@/dtos/user'
 import { type DataTableColumns, NDataTable, NAutoComplete, NSelect, NButton } from 'naive-ui'
 import { SYSTEM_ROLE } from '@/constant/role'
 // Components
@@ -31,7 +31,7 @@ const openModal = () => (showModal.value = true)
 // Search input
 const input = ref({
   searchInput: '',
-  roleInput: '51'
+  roleInput: ''
 })
 const { roleInput, searchInput } = toRefs(input.value)
 // Debounced Search Input
@@ -48,10 +48,15 @@ const searchOptions = computed(() => {
 })
 // Select Role
 const roleOptions = computed(() => {
-  const roles = []
+  const roles = [
+    {
+      label: 'TẤT CẢ',
+      value: ''
+    }
+  ]
   for (let role in SYSTEM_ROLE) {
     roles.push({
-      label: SYSTEM_ROLE[role],
+      label: SYSTEM_ROLE[role] as string,
       value: role
     })
   }
@@ -68,7 +73,7 @@ const pagination = reactive({
   }
 })
 // Columns
-const createColumns = (): DataTableColumns<User> => {
+const createColumns = (): DataTableColumns<IUser> => {
   return [
     {
       title: 'STT',
@@ -126,7 +131,9 @@ const columns = createColumns()
 const { users, getUsers, paging } = useUsers()
 
 onBeforeMount(() => {
-  getUsers()
+  // if paging not null -> paging = null
+  // assign paging -> auto getUsers (useUsers)
+  if (!paging.value) paging.value = null
 })
 // Submit with params paging
 const doSubmit = () => {
