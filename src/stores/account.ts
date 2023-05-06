@@ -10,8 +10,14 @@ const accountStore = () => {
     else if (+account.value.role === 4) return 'STAFF'
     else if (+account.value.role === 5) return 'MANAGER'
     else if (+account.value.role === 51) return 'ADMIN'
-    else if (+account.value.role === 66) return 'SUPPERADMIN'
+    else if (+account.value.role === 66) return 'SUPERADMIN'
   })
+
+  const isHotelier = computed(() => role.value === 'HOTELIER')
+  const isAdmin = computed(() => ['HOTELIER', 'SUPERADMIN'].includes(role.value))
+  const isAccountant = computed(() => role.value === 'ACCOUNTANT')
+  const isStaff = computed(() => role.value === 'STAFF')
+  const isManager = computed(() => role.value === 'MANAGER')
 
   const setAccount = (acc: IUser) => {
     account.value = acc
@@ -20,6 +26,11 @@ const accountStore = () => {
   return {
     account,
     role,
+    isHotelier,
+    isAdmin,
+    isAccountant,
+    isStaff,
+    isManager,
     setAccount
   }
 }
