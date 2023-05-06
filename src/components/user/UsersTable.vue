@@ -128,7 +128,7 @@ const createColumns = (): DataTableColumns<IUser> => {
 
 const columns = createColumns()
 // Data
-const { users, getUsers, paging } = useUsers()
+const { users, paging } = useUsers()
 
 onBeforeMount(() => {
   // if paging not null -> paging = null
