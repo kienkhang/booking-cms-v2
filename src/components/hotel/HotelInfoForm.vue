@@ -8,7 +8,7 @@ div
       .flex.flex-col.gap-1.justify-start
         label.font-bold Kích hoạt
         NSwitch.w-full(v-model:value='activate' style="width:max-content")
-      NAutoComplete(v-model:value='email'  :input-props="{autocomplete: 'disabled'}" :options='hotelierOptions' style='width: 300px;' placeholder='Nhập email cần tìm')
+      NAutoComplete(v-model:value='email'  :input-props="{autocomplete: 'disabled'}" :options='hotelierOptions' style='width: 300px;' placeholder='Nhập email cần tìm' v-if='isAdmin')
       //- name
       FormKit(type='text' v-model='name' label='Tên khách sạn' name="name" placeholder='Nhập tên khách sạn bạn' validation="required")
       //- overview
@@ -81,7 +81,9 @@ div
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Ăn sáng' name='breakfast' v-model='breakfast')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Casio' name='casio' v-model='casio')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bãi đỗ xe' name='parking' v-model='parking')
-    FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end') {{isEditForm ?'Cập nhật':'Tạo'}}
+    FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end')
+      icon-custom-load.w-4.h-4.animate-spin(v-if='isLoading') 
+      span(v-else) {{isEditForm ?'Cập nhật':'Tạo'}}
 </template>
 
 <script setup lang="ts">
@@ -94,10 +96,14 @@ import useUsers from '@/composables/user/useUsers'
 
 const route = useRoute()
 const isEditForm = computed(() => route.name === 'hotel-settings')
+
+// Hotel ID
+const { hotelId } = useHotelStorage()
 // ========================= HOTELIER ID ======================
-const { account, isHotelier } = storeToRefs(useAccountsStore())
+const { account, isHotelier, isAdmin } = storeToRefs(useAccountsStore())
 const { paging, users } = useUsers()
 
+// select hotelier with email
 const email = ref('')
 const hotelierOptions = computed(() => {
   return users.value.map((user) => ({
@@ -105,16 +111,18 @@ const hotelierOptions = computed(() => {
     value: user.email
   }))
 })
-
+// if role is admin -> call api to get hotel role 2 and get hotelier
+// else if role is hotelier -> get id from account store
 const hotelier_id = computed(() => {
   if (isHotelier.value) {
     return account.value.id
   } else {
-    const foundedAccount = users.value.find((user) => user.email === email.value)
-    return foundedAccount.id
+    const foundedAccount = users?.value.find((user) => user.email === email.value)
+    return foundedAccount?.id
   }
 })
 
+// when email change -> get hotel with paging
 watchDebounced(
   email,
   () => {
@@ -128,28 +136,31 @@ watchDebounced(
   { debounce: 500 }
 )
 // ---------------------- HOTEL INFO ----------------------
-const hotelInfo = ref({
-  name: '',
-  overview: '',
-  activate: true,
-  photos: '',
-  raw_address: '',
-  bankAccount: '',
-  bankName: '',
-  bankBeneficiary: ''
+const { hotels, paging: hotelPaging } = storeToRefs(useHotelsStore())
+
+const hotelEditing = computed(() => {
+  if (hotels.value.length > 0) {
+    return hotels?.value[0]
+  }
 })
-const {
-  activate,
-  bankAccount,
-  bankBeneficiary,
-  bankName,
-  name,
-  overview,
-  raw_address
-  // photos
-} = toRefs(hotelInfo.value)
-// ---------------------- HOTEL ADDITIONAL ----------------------
-const hotelAdditional = ref({
+onMounted(() => {
+  if (isEditForm.value) {
+    hotelPaging.value = {
+      limit: 1
+    }
+  }
+})
+const hotelInfo = reactive({
+  // Hotel Basic Info
+  name: hotelEditing.value.name || '',
+  overview: hotelEditing.value.overview || '',
+  activate: hotelEditing.value.activate || true,
+  photos: hotelEditing.value.photos || '',
+  raw_address: hotelEditing.value.raw_address || '',
+  bankAccount: hotelEditing.value.bankAccount || '',
+  bankName: hotelEditing.value.name || '',
+  bankBeneficiary: hotelEditing.value.name || '',
+  // Hotel More info
   hotel: false,
   apartment: false,
   resort: false,
@@ -169,6 +180,15 @@ const hotelAdditional = ref({
   parking: false
 })
 const {
+  // Hotel Basic Info
+  activate,
+  bankAccount,
+  bankBeneficiary,
+  bankName,
+  name,
+  overview,
+  raw_address,
+  // Hotel More info
   hotel,
   apartment,
   bar,
@@ -186,8 +206,8 @@ const {
   resort,
   villa,
   wifi
-} = toRefs(hotelAdditional.value)
-
+  // photos
+} = toRefs(hotelInfo)
 // ---------------------- ADDRESS ----------------------
 const {
   pOptions,
@@ -222,42 +242,55 @@ const doFocusWard = async () => {
     selectWard(district.value).execute()
   }
 }
+// SUBMIT DATA
+const { createHotel, updateHotel } = useHotel()
+
+const createForm = computed<IHotelAdd>(() => ({
+  activate: activate.value,
+  apartment: apartment.value,
+  bankAccount: bankAccount.value,
+  bankBeneficiary: bankBeneficiary.value,
+  bankName: bankName.value,
+  bar: bar.value,
+  bath: bath.value,
+  beach: beach.value,
+  breakfast: breakfast.value,
+  camping: camping.value,
+  casio: casio.value,
+  fitness: fitness.value,
+  homestay: homestay.value,
+  hotel: hotel.value,
+  motel: motel.value,
+  name: name.value,
+  no_smoking_room: no_smoking_room.value,
+  overview: overview.value,
+  parking: parking.value,
+  photos: '',
+  pool: pool.value,
+  raw_address: raw_address.value,
+  resort: resort.value,
+  villa: villa.value,
+  wifi: wifi.value,
+  district: district.value,
+  province: province.value,
+  ward: ward.value,
+  hotelier_id: hotelier_id.value,
+  bussiness_license: ''
+}))
+
+const { isLoading: isCLoading, executeApi: add } = createHotel(createForm)
+const { isLoading: isULoading, executeApi: update } = updateHotel(createForm, hotelId.value)
+const isLoading = computed(() => isCLoading.value || isULoading.value)
+// const isLoading = computed(() => isCLoading.value)
 
 // ---------------------- HANDLE SUBMIT FORM ----------------------
-const doSubmit = () => {
-  const data: IHotelAdd = {
-    activate: activate.value,
-    apartment: apartment.value,
-    bankAccount: bankAccount.value,
-    bankBeneficiary: bankBeneficiary.value,
-    bankName: bankName.value,
-    bar: bar.value,
-    bath: bath.value,
-    beach: beach.value,
-    breakfast: breakfast.value,
-    camping: camping.value,
-    casio: casio.value,
-    fitness: fitness.value,
-    homestay: homestay.value,
-    hotel: hotel.value,
-    motel: motel.value,
-    name: name.value,
-    no_smoking_room: no_smoking_room.value,
-    overview: overview.value,
-    parking: parking.value,
-    photos: '',
-    pool: pool.value,
-    raw_address: raw_address.value,
-    resort: resort.value,
-    villa: villa.value,
-    wifi: wifi.value,
-    district: district.value,
-    province: province.value,
-    ward: ward.value,
-    hotelier_id: hotelier_id.value,
-    bussiness_license: ''
+const doSubmit = async () => {
+  if (!isEditForm.value) {
+    await add()
+  } else {
+    await update()
+    return
   }
-  console.log('🐔🦢 ~ doSubmit ~ data:', data)
 }
 </script>
 

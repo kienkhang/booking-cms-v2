@@ -37,7 +37,7 @@ const useUsers = () => {
   // handle create user
   const updateUser = (form: Ref<IUpdateUser>) => {
     // call api
-    const usedUpdateUser = usersApi.createAccount(form.value)
+    const usedUpdateUser = usersApi.updateAccount(form.value)
     // destructuring useAxios struct
     const { execute, isFinished, error } = usedUpdateUser
     // after finished && not error -> Get user

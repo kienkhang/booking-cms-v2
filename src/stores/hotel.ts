@@ -46,13 +46,15 @@ const useHotelStore = () => {
 
   // Set current hotel with hotelId from localstorage
   const getHotelLocalStore = async () => {
+    if (!hotelId.value) return
     paging.value = {
       limit: 1,
       page: 1,
       id: hotelId.value
     }
-    const { data } = await getHotelPartner()
-    setCurrentHotel(data.value[0])
+    // Get hotel
+    await getHotels()
+    setCurrentHotel(hotels.value[0])
   }
 
   // Get Hotels
@@ -63,6 +65,10 @@ const useHotelStore = () => {
       await getHotelPartner()
     }
   }
+
+  watch([hotelId], () => {
+    !!hotelId.value && getHotelLocalStore()
+  })
 
   return {
     hotels,

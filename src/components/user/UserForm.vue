@@ -24,20 +24,22 @@ const props = defineProps<{
 
 // ================== HANDLE FORM ========================
 const isEditForm = computed(() => props.formType === 'edit')
-const form = isEditForm
-  ? ref<IUpdateUser>({
-      first_name: props?.user?.first_name || '',
-      last_name: props?.user?.last_name || '',
-      status: props?.user?.status || 1,
-      password: ''
-    })
-  : ref<IAddUser>({
-      email: '',
-      first_name: '',
-      last_name: '',
-      role: 2,
-      password: ''
-    })
+
+const updateForm = ref<IUpdateUser>({
+  first_name: props?.user?.first_name || '',
+  last_name: props?.user?.last_name || '',
+  status: props?.user?.status || 1,
+  password: '',
+  id: props.user?.id || ''
+})
+const createForm = ref<IAddUser>({
+  email: '',
+  first_name: '',
+  last_name: '',
+  role: '2',
+  password: ''
+})
+const form = computed(() => (isEditForm.value ? updateForm.value : createForm.value))
 // Select Role
 const roleOptions = computed(() => {
   const roles = []
@@ -45,7 +47,7 @@ const roleOptions = computed(() => {
     if (!['1', '66'].includes(role))
       roles.push({
         label: SYSTEM_ROLE[role],
-        value: role
+        value: role + ''
       })
   }
   return roles
@@ -63,14 +65,18 @@ const statusOptions = ref([
 ])
 
 // ================== CALL API ========================
-const { createUser } = useUsers()
-const { executeApi: exeCreate, isLoading: isCLoading } = createUser(form as Ref<IAddUser>)
-// const {executeApi:exeUpdate} = IUpdateUser(form as Ref<IUpdateUser>)
-const isLoading = computed(() => isCLoading.value)
+const { createUser, updateUser } = useUsers()
+const { executeApi: exeCreate, isLoading: isCLoading } = createUser(createForm)
+const { executeApi: exeUpdate, isLoading: isULoading } = updateUser(updateForm)
+const isLoading = computed(() => isCLoading.value || isULoading.value)
 // Submit data
 const doSubmit = async () => {
   if (!isEditForm.value) {
+    console.log('Add api')
     await exeCreate()
+  } else {
+    console.log('Update api')
+    await exeUpdate()
   }
 }
 </script>

@@ -10,17 +10,23 @@ DashboardHeader
 <script setup lang="ts">
 import DashboardHeader from '@/components/dashboard/DashboardHeader.vue'
 
+// hooks
+const router = useRouter()
 // Guard if no hotel selected
-// const { hotelId } = useHotelStorage()
-
-// const router = useRouter()
-
-// onBeforeMount(() => {
-//   // Check exist hotel -> exist -> go to app
-//   if (!!hotelId.value === false) {
-//     router.push({ name: 'select' })
-//   }
-// })
+const { hotelId } = useHotelStorage()
+const { getHotelLocalStore } = useHotelsStore()
+const { isHotelier } = storeToRefs(useAccountsStore())
+onBeforeMount(() => {
+  // Check exist hotel -> exist -> go to app
+  if (!!hotelId.value === false) {
+    if (isHotelier.value) {
+      router.push({ name: 'select' })
+    }
+    return
+  } else {
+    getHotelLocalStore()
+  }
+})
 </script>
 
 <style scoped></style>
