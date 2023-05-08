@@ -5,5 +5,5 @@ export const SYSTEM_ROLE = {
   '4': 'STAFF',
   '5': 'MANAGER',
   '51': 'ADMIN',
-  '66': 'SUPPERADMIN'
+  '66': 'SUPERADMIN'
 }

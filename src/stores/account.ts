@@ -4,6 +4,7 @@ const accountStore = () => {
   const account = ref<IUser>()
 
   const role = computed(() => {
+    if (!account.value) return 'CUSTOMER'
     if (+account.value.role === 1) return 'CUSTOMER'
     else if (+account.value.role === 2) return 'HOTELIER'
     else if (+account.value.role === 3) return 'ACCOUNTANT'
@@ -14,7 +15,7 @@ const accountStore = () => {
   })
 
   const isHotelier = computed(() => role.value === 'HOTELIER')
-  const isAdmin = computed(() => ['HOTELIER', 'SUPERADMIN'].includes(role.value))
+  const isAdmin = computed(() => ['ADMIN', 'SUPERADMIN'].includes(role.value))
   const isAccountant = computed(() => role.value === 'ACCOUNTANT')
   const isStaff = computed(() => role.value === 'STAFF')
   const isManager = computed(() => role.value === 'MANAGER')

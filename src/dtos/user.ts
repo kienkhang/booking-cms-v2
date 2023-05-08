@@ -7,7 +7,7 @@ interface IUser {
   full_name: string
   phone: string
   gender: boolean
-  role: number
+  role: string
   status: number
   user_key_firebase: string
   created_at: string
@@ -16,6 +16,6 @@ interface IUser {
 }
 
 type IAddUser = Pick<IUser, 'first_name' | 'last_name' | 'email' | 'role' | 'password'>
-type IUpdateUser = Pick<IUser, 'first_name' | 'last_name' | 'status' | 'password'>
+type IUpdateUser = Pick<IUser, 'first_name' | 'last_name' | 'status' | 'password' | 'id'>
 
 export { IUser, IAddUser, IUpdateUser }
