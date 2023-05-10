@@ -17,7 +17,7 @@ instance.interceptors.response.use(
     return resp
   },
   async (error) => {
-    const { refresh } = useAuth()
+    const { refresh, logout } = useAuth()
     // Get status code
     const status = error?.response.status
     // Get message jwt
@@ -25,15 +25,20 @@ instance.interceptors.response.use(
     // Get preConfig
     const preConfig = error?.config
     // Check status and custom properties is "sent" meaning request is sended ?
-    if (status === 401 && message === 'invalid or expired jwt' && !preConfig?.sent) {
-      preConfig.sent = true
-      const { data, executeAPI } = refresh({ refresh_token: refreshToken })
+    if (status === 401 && message === 'invalid or expired jwt' && !preConfig?._retry) {
+      preConfig._retry = true
+
+      const { data, executeAPI, error } = refresh({ refresh_token: refreshToken })
       // Execute refresh token
       await executeAPI()
+      // If error -> logout
+      if (error.value) {
+        logout()
+        return
+      }
       // After execute -> Return preConfig with new access token
-      console.log({ data: data.value })
       const newAccessToken = data.value?.access_token
-      preConfig.headers['Authorization'] = `Bearer ${newAccessToken}`
+      instance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`
       return instance(preConfig)
     }
     return Promise.reject(error)
