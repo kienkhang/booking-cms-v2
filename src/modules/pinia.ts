@@ -3,7 +3,7 @@ import type { Router } from 'vue-router'
 import type { UserModule } from '@/types'
 import accountStore from '@/stores/account'
 
-const navigationGuard = (router: Router) => {
+const navigationAuthGuard = (router: Router) => {
   const { getMe } = useAuth()
   const { account } = storeToRefs(accountStore())
   const { isLoggedIn } = useAuthStorage()
@@ -22,6 +22,26 @@ const navigationGuard = (router: Router) => {
     }
   })
 }
+
+const navigationHotelGuard = (router: Router) => {
+  const { currentHotel } = storeToRefs(useHotelsStore())
+  const { getHotelLocalStore } = useHotelsStore()
+  const { hotelId } = useHotelStorage()
+  router.beforeEach((to, _, next) => {
+    const requiredHotel = to.meta.requiredHotel
+    // from catch navigate to "/" and to catch case reload
+    // if need hotel and not hotel saved in store -> goto select
+    if (requiredHotel === true && !hotelId.value) {
+      next({ name: 'select' })
+    }
+    // else next
+    else next()
+    // if exist hotel in local and not having current Hotel -> get hotel
+    if (!!currentHotel.value === false && hotelId.value) {
+      getHotelLocalStore()
+    }
+  })
+}
 // Setup Pinia
 // https://pinia.vuejs.org/
 export const install: UserModule = ({ isClient, initialState, app, router }) => {
@@ -34,5 +54,6 @@ export const install: UserModule = ({ isClient, initialState, app, router }) => 
   else initialState.pinia = pinia.state.value
 
   // Navigation guard
-  navigationGuard(router)
+  navigationAuthGuard(router)
+  navigationHotelGuard(router)
 }

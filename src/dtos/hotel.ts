@@ -5,11 +5,11 @@ interface IHotel {
   name: string
   overview: string
   activate: boolean
-  photos: string
+  hotel_photos: string
   raw_address: string
-  bankAccount: string
-  bankName: string
-  bankBeneficiary: string
+  bank_account: string
+  bank_name: string
+  bank_beneficiary: string
   // Additional & Hotel Type
   hotel: boolean
   apartment: boolean

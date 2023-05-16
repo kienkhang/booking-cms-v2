@@ -12,7 +12,7 @@ n-tabs.config-tab(
   //- tab label của Tab, name là value của Tab
   n-tab-pane(name="infos" tab="Thông tin" display-directive="show:lazy")
     hotel-info-form
-  n-tab-pane(name="photos" tab="Hình ảnh")
+  n-tab-pane(name="photos" tab="Hình ảnh" v-if='!isCreateHotel')
     hotel-file-form
 </template>
 
@@ -26,6 +26,9 @@ import { type CSSProperties } from 'vue'
 //   tabValue.value = name
 
 // }
+const route = useRoute()
+
+const isCreateHotel = computed(() => route.name === 'select')
 
 const tabStyle = computed<CSSProperties>(() => ({
   width: '200px',

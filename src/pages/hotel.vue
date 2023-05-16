@@ -37,4 +37,5 @@ const [animate] = useAutoAnimate({})
 meta:
   layout: dashboard
   requiredAuth: true
+  requiredHotel: true
 </route>

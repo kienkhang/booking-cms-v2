@@ -7,13 +7,6 @@ const useHotel = () => {
   const { hotels, paging } = storeToRefs(useHotelsStore())
   const { getHotels } = useHotelsStore()
 
-  // Get hotel by role account
-
-  // Every paging change -> getHotel follow role
-  watch(paging, () => {
-    getHotels()
-  })
-
   // handle create hotel
   const createHotel = (form: Ref<IHotelAdd>) => {
     // call api

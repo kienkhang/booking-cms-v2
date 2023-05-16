@@ -128,7 +128,7 @@ watchDebounced(
   () => {
     paging.value = {
       search: email.value,
-      limit: 10,
+      offset: 10,
       page: 1,
       role: 2
     }
@@ -136,30 +136,18 @@ watchDebounced(
   { debounce: 500 }
 )
 // ---------------------- HOTEL INFO ----------------------
-const { hotels, paging: hotelPaging } = storeToRefs(useHotelsStore())
+const { currentHotel } = storeToRefs(useHotelsStore())
 
-const hotelEditing = computed(() => {
-  if (hotels.value.length > 0) {
-    return hotels?.value[0]
-  }
-})
-onMounted(() => {
-  if (isEditForm.value) {
-    hotelPaging.value = {
-      limit: 1
-    }
-  }
-})
 const hotelInfo = reactive({
   // Hotel Basic Info
-  name: hotelEditing.value.name || '',
-  overview: hotelEditing.value.overview || '',
-  activate: hotelEditing.value.activate || true,
-  photos: hotelEditing.value.photos || '',
-  raw_address: hotelEditing.value.raw_address || '',
-  bankAccount: hotelEditing.value.bankAccount || '',
-  bankName: hotelEditing.value.name || '',
-  bankBeneficiary: hotelEditing.value.name || '',
+  name: currentHotel.value?.name || '',
+  overview: currentHotel.value?.overview || '',
+  activate: currentHotel.value?.activate || true,
+  photos: currentHotel.value?.hotel_photos || '',
+  raw_address: currentHotel.value?.raw_address || '',
+  bankAccount: currentHotel.value?.bank_account || '',
+  bankName: currentHotel.value?.bank_name || '',
+  bankBeneficiary: currentHotel.value?.bank_beneficiary || '',
   // Hotel More info
   hotel: false,
   apartment: false,
@@ -168,6 +156,7 @@ const hotelInfo = reactive({
   camping: false,
   motel: false,
   homestay: false,
+  // Hotel facilities
   beach: false,
   pool: false,
   bar: false,
@@ -248,9 +237,9 @@ const { createHotel, updateHotel } = useHotel()
 const createForm = computed<IHotelAdd>(() => ({
   activate: activate.value,
   apartment: apartment.value,
-  bankAccount: bankAccount.value,
-  bankBeneficiary: bankBeneficiary.value,
-  bankName: bankName.value,
+  bank_account: bankAccount.value,
+  bank_beneficiary: bankBeneficiary.value,
+  bank_name: bankName.value,
   bar: bar.value,
   bath: bath.value,
   beach: beach.value,
@@ -265,7 +254,7 @@ const createForm = computed<IHotelAdd>(() => ({
   no_smoking_room: no_smoking_room.value,
   overview: overview.value,
   parking: parking.value,
-  photos: '',
+  hotel_photos: '',
   pool: pool.value,
   raw_address: raw_address.value,
   resort: resort.value,

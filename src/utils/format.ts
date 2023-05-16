@@ -3,4 +3,9 @@ const VND = new Intl.NumberFormat('vi-VN', {
   currency: 'VND'
 })
 
-export { VND }
+const Image2Array = (text: string) => {
+  const imgs = text.split(';')
+  return imgs
+}
+
+export { VND, Image2Array }

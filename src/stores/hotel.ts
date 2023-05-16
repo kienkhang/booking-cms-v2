@@ -10,10 +10,11 @@ const useHotelStore = () => {
   const currentHotel = ref<IHotel>()
   // List hotel with paging
   const hotels = ref<IHotel[]>([])
+  const hotelCount = computed(() => hotels.value.length)
 
   // dynamic paging
   const paging = ref<{
-    limit?: number
+    offset?: number
     page?: number
     [filter: string]: any
   }>()
@@ -26,21 +27,40 @@ const useHotelStore = () => {
   // Get hotel with role admin
   const getHotelAdmin = async () => {
     const usedGetHotel = hotelsApi.getHotels(paging.value)
-    const { data, error } = usedGetHotel
+    const { data, error, isFinished } = usedGetHotel
     await usedGetHotel.execute()
+    // After get hotel -> save global state
     if (!error.value) {
       hotels.value = data.value
+    } else {
+      hotelId.value = null
     }
+    // After get data -> reset paging to null
+    until(isFinished)
+      .toBeTruthy()
+      .then(() => {
+        paging.value = null
+      })
     return usedGetHotel
   }
   // Get hotel with role partner (hotelier | manager | staff)
   const getHotelPartner = async () => {
     const usedGetHotel = hotelsApi.partnerGetHotel(paging.value)
-    const { data, error } = usedGetHotel
+    const { data, error, isFinished } = usedGetHotel
+    // Execute get hotel
     await usedGetHotel.execute()
+    // After get hotel -> save global state
     if (!error.value) {
       hotels.value = data.value
+    } else {
+      hotelId.value = null
     }
+    // After get data -> reset paging to null
+    until(isFinished)
+      .toBeTruthy()
+      .then(() => {
+        paging.value = null
+      })
     return usedGetHotel
   }
 
@@ -48,8 +68,6 @@ const useHotelStore = () => {
   const getHotelLocalStore = async () => {
     if (!hotelId.value) return
     paging.value = {
-      limit: 1,
-      page: 1,
       id: hotelId.value
     }
     // Get hotel
@@ -61,17 +79,19 @@ const useHotelStore = () => {
   const getHotels = async () => {
     if (['ADMIN', 'SUPPERADMIN'].includes(role.value)) {
       await getHotelAdmin()
-    } else {
+    } else if (role.value === 'HOTELIER') {
       await getHotelPartner()
     }
   }
 
-  watch([hotelId], () => {
-    !!hotelId.value && getHotelLocalStore()
+  // When ever hotelId change and not null -> get HotelLocalStore
+  whenever(hotelId, async () => {
+    await getHotelLocalStore()
   })
 
   return {
     hotels,
+    hotelCount,
     currentHotel,
     paging,
     getHotelAdmin,
