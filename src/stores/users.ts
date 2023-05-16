@@ -4,7 +4,7 @@ import { IUser } from '@/dtos/user'
 const useUsersStore = () => {
   const users = ref<IUser[]>([])
   const paging = ref<{
-    limit?: number
+    offset?: number
     page?: number
     [filter: string]: any
   }>()
