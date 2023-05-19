@@ -61,6 +61,9 @@ onBeforeMount(async () => {
   //     offset: 10
   //   }
   // } else getHotels()
+  // Reset current hotel
+  currentHotel.value = null
+  // reset paging and call api hotels
   paging.value = null
   isLoading.value = true
   await getHotels()

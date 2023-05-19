@@ -4,6 +4,8 @@ hotel-tabs
 
 <script setup lang="ts">
 import HotelTabs from '@/components/hotel/HotelTabs.vue'
+const { getHotelLocalStore } = useHotelsStore()
+onBeforeMount(() => {
+  getHotelLocalStore()
+})
 </script>
-
-<style scoped></style>

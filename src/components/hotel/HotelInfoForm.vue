@@ -140,14 +140,14 @@ const { currentHotel } = storeToRefs(useHotelsStore())
 
 const hotelInfo = reactive({
   // Hotel Basic Info
-  name: currentHotel.value?.name || '',
-  overview: currentHotel.value?.overview || '',
-  activate: currentHotel.value?.activate || true,
-  photos: currentHotel.value?.hotel_photos || '',
-  raw_address: currentHotel.value?.raw_address || '',
-  bankAccount: currentHotel.value?.bank_account || '',
-  bankName: currentHotel.value?.bank_name || '',
-  bankBeneficiary: currentHotel.value?.bank_beneficiary || '',
+  name: '',
+  overview: '',
+  activate: true,
+  hotel_photos: '',
+  raw_address: '',
+  bankAccount: '',
+  bankName: '',
+  bankBeneficiary: '',
   // Hotel More info
   hotel: false,
   apartment: false,
@@ -194,9 +194,36 @@ const {
   pool,
   resort,
   villa,
-  wifi
-  // photos
+  wifi,
+  hotel_photos
 } = toRefs(hotelInfo)
+
+// Binding if form is edit type
+const bindingEditForm = () => {
+  // Hotel Basic Info
+  name.value = currentHotel.value?.name
+  overview.value = currentHotel.value?.overview
+  activate.value = currentHotel.value?.activate
+  hotel_photos.value = currentHotel.value?.hotel_photos
+  raw_address.value = currentHotel.value?.raw_address
+  bankAccount.value = currentHotel.value?.bank_account
+  bankName.value = currentHotel.value?.bank_name
+  bankBeneficiary.value = currentHotel.value?.bank_beneficiary
+}
+
+const requiredHotel = route.meta.requiredHotel
+// if reload settings page -> binding Mounted
+watch(currentHotel, () => {
+  if (currentHotel.value && requiredHotel) {
+    bindingEditForm()
+  }
+})
+// if redirect from another page -> binding Mounted
+onMounted(() => {
+  if (currentHotel.value && requiredHotel) {
+    bindingEditForm()
+  }
+})
 // ---------------------- ADDRESS ----------------------
 const {
   pOptions,

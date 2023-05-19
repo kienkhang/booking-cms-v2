@@ -66,7 +66,7 @@ const useHotelStore = () => {
 
   // Set current hotel with hotelId from localstorage
   const getHotelLocalStore = async () => {
-    if (!hotelId.value) return
+    if (!hotelId.value || currentHotel.value) return
     paging.value = {
       id: hotelId.value
     }

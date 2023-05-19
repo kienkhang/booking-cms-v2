@@ -9,6 +9,10 @@ const navigationAuthGuard = (router: Router) => {
   const { isLoggedIn } = useAuthStorage()
   router.beforeEach((to, _, next) => {
     const requiredAuth = to.meta.requiredAuth
+    // if reload or redirect to any page (logged in) but not account -> get me
+    if (!!account.value === false && isLoggedIn() && requiredAuth) {
+      getMe().executeAPI()
+    }
     // from catch navigate to "/" and to catch case reload
     // if need authen and not login -> goto login
     if (requiredAuth === true && !isLoggedIn()) {
@@ -16,19 +20,18 @@ const navigationAuthGuard = (router: Router) => {
     }
     // else next
     else next()
-    // if reload or redirect to any page (logged in) but not account -> get me
-    if (!!account.value === false && isLoggedIn()) {
-      getMe().executeAPI()
-    }
   })
 }
 
 const navigationHotelGuard = (router: Router) => {
-  const { currentHotel } = storeToRefs(useHotelsStore())
   const { getHotelLocalStore } = useHotelsStore()
   const { hotelId } = useHotelStorage()
   router.beforeEach((to, _, next) => {
     const requiredHotel = to.meta.requiredHotel
+    // if exist hotel in local and not having current Hotel -> get hotel
+    if (hotelId.value && requiredHotel) {
+      getHotelLocalStore()
+    }
     // from catch navigate to "/" and to catch case reload
     // if need hotel and not hotel saved in store -> goto select
     if (requiredHotel === true && !hotelId.value) {
@@ -36,10 +39,6 @@ const navigationHotelGuard = (router: Router) => {
     }
     // else next
     else next()
-    // if exist hotel in local and not having current Hotel -> get hotel
-    if (!!currentHotel.value === false && hotelId.value) {
-      getHotelLocalStore()
-    }
   })
 }
 // Setup Pinia
