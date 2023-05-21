@@ -8,6 +8,7 @@ specifiers:
   '@formkit/themes': ^0.16.4
   '@formkit/vue': ^0.16.4
   '@iconify-json/ic': ^1.1.12
+  '@iconify-json/icon-park-outline': ^1.1.11
   '@iconify-json/material-symbols': ^1.1.38
   '@iconify-json/mdi': ^1.1.41
   '@iconify-json/ph': ^1.1.5
@@ -84,6 +85,7 @@ dependencies:
 
 devDependencies:
   '@iconify-json/ic': 1.1.12
+  '@iconify-json/icon-park-outline': 1.1.11
   '@iconify-json/material-symbols': 1.1.38
   '@iconify-json/mdi': 1.1.41
   '@iconify-json/ph': 1.1.5
@@ -554,6 +556,12 @@ packages:
 
   /@iconify-json/ic/1.1.12:
     resolution: {integrity: sha512-J0rDxdAc9GjJ1iS95hPXseN76ioZr9olGmdu9H+NKrmYAHanaeMIfWZ6PlANA5kCc+lNOFcDySSvQQ7DLMMoRQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/icon-park-outline/1.1.11:
+    resolution: {integrity: sha512-hfevr1UUsw3d0STNgD6b0wUex6N99tE7URxN9bBbi+HJBzGOcN4gQt6GTKuapliAWoyZbnAqUtRdhIvgZ7epUA==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
