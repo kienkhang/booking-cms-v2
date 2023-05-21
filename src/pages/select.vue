@@ -1,7 +1,6 @@
 <template lang="pug">
 div.h-full.w-full
-  .flex.justify-center.items-center(class='h-[500px] w-full' v-if='isLoading')
-    icon-custom-load.w-12.h-12.animate-spin
+  Loading(v-if='isLoading')
   .flex.flex-col.items-center.justify-center.w-full.h-full.gap-3(v-else)
     .flex.justify-center
       span.font-bold.text-base.animate-bounce {{ content }}
@@ -24,6 +23,7 @@ div.h-full.w-full
 // Components
 import HotelTabs from '@/components/hotel/HotelTabs.vue'
 import HotelCard from '@/components/select/HotelCard.vue'
+import Loading from '@/components/shared/Loading.vue'
 import { useHotelsStore } from '@/stores'
 import { NPagination, type PaginationInfo } from 'naive-ui'
 
