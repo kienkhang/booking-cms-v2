@@ -1,31 +1,29 @@
 <template lang="pug">
-.flex.flex-wrap.items-center.gap-3
-  RoomCardItem(v-for='room in fakeData' :data='room' :key='room.id')
+div
+  Loading(v-if='isLoading')
+  .flex.flex-wrap.items-center.gap-3(v-else='')
+    RoomCardItem(v-for='room in rooms' :data='room' :key='room.id')
+  .flex.items-center.justify-between.mt-6
+        NPagination(
+          v-model:page='pagination.page',
+          :item-count='roomCount',
+          :page-size='6'
+        )
 </template>
 
 <script setup lang="ts">
-const fakeData = ref([
-  {
-    id: '75f38ce2-e254-4733-943c-76d6a003ead5',
-    content:
-      'Kích thước phòng: 38 m² / 409 ft². Không hút thuốc. Vòi hoa sen. Wifi miễn phí Wifi miễn phí Wifi miễn phí Wifi miễn phí'
-  },
-  {
-    id: '03bb21cb-7907-43b4-9459-40a4da3e21e6',
-    content:
-      'Kích thước phòng: 38 m² / 409 ft². Không hút thuốc. Vòi hoa sen. Wifi miễn phí Wifi miễn phí Wifi miễn phí Wifi miễn phí'
-  },
-  {
-    id: '58a6be03-c92f-4d67-8ef9-b7d18bca0611',
-    content:
-      'Kích thước phòng: 38 m² / 409 ft². Không hút thuốc. Vòi hoa sen. Wifi miễn phí Wifi miễn phí Wifi miễn phí Wifi miễn phí'
-  },
-  {
-    id: 'e9dbaebf-b9f5-44b0-92a8-792a1b5b3762',
-    content:
-      'Kích thước phòng: 38 m² / 409 ft². Không hút thuốc. Vòi hoa sen. Wifi miễn phí Wifi miễn phí Wifi miễn phí Wifi miễn phí'
-  }
-])
+import Loading from '@/components/shared/Loading.vue'
+import { NPagination, type PaginationInfo } from 'naive-ui'
+
+const { roomCount, rooms } = storeToRefs(useRoomStore())
+const { getRooms } = useRoomStore()
+
+const { isLoading } = getRooms()
+// Handle Paging rooms
+const pagination = ref<Partial<PaginationInfo>>({
+  page: 1,
+  pageSize: 6
+})
 </script>
 
 <style scoped></style>

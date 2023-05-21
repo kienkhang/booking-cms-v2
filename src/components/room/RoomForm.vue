@@ -1,6 +1,7 @@
 <template lang="pug">
 div
-  FormKit(type='form' name='config_form' id='config_form' @submit='doSubmit' :actions='false' style='width: 100%; padding: 16px;')
+  Loading(v-if='isLoading')
+  FormKit(type='form' name='config_form' id='config_form' @submit='doSubmit' :actions='false' style='width: 100%; padding: 16px;' v-else='')
     .hotel_basic_info.flex.flex-col.gap-3
       .text-2xl.font-semibold Cơ bản
       hr
@@ -63,15 +64,27 @@ div
 </template>
 
 <script setup lang="ts">
-import type { IRoom } from '@/dtos/room'
+import { useRoomStore } from '@/stores'
+import Loading from '../shared/Loading.vue'
+// Route page /room/{id}/edit
+const route = useRoute()
+// Get room id from route
+const roomId = computed(() => route.params.id as string)
+// if exist id -> isEdit === true
+const isEdit = computed(() => !!roomId.value)
 
-const props = defineProps<{
-  room?: IRoom
-}>()
+// Destructuring function getRoom and currentRoom
+const { getRoomById } = useRoomStore()
+const { currentRoom } = storeToRefs(useRoomStore())
+// Destructuring isLoading get room
+const { isLoading } = getRoomById(roomId.value)
+whenever(roomId, async () => {
+  await getRoomById(roomId.value)
+})
 
-const isEdit = computed(() => !!props.room)
 // ============= ROOM INFO ==================
 const { hotelId } = useHotelStorage()
+// Define Info
 const roomInfo = reactive({
   name: '',
   description: '',
@@ -81,11 +94,13 @@ const roomInfo = reactive({
   max_children: 0,
   max_adult: 0
 })
+// Destructuring Info
 const { activated, bathroom_nums, bed_nums, description, max_adult, max_children, name } =
   toRefs(roomInfo)
 
 // ============= ROOM VIEWS ================
 
+// Define Views
 const roomViews = reactive({
   bay: false,
   ocean: false,
@@ -97,9 +112,11 @@ const roomViews = reactive({
   river: false,
   private_balcony: false
 })
+// Destructuring Views
 const { bay, city, garden, lake, mountain, ocean, private_balcony, river, sea } = toRefs(roomViews)
 
 // ============= ROOM FACILITIES ================
+// Define Facilities
 const roomFacilities = reactive({
   air_conditional: false,
   tivi: false,
@@ -121,6 +138,7 @@ const roomFacilities = reactive({
   fryer: false,
   kitchen_tool: false
 })
+// Destructuring reactive state
 const {
   air_conditional,
   bbq,
@@ -141,6 +159,61 @@ const {
   towels,
   wine
 } = toRefs(roomFacilities)
+// Biding room function if exist currentRoom
+const bindingEditRoom = () => {
+  // Room Info Binding
+  roomInfo.activated = currentRoom.value.activated
+  roomInfo.bathroom_nums = currentRoom.value.bathroom_nums
+  roomInfo.bed_nums = currentRoom.value.bed_nums
+  roomInfo.description = currentRoom.value.description
+  roomInfo.max_adult = currentRoom.value.max_adult
+  roomInfo.max_children = currentRoom.value.max_children
+  roomInfo.name = currentRoom.value.name
+  // Room View Binding
+  roomViews.bay = currentRoom.value.room_type_views.bay
+  roomViews.ocean = currentRoom.value.room_type_views.ocean
+  roomViews.sea = currentRoom.value.room_type_views.sea
+  roomViews.city = currentRoom.value.room_type_views.city
+  roomViews.garden = currentRoom.value.room_type_views.garden
+  roomViews.lake = currentRoom.value.room_type_views.lake
+  roomViews.mountain = currentRoom.value.room_type_views.mountain
+  roomViews.river = currentRoom.value.room_type_views.river
+  roomViews.private_balcony = currentRoom.value.room_type_views.private_balcony
+  // Room Facilites Biding
+  roomFacilities.air_conditional = currentRoom.value.room_type_facility.air_conditional
+  roomFacilities.tivi = currentRoom.value.room_type_facility.tivi
+  roomFacilities.kitchen = currentRoom.value.room_type_facility.kitchen
+  roomFacilities.private_pool = currentRoom.value.room_type_facility.private_pool
+  roomFacilities.iron = currentRoom.value.room_type_facility.iron
+  roomFacilities.sofa = currentRoom.value.room_type_facility.sofa
+  roomFacilities.desk = currentRoom.value.room_type_facility.desk
+  roomFacilities.soundproof = currentRoom.value.room_type_facility.soundproof
+  roomFacilities.towels = currentRoom.value.room_type_facility.towels
+  roomFacilities.toiletries = currentRoom.value.room_type_facility.toiletries
+  roomFacilities.fruit = currentRoom.value.room_type_facility.fruit
+  roomFacilities.shower = currentRoom.value.room_type_facility.shower
+  roomFacilities.slippers = currentRoom.value.room_type_facility.slippers
+  roomFacilities.hairdry = currentRoom.value.room_type_facility.hairdry
+  roomFacilities.fuirt = currentRoom.value.room_type_facility.fuirt
+  roomFacilities.bbq = currentRoom.value.room_type_facility.bbq
+  roomFacilities.wine = currentRoom.value.room_type_facility.wine
+  roomFacilities.fryer = currentRoom.value.room_type_facility.fryer
+  roomFacilities.kitchen_tool = currentRoom.value.room_type_facility.kitchen_tool
+}
+
+// If reload edit room page -> biding whenever have cuurentRoom
+watch(currentRoom, () => {
+  if (currentRoom.value) {
+    bindingEditRoom()
+  }
+})
+
+// if redirect from another page -> binding Mounted
+onMounted(() => {
+  if (currentRoom.value) {
+    bindingEditRoom()
+  }
+})
 
 const doSubmit = () => {
   const data = { ...roomInfo, ...roomViews, ...roomFacilities, hotel_id: hotelId.value }

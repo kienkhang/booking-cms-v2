@@ -1,7 +1,7 @@
 <template lang="pug">
 .flex.flex-col(class='gap-2.5 md:flex-row select-none mx-auto')
   div.rounded-10.overflow-hidden(class='w-56 h-[125px]')
-    img(src="@/assets/images/hotela.jpg", alt="Hinh anh hotel", srcset="@/assets/images/hotela.jpg" class='object-cover cursor-pointer' @click='gotoDetails()')
+    img(:src='roomPhotos[0] || defaultImage', alt="Hinh anh hotel", :srcset='roomPhotos[0] || defaultImage' class='object-cover cursor-pointer' @click='gotoDetails()')
   .flex.flex-col.justify-between(class='w-56 h-full md:w-72 md:h-[125px]')
     //- Price & action
     .flex.items-center.justify-between
@@ -11,39 +11,39 @@
         span.px-2.py-1.bg-green-100.text-green-600.font-medium Garden
         span.px-2.py-1.bg-green-100.text-green-600.font-medium Mountain
         span.px-2.py-1.bg-green-100.text-green-600.font-medium River
-      RoomCardAction(:id='data.id')
+      RoomCardAction(:id='id')
     //- Title and description
-    .title.font-semibold.text-lg(class='cursor-pointer' @click='gotoDetails()') Metro Jayakarta Hotel & Spa
+    .title.font-semibold.text-lg(class='cursor-pointer' @click='gotoDetails()') {{name}}
     n-popover(width='trigger')
       template(#trigger)
-        span.description.text-roman-silver.text-sm.line-clamp-none(class='md:line-clamp-2') {{ data.content }}
-      span {{ data.content }}
+        span.description.text-roman-silver.text-sm.line-clamp-none(class='md:line-clamp-2' v-html='description')
+      span {{ description }}
     .flex.items-center.gap-2.mt-auto.text-sm
       .flex.items-center(class='gap-1')
         icon-custom-bath.flex-shrink-0
-        span 2 Baths
+        span {{ bathroom_nums }} Baths
       .flex.items-center(class='gap-1')
         icon-custom-bed.flex-shrink-0
-        span 2 Beds
+        span {{ bed_nums }} Beds
 </template>
 
 <script setup lang="ts">
+import type { IRoom } from '@/dtos'
 import RoomCardAction from './RoomCardAction.vue'
 import { NPopover } from 'naive-ui'
-
-interface IRoomData {
-  id: string
-  content: string
-}
+import defaultImage from '@/assets/images/hotela.jpg'
+import { Image2Array } from '@/utils/format'
 
 const props = defineProps<{
-  data: IRoomData
+  data: IRoom
 }>()
 
+const { name, description, bathroom_nums, bed_nums, id, photos } = toRefs(props.data)
+const roomPhotos = computed(() => Image2Array(photos.value))
+
 const router = useRouter()
-const route = useRoute()
 const gotoDetails = () => {
-  router.push(`room/${props.data.id}`)
+  router.push({ name: 'room-id', params: { id: props.data.id } })
 }
 </script>
 

@@ -34,6 +34,9 @@ const redirect = () => {
     case 'room-id':
       router.push('/room')
       break
+    case 'room-id-edit':
+      router.push('/room')
+      break
 
     default:
       break
