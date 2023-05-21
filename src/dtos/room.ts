@@ -39,5 +39,38 @@ interface IRoom {
   wine: boolean
   fryer: boolean
   kitchen_tool: boolean
+  room_type_views?: {
+    bay: boolean
+    ocean: boolean
+    sea: boolean
+    city: boolean
+    garden: boolean
+    lake: boolean
+    mountain: boolean
+    river: boolean
+    private_balcony: boolean
+  }
+  room_type_facility?: {
+    air_conditional: boolean
+    tivi: boolean
+    kitchen: boolean
+    private_pool: boolean
+    iron: boolean
+    sofa: boolean
+    desk: boolean
+    soundproof: boolean
+    towels: boolean
+    toiletries: boolean
+    fruit: boolean
+    shower: boolean
+    slippers: boolean
+    hairdry: boolean
+    fuirt: boolean
+    bbq: boolean
+    wine: boolean
+    fryer: boolean
+    kitchen_tool: boolean
+  }
+  [more: string]: any
 }
 export { IRoom }

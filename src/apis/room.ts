@@ -9,9 +9,9 @@ class Room {
     const url = path + hotelId
     return usePatch({ url, data, requiredToken: true })
   }
-  getDetails = (params: any | {}, roomId: string) => {
-    const url = path + roomId
-    return useGet({ url, params, requiredToken: true })
+  getDetails = (roomId: string) => {
+    const url = `${path}${roomId}`
+    return useGet({ url, requiredToken: true })
   }
   createRoomNight = (data: any | {}) => {
     const url = path + 'roomnights'
