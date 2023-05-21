@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   label.font-bold {{ title }}
-  QuillEditor(theme='snow' toolbar='essential' content-type="html" style='height: 150px;' v-model:content='textEditor' ref='target')
+  QuillEditor(theme='snow' toolbar='essential' content-type="html" style='height: 150px;' v-model:content='content' ref='target' @ready="true")
 </template>
 
 <script setup lang="ts">
@@ -9,7 +9,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { QuillEditor } from '@vueup/vue-quill'
 import {} from '@vueup/vue-quill'
 // Props & Emits
-defineProps<{
+const props = defineProps<{
   title: string
   content: string
 }>()
@@ -17,19 +17,15 @@ const emit = defineEmits<{
   (e: 'update:content', value: string): void
 }>()
 
-// editor model
-const textEditor = ref('')
-
-// Change content in parent component
-watchDebounced(
-  [textEditor],
-  () => {
-    emit('update:content', textEditor.value)
+// Reactive Content Biding default and setter by emit
+const content = computed({
+  get() {
+    return props.content
   },
-  {
-    debounce: 200
+  set(newValue: string) {
+    emit('update:content', newValue)
   }
-)
+})
 </script>
 
 <style scoped></style>
