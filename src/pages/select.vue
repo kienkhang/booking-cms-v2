@@ -2,8 +2,9 @@
 div.h-full.w-full
   Loading(v-if='isLoading')
   .flex.flex-col.items-center.justify-center.w-full.h-full.gap-3(v-else)
-    .flex.justify-center
+    .flex.items-center.justify-between.gap-3.w-full
       span.font-bold.text-base.animate-bounce {{ content }}
+      NAutoComplete(v-model:value='search'  :input-props="{autocomplete: 'disabled'}" :options='hotelOptions' style='width: 300px;' placeholder='Nhập khách sạn cần tìm' :disabled='isSearching')
     .w-full.h-full.mx-auto(v-if='!isEmpty')
       .grid.grid-cols-1.gap-4.bg-white.rounded-10.scrollbar-gradient(class='flex-wrap justify-around max-w-5xl p-5 mb-3 overflow-auto md:grid-cols-3')
         HotelCard(v-for='hotel in cut()' :hotel='hotel')
@@ -20,13 +21,15 @@ div.h-full.w-full
 </template>
 
 <script setup lang="ts">
-// Components
-import HotelTabs from '@/components/hotel/HotelTabs.vue'
-import HotelCard from '@/components/select/HotelCard.vue'
-import Loading from '@/components/shared/Loading.vue'
+// import HotelTabs from '@/components/hotel/HotelTabs.vue'
+// import HotelCard from '@/components/select/HotelCard.vue'
+// import Loading from '@/components/shared/Loading.vue'
 import { useHotelsStore } from '@/stores'
 import { NPagination, type PaginationInfo } from 'naive-ui'
-
+// Components
+const Loading = defineAsyncComponent(() => import('@/components/shared/Loading.vue'))
+const HotelTabs = defineAsyncComponent(() => import('@/components/hotel/HotelTabs.vue'))
+const HotelCard = defineAsyncComponent(() => import('@/components/select/HotelCard.vue'))
 // Get account store
 // Get hotel store
 const { currentHotel, hotels, paging, hotelCount } = storeToRefs(useHotelsStore())
@@ -55,12 +58,6 @@ const cut = () => {
 const isLoading = ref(false)
 
 onBeforeMount(async () => {
-  // if (paging.value) {
-  //   paging.value = {
-  //     page: 1,
-  //     offset: 10
-  //   }
-  // } else getHotels()
   // Reset current hotel
   currentHotel.value = null
   // reset paging and call api hotels
@@ -69,6 +66,33 @@ onBeforeMount(async () => {
   await getHotels()
   isLoading.value = false
 })
+// Search Hotel
+
+// Search text input
+const search = ref('')
+const isSearching = ref(false)
+// hotel options each input change
+const hotelOptions = computed(() => {
+  // return selected with name
+  return hotels.value.map((hotel) => ({
+    label: hotel.name,
+    value: hotel.name
+  }))
+})
+
+watchDebounced(
+  search,
+  async () => {
+    isSearching.value = true
+    paging.value = {
+      search: search.value,
+      page: 1
+    }
+    await getHotels()
+    isSearching.value = false
+  },
+  { debounce: 1000 }
+)
 </script>
 
 <style scoped></style>
