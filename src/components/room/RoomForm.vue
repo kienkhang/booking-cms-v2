@@ -77,9 +77,10 @@ const isEdit = computed(() => !!roomId.value)
 const { getRoomById } = useRoomStore()
 const { currentRoom } = storeToRefs(useRoomStore())
 // Destructuring isLoading get room
-const { isLoading } = getRoomById(roomId.value)
-whenever(roomId, async () => {
-  await getRoomById(roomId.value)
+const { isLoading, execute } = getRoomById(roomId.value)
+
+whenever(roomId, () => {
+  execute()
 })
 
 // ============= ROOM INFO ==================

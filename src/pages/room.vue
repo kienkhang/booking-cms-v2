@@ -6,7 +6,7 @@ div.h-full.w-full
         router-link.page-title.font-bold.text-2xl(to='/hotel') Khách sạn
       NBreadcrumbItem
         .page-title.font-bold.text-2xl Phòng
-    Button(@press="open" color='text-white' bgcolor='bg-purple-600' size='medium')
+    Button(@press="open" color='text-white' bgcolor='bg-purple-600' size='medium' v-if='addRoomAble')
       icon-ic:round-plus.w-6.h-6.flex-shrink-0
       .font-bold Thêm phòng
   .flex.items-center.mb-2.cursor-pointer.select-none.text-roman-silver.w-max
@@ -25,6 +25,7 @@ const RoomModal = defineAsyncComponent(() => import('@/components/shared/modal/R
 // Route & Router
 const route = useRoute()
 const router = useRouter()
+const addRoomAble = computed(() => route.name === 'room')
 
 const redirect = () => {
   switch (route.name) {

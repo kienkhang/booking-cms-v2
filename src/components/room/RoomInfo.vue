@@ -63,11 +63,13 @@ const roomId = computed(() => route.params.id as string)
 const { currentRoom } = storeToRefs(useRoomStore())
 
 const { getRoomById } = useRoomStore()
-const { isLoading } = getRoomById(roomId.value)
-whenever(roomId, async () => {
-  await getRoomById(roomId.value)
-})
 
+// Call API and Destruct Loading
+const { isLoading, executeApi } = getRoomById(roomId.value)
+
+onMounted(() => {
+  executeApi()
+})
 // Room Views
 const roomViews = computed<
   {

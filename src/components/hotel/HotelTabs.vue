@@ -12,7 +12,7 @@ n-tabs.config-tab(
   //- tab label của Tab, name là value của Tab
   n-tab-pane(name="infos" tab="Thông tin" display-directive="show:lazy")
     hotel-info-form
-  n-tab-pane(name="photos" tab="Hình ảnh" v-if='!isCreateHotel')
+  n-tab-pane(name="photos" tab="Hình ảnh" :disabled='isCreateHotel')
     hotel-file-form
 </template>
 

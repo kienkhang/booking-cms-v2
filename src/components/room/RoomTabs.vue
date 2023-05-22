@@ -12,7 +12,7 @@ n-tabs.config-tab(
       //- tab label của Tab, name là value của Tab
       n-tab-pane(name="basic" tab="Thông tin" display-directive="show:lazy")
         room-form
-      n-tab-pane(name="photos" tab="Hình ảnh")
+      n-tab-pane(name="photos" tab="Hình ảnh" :disabled='addRoomAble')
         room-file-form
 
 </template>
@@ -23,6 +23,8 @@ import RoomFileForm from './RoomFileForm.vue'
 import { NTabPane, NTabs } from 'naive-ui'
 // ============= =TAB STYLE ===============
 import { type CSSProperties } from 'vue'
+const route = useRoute()
+const addRoomAble = computed(() => route.name === 'room')
 
 const tabStyle = computed<CSSProperties>(() => ({
   width: '200px',

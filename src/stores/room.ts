@@ -27,7 +27,7 @@ const useRoomStore = () => {
     const usedGetRoom = hotelsApi.getRoomsByHotel(paging.value, hotelId.value)
     const { data, error, isFinished } = usedGetRoom
     // Execute get hotel
-    roomCount.value <= 0 && usedGetRoom.execute()
+    // roomCount.value <= 0 && usedGetRoom.execute()
     // After get data ->  save global state && reset paging to null
     until(isFinished)
       .toBeTruthy()
@@ -37,14 +37,19 @@ const useRoomStore = () => {
           paging.value = null
         }
       })
-    return usedGetRoom
+    return {
+      ...usedGetRoom,
+      // Execute get hotel if not rooms
+      executeApi: () => {
+        usedGetRoom.execute()
+      }
+    }
   }
 
   const getRoomById = (roomId: string) => {
     const usedGetRoom = roomsApi.getDetails(roomId)
     const { data, error, isFinished } = usedGetRoom
-    // Execute get hotel
-    currentRoom.value && usedGetRoom.execute()
+
     // After get data ->  save global state && reset paging to null
     until(isFinished)
       .toBeTruthy()
@@ -55,7 +60,20 @@ const useRoomStore = () => {
         }
       })
 
-    return usedGetRoom
+    return {
+      ...usedGetRoom,
+      // Execute get hotel if not current room
+      executeApi: () => {
+        // Check current room
+        if (currentRoom.value) {
+          // If current room change -> refetch room
+          roomId !== currentRoom.value.id && usedGetRoom.execute()
+        } else {
+          // Not hotel -> fetch room
+          usedGetRoom.execute()
+        }
+      }
+    }
   }
 
   return {

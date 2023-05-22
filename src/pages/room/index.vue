@@ -18,11 +18,15 @@ import { NPagination, type PaginationInfo } from 'naive-ui'
 const { roomCount, rooms } = storeToRefs(useRoomStore())
 const { getRooms } = useRoomStore()
 
-const { isLoading } = getRooms()
+const { isLoading, executeApi } = getRooms()
 // Handle Paging rooms
 const pagination = ref<Partial<PaginationInfo>>({
   page: 1,
   pageSize: 6
+})
+
+onMounted(() => {
+  executeApi()
 })
 </script>
 
