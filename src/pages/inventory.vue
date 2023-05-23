@@ -19,9 +19,14 @@ div.h-full.w-full
 </template>
 
 <script setup lang="ts">
-import InventoryMode from '@/components/inventory/InventoryMode.vue'
-import InventorySelected from '@/components/inventory/InventorySelected.vue'
-import InventoryTable from '@/components/inventory/InventoryTable.vue'
+// Components
+const InventoryMode = defineAsyncComponent(() => import('@/components/inventory/InventoryMode.vue'))
+const InventorySelected = defineAsyncComponent(
+  () => import('@/components/inventory/InventorySelected.vue')
+)
+const InventoryTable = defineAsyncComponent(
+  () => import('@/components/inventory/InventoryTable.vue')
+)
 </script>
 
 <route lang="yaml">
