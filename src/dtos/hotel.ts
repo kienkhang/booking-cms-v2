@@ -28,14 +28,41 @@ interface IHotel {
   breakfast: boolean
   casio: boolean
   parking: boolean
+  spa: boolean
   // district & province & ward
   district: number
   province: number
   ward: number
   bussiness_license: string
+  // Facilities
+  hotel_facility?: {
+    bar: boolean
+    bath: boolean
+    beach: boolean
+    breakfast: boolean
+    casino: boolean
+    fitness: boolean
+    hotel_id: string
+    no_smoking_room: boolean
+    parking: boolean
+    pool: boolean
+    spa: boolean
+    wifi: boolean
+  }
+  // Hotel Type
+  hotel_type?: {
+    apartment: boolean
+    camping: boolean
+    home_stay: boolean
+    hotel: true
+    hotel_id: string
+    motel: boolean
+    resort: boolean
+    villa: boolean
+  }
 }
 
-type IHotelAdd = Omit<IHotel, 'id'>
-type IHotelUpdate = Omit<IHotel, 'id'>
+type IHotelAdd = Omit<IHotel, 'id' | 'hotel_photos' | 'bussiness_license'>
+type IHotelUpdate = Omit<IHotel, 'id' | 'hotel_photos' | 'bussiness_license'>
 
 export { IHotel, IHotelAdd, IHotelUpdate }

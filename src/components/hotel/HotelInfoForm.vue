@@ -79,8 +79,9 @@ div
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bồn tắm' name='bath' v-model='bath')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Wifi' name='wifi' v-model='wifi')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Ăn sáng' name='breakfast' v-model='breakfast')
-        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Casio' name='casio' v-model='casio')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Casio' name='casio' v-model='casino')
         FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Bãi đỗ xe' name='parking' v-model='parking')
+        FormKit(type='checkbox' decorator-icon="mdi:check:16" label='Spa' name='spa' v-model='spa')
     FormKit(type='submit' name='submit-btn' input-class='w-max' wrapper-class='flex justify-end')
       icon-custom-load.w-4.h-4.animate-spin(v-if='isLoading') 
       span(v-else) {{isEditForm ?'Cập nhật':'Tạo'}}
@@ -165,8 +166,9 @@ const hotelInfo = reactive({
   bath: false,
   wifi: false,
   breakfast: false,
-  casio: false,
-  parking: false
+  casino: false,
+  parking: false,
+  spa: false
 })
 const {
   // Hotel Basic Info
@@ -186,7 +188,7 @@ const {
   breakfast,
   camping,
   homestay,
-  casio,
+  casino,
   fitness,
   motel,
   no_smoking_room,
@@ -195,6 +197,7 @@ const {
   resort,
   villa,
   wifi,
+  spa,
   hotel_photos
 } = toRefs(hotelInfo)
 
@@ -209,6 +212,25 @@ const bindingEditForm = () => {
   bankAccount.value = currentHotel.value?.bank_account
   bankName.value = currentHotel.value?.bank_name
   bankBeneficiary.value = currentHotel.value?.bank_beneficiary
+  // Hotel More info
+  hotel.value = currentHotel.value.hotel_type.hotel
+  apartment.value = currentHotel.value.hotel_type.apartment
+  bar.value = currentHotel.value.hotel_facility.bar
+  bath.value = currentHotel.value.hotel_facility.bath
+  beach.value = currentHotel.value.hotel_facility.beach
+  breakfast.value = currentHotel.value.hotel_facility.breakfast
+  camping.value = currentHotel.value.hotel_type.camping
+  homestay.value = currentHotel.value.hotel_type.home_stay
+  casino.value = currentHotel.value.hotel_facility.casino
+  fitness.value = currentHotel.value.hotel_facility.fitness
+  motel.value = currentHotel.value.hotel_type.motel
+  no_smoking_room.value = currentHotel.value.hotel_facility.no_smoking_room
+  parking.value = currentHotel.value.hotel_facility.parking
+  pool.value = currentHotel.value.hotel_facility.pool
+  resort.value = currentHotel.value.hotel_type.resort
+  villa.value = currentHotel.value.hotel_type.villa
+  wifi.value = currentHotel.value.hotel_facility.wifi
+  spa.value = currentHotel.value.hotel_facility.spa
 }
 
 const requiredHotel = route.meta.requiredHotel
@@ -272,7 +294,7 @@ const createForm = computed<IHotelAdd>(() => ({
   beach: beach.value,
   breakfast: breakfast.value,
   camping: camping.value,
-  casio: casio.value,
+  casio: casino.value,
   fitness: fitness.value,
   homestay: homestay.value,
   hotel: hotel.value,
@@ -281,7 +303,6 @@ const createForm = computed<IHotelAdd>(() => ({
   no_smoking_room: no_smoking_room.value,
   overview: overview.value,
   parking: parking.value,
-  hotel_photos: '',
   pool: pool.value,
   raw_address: raw_address.value,
   resort: resort.value,
@@ -291,7 +312,7 @@ const createForm = computed<IHotelAdd>(() => ({
   province: province.value,
   ward: ward.value,
   hotelier_id: hotelier_id.value,
-  bussiness_license: ''
+  spa: spa.value
 }))
 
 const { isLoading: isCLoading, executeApi: add } = createHotel(createForm)
