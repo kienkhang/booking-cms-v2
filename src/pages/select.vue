@@ -7,13 +7,13 @@ div.h-full.w-full
       NAutoComplete(v-model:value='search'  :input-props="{autocomplete: 'disabled'}" :options='hotelOptions' style='width: 300px;' placeholder='Nhập khách sạn cần tìm' :disabled='isSearching')
     .w-full.h-full.mx-auto(v-if='!isEmpty')
       .grid.grid-cols-1.gap-4.bg-white.rounded-10.scrollbar-gradient(class='flex-wrap justify-around max-w-5xl p-5 mb-3 overflow-auto md:grid-cols-3')
-        HotelCard(v-for='hotel in cut()' :hotel='hotel')
+        HotelCard(v-for='hotel in hotels' :hotel='hotel')
 
       .flex.items-center.justify-between
         NPagination(
           v-model:page='pagination.page',
-          :item-count='hotelCount',
-          :page-size='6'
+          :page-count='pagination.pageCount'
+          @update:page='updatePage'
         )
     .p-6.rounded-lg.shadow-md.bg-white.overflow-auto.scrollbar-gradient(class='' ref='animate' v-else)
       HotelTabs
@@ -32,7 +32,7 @@ const HotelTabs = defineAsyncComponent(() => import('@/components/hotel/HotelTab
 const HotelCard = defineAsyncComponent(() => import('@/components/select/HotelCard.vue'))
 // Get account store
 // Get hotel store
-const { currentHotel, hotels, paging, hotelCount } = storeToRefs(useHotelsStore())
+const { currentHotel, hotels, paging, filter } = storeToRefs(useHotelsStore())
 // Get hotel function
 const { getHotels } = useHotelsStore()
 
@@ -44,29 +44,14 @@ const content = computed(() => {
   else return 'Chọn khách sạn để thao tác'
 })
 
-// Handle Paging hotel
-const pagination = ref<Partial<PaginationInfo>>({
-  page: 1,
-  pageSize: 6
-})
-const cut = () => {
-  const lastIndex = pagination.value.page * pagination.value.pageSize
-  const firstIndex = lastIndex - pagination.value.pageSize
-  return hotels.value.slice(firstIndex, lastIndex)
-}
+// NaiveUI Pagination component
+const pagination = computed<Partial<PaginationInfo>>(() => ({
+  page: paging.value.page,
+  pageSize: paging.value.offset,
+  pageCount: paging.value.total_pages
+}))
 
-const isLoading = ref(false)
-
-onBeforeMount(async () => {
-  // Reset current hotel
-  currentHotel.value = null
-  // reset paging and call api hotels
-  paging.value = null
-  isLoading.value = true
-  await getHotels()
-  isLoading.value = false
-})
-// Search Hotel
+// ---- HANDLE SEARCH HOTEL ----
 
 // Search text input
 const search = ref('')
@@ -84,15 +69,42 @@ watchDebounced(
   search,
   async () => {
     isSearching.value = true
-    paging.value = {
+    filter.value = {
       search: search.value,
-      page: 1
+      offset: 6,
+      page: pagination.value.page
     }
     await getHotels()
     isSearching.value = false
   },
   { debounce: 1000 }
 )
+
+// ---- HANDLE PAGING HOTEL ----
+
+const updatePage = (page: number) => {
+  filter.value = {
+    search: search.value,
+    page,
+    offset: 6
+  }
+  getHotels()
+}
+
+const isLoading = ref(false)
+
+onBeforeMount(async () => {
+  // Reset current hotel
+  currentHotel.value = null
+  // reset paging and call api hotels
+  filter.value = {
+    offset: 6,
+    page: 1
+  }
+  isLoading.value = true
+  await getHotels()
+  isLoading.value = false
+})
 </script>
 
 <style scoped></style>
