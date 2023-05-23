@@ -5,10 +5,11 @@ interface IRoom {
   description: string
   bed_nums: number
   bathroom_nums: number
-  activated: false
+  activated: boolean
   max_children: number
   max_adult: number
   photos: any
+  hotel_id: string
   // VIEW
   bay: boolean
   ocean: boolean
@@ -34,7 +35,6 @@ interface IRoom {
   shower: boolean
   slippers: boolean
   hairdry: boolean
-  fuirt: boolean
   bbq: boolean
   wine: boolean
   fryer: boolean
@@ -65,12 +65,11 @@ interface IRoom {
     shower: boolean
     slippers: boolean
     hairdry: boolean
-    fuirt: boolean
     bbq: boolean
     wine: boolean
     fryer: boolean
     kitchen_tool: boolean
   }
-  [more: string]: any
+  // [more: string]: any
 }
 export { IRoom }
