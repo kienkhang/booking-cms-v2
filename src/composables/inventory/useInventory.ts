@@ -4,7 +4,7 @@ import _remove from 'lodash-es/remove'
 type IMode = 'free' | 'dayOfWeek'
 const useInventory = () => {
   // Get room type , month, year
-  const room = ref<string | null>('roomtypeid1')
+  const room = ref<string | null>('')
   const month = ref<number | null>(dayjs(useNow().value).month())
   const year = ref<number | null>(dayjs(useNow().value).year())
   // Mode select date
