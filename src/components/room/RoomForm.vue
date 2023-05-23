@@ -66,16 +66,18 @@ div
 <script setup lang="ts">
 import { useRoomStore } from '@/stores'
 import Loading from '../shared/Loading.vue'
+import type { IRoom } from '@/dtos'
 // Route page /room/{id}/edit
 const route = useRoute()
+const router = useRouter()
 // Get room id from route
 const roomId = computed(() => route.params.id as string)
 // if exist id -> isEdit === true
 const isEdit = computed(() => !!roomId.value)
 
 // Destructuring function getRoom and currentRoom
+const { currentRoom } = useRoom()
 const { getRoomById } = useRoomStore()
-const { currentRoom } = storeToRefs(useRoomStore())
 // Destructuring isLoading get room
 const { isLoading, execute } = getRoomById(roomId.value)
 
@@ -133,7 +135,6 @@ const roomFacilities = reactive({
   shower: false,
   slippers: false,
   hairdry: false,
-  fuirt: false,
   bbq: false,
   wine: false,
   fryer: false,
@@ -195,7 +196,6 @@ const bindingEditRoom = () => {
   roomFacilities.shower = currentRoom.value.room_type_facility.shower
   roomFacilities.slippers = currentRoom.value.room_type_facility.slippers
   roomFacilities.hairdry = currentRoom.value.room_type_facility.hairdry
-  roomFacilities.fuirt = currentRoom.value.room_type_facility.fuirt
   roomFacilities.bbq = currentRoom.value.room_type_facility.bbq
   roomFacilities.wine = currentRoom.value.room_type_facility.wine
   roomFacilities.fryer = currentRoom.value.room_type_facility.fryer
@@ -215,12 +215,55 @@ onMounted(() => {
     bindingEditRoom()
   }
 })
+// HANDLE ADD/EDIT ROOM
+const { createRoom, updateRoom } = useRoom()
+const data = computed<Omit<IRoom, 'id' | 'photos'>>(() => ({
+  air_conditional: air_conditional.value,
+  bathroom_nums: bathroom_nums.value,
+  bay: bay.value,
+  bbq: bbq.value,
+  bed_nums: bed_nums.value,
+  city: city.value,
+  description: description.value,
+  desk: desk.value,
+  fruit: fruit.value,
+  fryer: fryer.value,
+  garden: garden.value,
+  hairdry: hairdry.value,
+  kitchen: kitchen.value,
+  iron: iron.value,
+  kitchen_tool: kitchen_tool.value,
+  lake: lake.value,
+  max_adult: max_adult.value,
+  max_children: max_children.value,
+  mountain: mountain.value,
+  name: name.value,
+  ocean: ocean.value,
+  private_balcony: private_balcony.value,
+  private_pool: private_pool.value,
+  river: river.value,
+  sea: sea.value,
+  shower: shower.value,
+  slippers: slippers.value,
+  sofa: sofa.value,
+  soundproof: soundproof.value,
+  tivi: tivi.value,
+  toiletries: toiletries.value,
+  towels: towels.value,
+  wine: wine.value,
+  hotel_id: hotelId.value,
+  activated: activated.value
+}))
+const { executeApi: create } = createRoom(data.value)
+const { executeApi: update } = updateRoom(data.value, roomId.value)
 
-const doSubmit = () => {
-  const data = { ...roomInfo, ...roomViews, ...roomFacilities, hotel_id: hotelId.value }
+const doSubmit = async () => {
   if (isEdit.value) {
-    console.log('🐔🦢 ~ data:', data)
+    await update()
+    // router.push({ name: 'room' })
+    return
   }
+  await create()
 }
 </script>
 
