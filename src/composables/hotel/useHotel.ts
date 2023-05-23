@@ -4,7 +4,7 @@ import { useHotelsStore } from '@/stores'
 
 const useHotel = () => {
   const message = useMessage()
-  const { hotels, paging } = storeToRefs(useHotelsStore())
+  const { hotels, paging, filter } = storeToRefs(useHotelsStore())
   const { getHotels } = useHotelsStore()
 
   // handle create hotel
@@ -49,6 +49,7 @@ const useHotel = () => {
   return {
     hotels,
     paging,
+    filter,
     createHotel,
     updateHotel
   }
