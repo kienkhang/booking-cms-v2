@@ -1,7 +1,7 @@
 <template lang="pug">
 .flex.flex-col(class='gap-2.5 md:flex-row select-none mx-auto')
   div.rounded-10.overflow-hidden(class='w-56 h-[125px]')
-    img(:src='roomPhotos[0] || defaultImage', alt="Hinh anh hotel", :srcset='roomPhotos[0] || defaultImage' class='object-cover cursor-pointer' @click='gotoDetails()')
+    img(:src='overlayPhoto', alt="Hinh anh hotel", :srcset='roomPhotos[0] || defaultImage' class='object-cover cursor-pointer' @click='gotoDetails()')
   .flex.flex-col.justify-between(class='w-56 h-full md:w-72 md:h-[125px]')
     //- Price & action
     .flex.items-center.justify-between
@@ -37,14 +37,18 @@ import { Image2Array } from '@/utils/format'
 const props = defineProps<{
   data: IRoom
 }>()
-
+// Desctructuring Props
 const { name, description, bathroom_nums, bed_nums, id, photos } = toRefs(props.data)
+// Convert photos from string to array
 const roomPhotos = computed(() => Image2Array(photos.value))
 
+// goto details page
 const router = useRouter()
 const gotoDetails = () => {
   router.push({ name: 'room-id', params: { id: props.data.id } })
 }
+// Card Photo
+const overlayPhoto = computed(() => roomPhotos[0] || defaultImage)
 </script>
 
 <style scoped></style>
