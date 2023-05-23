@@ -5,8 +5,8 @@ class Room {
     const url = path
     return usePost({ url, data, requiredToken: true })
   }
-  updateRoom = (data: any | {}, hotelId: string) => {
-    const url = path + hotelId
+  updateRoom = (data: any | {}, roomId: string) => {
+    const url = path + roomId
     return usePatch({ url, data, requiredToken: true })
   }
   getDetails = (roomId: string) => {
