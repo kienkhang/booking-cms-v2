@@ -8,7 +8,6 @@ div
       .flex.flex-col.gap-1.justify-start
         label.font-bold Kích hoạt
         NSwitch.w-full(v-model:value='activate' style="width:max-content")
-      NAutoComplete(v-model:value='email'  :input-props="{autocomplete: 'disabled'}" :options='hotelierOptions' style='width: 300px;' placeholder='Nhập email cần tìm' v-if='isAdmin')
       //- name
       FormKit(type='text' v-model='name' label='Tên khách sạn' name="name" placeholder='Nhập tên khách sạn bạn' validation="required")
       //- overview
@@ -92,8 +91,6 @@ import { NSwitch } from 'naive-ui'
 import EditorQuill from '../shared/EditorQuill.vue'
 import { VIETNAM_BANKING_LIST } from '@/constant/bank'
 import type { IHotelAdd } from '@/dtos/hotel'
-import { useAccountsStore } from '@/stores'
-import useUsers from '@/composables/user/useUsers'
 
 const route = useRoute()
 const isEditForm = computed(() => route.name === 'hotel-settings')
@@ -101,43 +98,10 @@ const isEditForm = computed(() => route.name === 'hotel-settings')
 // Hotel ID
 const { hotelId } = useHotelStorage()
 // ========================= HOTELIER ID ======================
-const { account, isHotelier, isAdmin } = storeToRefs(useAccountsStore())
-const { paging, users } = useUsers()
-
-// select hotelier with email
-const email = ref('')
-const hotelierOptions = computed(() => {
-  return users.value.map((user) => ({
-    label: user.email,
-    value: user.email
-  }))
-})
-// if role is admin -> call api to get hotel role 2 and get hotelier
-// else if role is hotelier -> get id from account store
-const hotelier_id = computed(() => {
-  if (isHotelier.value) {
-    return account.value.id
-  } else {
-    const foundedAccount = users?.value.find((user) => user.email === email.value)
-    return foundedAccount?.id
-  }
-})
-
-// when email change -> get hotel with paging
-watchDebounced(
-  email,
-  () => {
-    paging.value = {
-      search: email.value,
-      offset: 10,
-      page: 1,
-      role: 2
-    }
-  },
-  { debounce: 500 }
-)
-// ---------------------- HOTEL INFO ----------------------
 const { currentHotel } = storeToRefs(useHotelsStore())
+// Get hotelier id from current hotel
+const hotelierId = computed(() => currentHotel.value.hotelier_id)
+// ---------------------- HOTEL INFO ----------------------
 
 const hotelInfo = reactive({
   // Hotel Basic Info
@@ -311,7 +275,7 @@ const createForm = computed<IHotelAdd>(() => ({
   district: district.value,
   province: province.value,
   ward: ward.value,
-  hotelier_id: hotelier_id.value,
+  hotelier_id: hotelierId.value,
   spa: spa.value
 }))
 
