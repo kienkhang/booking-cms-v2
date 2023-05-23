@@ -16,7 +16,7 @@ const useUsersStore = () => {
     await usedGetAccount.execute()
 
     if (!error.value) {
-      users.value = data.value
+      users.value = data.value.data
     }
     return usedGetAccount
   }
