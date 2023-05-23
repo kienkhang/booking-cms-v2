@@ -12,6 +12,18 @@ const useRoomStore = () => {
 
   // dynamic paging
   const paging = ref<{
+    total_items?: number
+    total_pages?: number
+    page?: number
+    offset?: number
+  }>({
+    total_items: 0,
+    total_pages: 0,
+    offset: -1,
+    page: 1
+  })
+  // client filter
+  const filter = ref<{
     offset?: number
     page?: number
     [filter: string]: any
@@ -24,17 +36,21 @@ const useRoomStore = () => {
 
   // Get hotel with role partner (hotelier | manager | staff)
   const getRooms = () => {
-    const usedGetRoom = hotelsApi.getRoomsByHotel(paging.value, hotelId.value)
+    const usedGetRoom = hotelsApi.getRoomsByHotel(filter.value, hotelId.value)
     const { data, error, isFinished } = usedGetRoom
     // Execute get hotel
     // roomCount.value <= 0 && usedGetRoom.execute()
-    // After get data ->  save global state && reset paging to null
+    // After get data ->  save global state && reset filter to null
+    // Response is <data:{ data:[], paging:{}}>
     until(isFinished)
       .toBeTruthy()
       .then(() => {
         if (!error.value) {
-          rooms.value = data.value
-          paging.value = null
+          // Set room & paging
+          rooms.value = data.value.data
+          paging.value = data.value.paging
+          // Reset filter
+          filter.value = null
         }
       })
     return {
@@ -56,7 +72,6 @@ const useRoomStore = () => {
       .then(() => {
         if (!error.value) {
           currentRoom.value = data.value
-          paging.value = null
         }
       })
 
@@ -79,6 +94,8 @@ const useRoomStore = () => {
   return {
     rooms,
     roomCount,
+    paging,
+    filter,
     setCurrentRoom,
     currentRoom,
     getRooms,

@@ -14,6 +14,17 @@ const useHotelStore = () => {
 
   // dynamic paging
   const paging = ref<{
+    total_items?: number
+    total_pages?: number
+    page?: number
+    offset?: number
+  }>({
+    total_items: 0,
+    total_pages: 0,
+    offset: -1,
+    page: 1
+  })
+  const filter = ref<{
     offset?: number
     page?: number
     [filter: string]: any
@@ -26,12 +37,14 @@ const useHotelStore = () => {
 
   // Get hotel with role admin
   const getHotelAdmin = async () => {
-    const usedGetHotel = hotelsApi.getHotels(paging.value)
+    const usedGetHotel = hotelsApi.getHotels(filter.value)
     const { data, error, isFinished } = usedGetHotel
     await usedGetHotel.execute()
     // After get hotel -> save global state
+    // Response is <data:{ data:[], paging:{}}>
     if (!error.value) {
-      hotels.value = data.value
+      hotels.value = data.value.data
+      paging.value = data.value.paging
     } else {
       hotelId.value = null
     }
@@ -39,19 +52,21 @@ const useHotelStore = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        paging.value = null
+        filter.value = null
       })
     return usedGetHotel
   }
   // Get hotel with role partner (hotelier | manager | staff)
   const getHotelPartner = async () => {
-    const usedGetHotel = hotelsApi.partnerGetHotel(paging.value)
+    const usedGetHotel = hotelsApi.partnerGetHotel(filter.value)
     const { data, error, isFinished } = usedGetHotel
     // Execute get hotel
     await usedGetHotel.execute()
     // After get hotel -> save global state
+    // Response is <data:{ data:[], paging:{}}>
     if (!error.value) {
-      hotels.value = data.value
+      hotels.value = data.value.data
+      paging.value = data.value.paging
     } else {
       hotelId.value = null
     }
@@ -59,7 +74,7 @@ const useHotelStore = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        paging.value = null
+        filter.value = null
       })
     return usedGetHotel
   }
@@ -67,7 +82,7 @@ const useHotelStore = () => {
   // Set current hotel with hotelId from localstorage
   const getHotelLocalStore = async () => {
     if (!hotelId.value || currentHotel.value) return
-    paging.value = {
+    filter.value = {
       id: hotelId.value
     }
     // Get hotel
@@ -94,6 +109,7 @@ const useHotelStore = () => {
     hotelCount,
     currentHotel,
     paging,
+    filter,
     getHotelAdmin,
     getHotelPartner,
     getHotelLocalStore,
