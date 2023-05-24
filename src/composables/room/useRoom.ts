@@ -10,7 +10,7 @@ function useRoom() {
   const { getRooms } = useRoomStore()
 
   // Create room
-  function createRoom(form: Omit<IRoom, 'id' | 'photos'>) {
+  function createRoom(form: Ref<Omit<IRoom, 'id' | 'photos'>>) {
     const usedCreateRoom = roomsApi.createRoom(form)
     const { isFinished, error, execute } = usedCreateRoom
 
@@ -28,13 +28,11 @@ function useRoom() {
     // Return all field useAxios
     return {
       ...usedCreateRoom,
-      executeApi: () => {
-        execute({ data: { ...form } })
-      }
+      executeApi: () => execute({ data: { ...form.value } })
     }
   }
   // Update room
-  function updateRoom(form: Omit<IRoom, 'id' | 'photos'>, roomId: string) {
+  function updateRoom(form: Ref<Omit<IRoom, 'id' | 'photos'>>, roomId: string) {
     const usedUpdateRoom = roomsApi.updateRoom(form, roomId)
     const { isFinished, error, execute } = usedUpdateRoom
 
@@ -51,9 +49,7 @@ function useRoom() {
 
     return {
       ...usedUpdateRoom,
-      executeApi: () => {
-        execute({ data: { ...form } })
-      }
+      executeApi: () => execute({ data: { ...form.value } })
     }
   }
 

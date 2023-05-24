@@ -69,7 +69,7 @@ import Loading from '../shared/Loading.vue'
 import type { IRoom } from '@/dtos'
 // Route page /room/{id}/edit
 const route = useRoute()
-const router = useRouter()
+// const router = useRouter()
 // Get room id from route
 const roomId = computed(() => route.params.id as string)
 // if exist id -> isEdit === true
@@ -219,10 +219,10 @@ onMounted(() => {
 const { createRoom, updateRoom } = useRoom()
 const data = computed<Omit<IRoom, 'id' | 'photos'>>(() => ({
   air_conditional: air_conditional.value,
-  bathroom_nums: bathroom_nums.value,
+  bathroom_nums: +bathroom_nums.value,
   bay: bay.value,
   bbq: bbq.value,
-  bed_nums: bed_nums.value,
+  bed_nums: +bed_nums.value,
   city: city.value,
   description: description.value,
   desk: desk.value,
@@ -234,8 +234,8 @@ const data = computed<Omit<IRoom, 'id' | 'photos'>>(() => ({
   iron: iron.value,
   kitchen_tool: kitchen_tool.value,
   lake: lake.value,
-  max_adult: max_adult.value,
-  max_children: max_children.value,
+  max_adult: +max_adult.value,
+  max_children: +max_children.value,
   mountain: mountain.value,
   name: name.value,
   ocean: ocean.value,
@@ -254,16 +254,18 @@ const data = computed<Omit<IRoom, 'id' | 'photos'>>(() => ({
   hotel_id: hotelId.value,
   activated: activated.value
 }))
-const { executeApi: create } = createRoom(data.value)
-const { executeApi: update } = updateRoom(data.value, roomId.value)
+const { executeApi: create } = createRoom(data)
+const { executeApi: update } = updateRoom(data, roomId.value)
 
 const doSubmit = async () => {
   if (isEdit.value) {
     await update()
     // router.push({ name: 'room' })
     return
+  } else {
+    await create()
+    return
   }
-  await create()
 }
 </script>
 
