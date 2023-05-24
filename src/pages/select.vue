@@ -4,9 +4,9 @@ div.h-full.w-full
   .flex.flex-col.items-center.justify-center.w-full.h-full.gap-3(v-else)
     .flex.items-center.justify-between.gap-3.w-full
       span.font-bold.text-base.animate-bounce {{ content }}
-      NAutoComplete(v-model:value='search'  :input-props="{autocomplete: 'disabled'}" :options='hotelOptions' style='width: 300px;' placeholder='Nhập khách sạn cần tìm' :disabled='isSearching')
+      NAutoComplete(v-model:value='search'  :input-props="{autocomplete: 'disabled'}" :options='hotelOptions' style='width: 300px;' placeholder='Nhập khách sạn cần tìm' :disabled='isLoading')
     .w-full.h-full.mx-auto(v-if='!isEmpty')
-      .grid.grid-cols-1.gap-4.bg-white.rounded-10.scrollbar-gradient(class='flex-wrap justify-around max-w-5xl p-5 mb-3 overflow-auto md:grid-cols-3')
+      .grid.grid-cols-1.gap-4.bg-white.rounded-10.scrollbar-gradient(class='flex-wrap justify-around p-5 mb-3 overflow-auto md:grid-cols-3')
         HotelCard(v-for='hotel in hotels' :hotel='hotel')
 
       .flex.items-center.justify-between
@@ -35,6 +35,7 @@ const HotelCard = defineAsyncComponent(() => import('@/components/select/HotelCa
 const { currentHotel, hotels, paging, filter } = storeToRefs(useHotelsStore())
 // Get hotel function
 const { getHotels } = useHotelsStore()
+const { executeApi: fetchHotel, isLoading } = getHotels()
 
 // Hotel empty -> show create hotel form
 // else -> show hotel card
@@ -55,7 +56,6 @@ const pagination = computed<Partial<PaginationInfo>>(() => ({
 
 // Search text input
 const search = ref('')
-const isSearching = ref(false)
 // hotel options each input change
 const hotelOptions = computed(() => {
   // return selected with name
@@ -68,14 +68,12 @@ const hotelOptions = computed(() => {
 watchDebounced(
   search,
   async () => {
-    isSearching.value = true
     filter.value = {
       search: search.value,
-      offset: 6,
-      page: pagination.value.page
+      offset: 9,
+      page: 1
     }
-    await getHotels()
-    isSearching.value = false
+    await fetchHotel()
   },
   { debounce: 1000 }
 )
@@ -86,24 +84,22 @@ const updatePage = (page: number) => {
   filter.value = {
     search: search.value,
     page,
-    offset: 6
+    offset: 9
   }
-  getHotels()
+  fetchHotel()
 }
 
-const isLoading = ref(false)
-
-onBeforeMount(async () => {
+onMounted(async () => {
   // Reset current hotel
   currentHotel.value = null
   // reset paging and call api hotels
+  console.log('😃😦😧 ~ TRước khi filter:', filter.value)
   filter.value = {
-    offset: 6,
+    offset: 9,
     page: 1
   }
-  isLoading.value = true
-  await getHotels()
-  isLoading.value = false
+  await fetchHotel()
+  console.log('😃😦😧 ~ TRước khi filter và fetch:', filter.value)
 })
 </script>
 

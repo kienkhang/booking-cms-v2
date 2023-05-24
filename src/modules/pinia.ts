@@ -24,13 +24,17 @@ const navigationAuthGuard = (router: Router) => {
 }
 
 const navigationHotelGuard = (router: Router) => {
-  const { getHotelLocalStore } = useHotelsStore()
+  const { getHotelLocalStore, setCurrentHotel } = useHotelsStore()
+  const { hotels } = useHotel()
   const { hotelId } = useHotelStorage()
   router.beforeEach((to, _, next) => {
     const requiredHotel = to.meta.requiredHotel
     // if exist hotel in local and not having current Hotel -> get hotel
-    if (hotelId.value && requiredHotel) {
-      getHotelLocalStore()
+    if (hotelId.value && requiredHotel && getHotelLocalStore()) {
+      const { executeApi } = getHotelLocalStore()
+      executeApi().then(() => {
+        setCurrentHotel(hotels.value[0])
+      })
     }
     // from catch navigate to "/" and to catch case reload
     // if need hotel and not hotel saved in store -> goto select

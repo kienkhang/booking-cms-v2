@@ -100,7 +100,7 @@ const { hotelId } = useHotelStorage()
 // ========================= HOTELIER ID ======================
 const { currentHotel } = storeToRefs(useHotelsStore())
 // Get hotelier id from current hotel
-const hotelierId = computed(() => currentHotel.value.hotelier_id)
+const hotelierId = computed(() => currentHotel.value?.hotelier_id)
 // ---------------------- HOTEL INFO ----------------------
 
 const hotelInfo = reactive({
@@ -184,7 +184,7 @@ const bindingEditForm = () => {
   beach.value = currentHotel.value.hotel_facility.beach
   breakfast.value = currentHotel.value.hotel_facility.breakfast
   camping.value = currentHotel.value.hotel_type.camping
-  homestay.value = currentHotel.value.hotel_type.home_stay
+  homestay.value = currentHotel.value.hotel_type.homestay
   casino.value = currentHotel.value.hotel_facility.casino
   fitness.value = currentHotel.value.hotel_facility.fitness
   motel.value = currentHotel.value.hotel_type.motel
