@@ -80,26 +80,24 @@ watchDebounced(
 
 // ---- HANDLE PAGING HOTEL ----
 
-const updatePage = (page: number) => {
+const updatePage = async (page: number) => {
   filter.value = {
     search: search.value,
     page,
     offset: 9
   }
-  fetchHotel()
+  await fetchHotel()
 }
 
 onMounted(async () => {
   // Reset current hotel
   currentHotel.value = null
   // reset paging and call api hotels
-  console.log('😃😦😧 ~ TRước khi filter:', filter.value)
   filter.value = {
     offset: 9,
     page: 1
   }
   await fetchHotel()
-  console.log('😃😦😧 ~ TRước khi filter và fetch:', filter.value)
 })
 </script>
 

@@ -40,7 +40,6 @@ const useHotelStore = () => {
   const getHotelAdmin = () => {
     const usedGetHotel = hotelsApi.getHotels(filter.value)
     const { data, error, isFinished, execute } = usedGetHotel
-
     // After get data -> reset paging to null
     until(isFinished)
       .toBeTruthy()
@@ -48,12 +47,11 @@ const useHotelStore = () => {
         // After get hotel & not error -> save global state
         // Response is <data:{ data:[], paging:{}}>
         if (!error.value) {
+          console.log('Lấy page:', data.value.paging)
           hotels.value = data.value.data
           paging.value = data.value.paging
-        } else {
-          hotelId.value = null
         }
-        filter.value = null
+        // filter.value = null
       })
     return { ...usedGetHotel, executeApi: () => execute({ params: filter.value }) }
   }
@@ -74,7 +72,7 @@ const useHotelStore = () => {
         } else {
           hotelId.value = null
         }
-        filter.value = null
+        // filter.value = null
       })
     return { ...usedGetHotel, executeApi: () => execute({ params: filter.value }) }
   }
@@ -89,19 +87,23 @@ const useHotelStore = () => {
   }
 
   // Set current hotel with hotelId from localstorage
-  const getHotelLocalStore = () => {
+  const getHotelLocalStore = async () => {
     if (!hotelId.value || currentHotel.value) return
     filter.value = {
       id: hotelId.value
     }
     // Get hotel
-    return getHotels()
+    if (getHotels()) {
+      const { executeApi } = getHotels()
+      await executeApi()
+      setCurrentHotel(hotels.value[0])
+    }
   }
 
   // When ever hotelId change and not null -> get HotelLocalStore
   whenever(hotelId, async () => {
-    const { executeApi } = getHotelLocalStore()
-    executeApi()
+    await getHotelLocalStore()
+    // executeApi()
   })
 
   return {

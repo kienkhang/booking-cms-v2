@@ -4,14 +4,8 @@ hotel-tabs
 
 <script setup lang="ts">
 import HotelTabs from '@/components/hotel/HotelTabs.vue'
-const { getHotelLocalStore, setCurrentHotel } = useHotelsStore()
-const { hotels } = useHotel()
+const { getHotelLocalStore } = useHotelsStore()
 onBeforeMount(() => {
-  if (getHotelLocalStore()) {
-    const { executeApi } = getHotelLocalStore()
-    executeApi().then(() => {
-      setCurrentHotel(hotels.value[0])
-    })
-  }
+  getHotelLocalStore()
 })
 </script>
