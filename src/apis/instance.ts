@@ -19,9 +19,9 @@ instance.interceptors.response.use(
   async (error) => {
     const { refresh, logout } = useAuth()
     // Get status code
-    const status = error?.response.status
+    const status = error?.response?.status
     // Get message jwt
-    const message = error?.response.data.message //invalid or expired jwt
+    const message = error?.response?.data.message //invalid or expired jwt
     // Get preConfig
     const preConfig = error?.config
     // Check status and custom properties is "sent" meaning request is sended ?
