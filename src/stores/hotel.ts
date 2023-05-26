@@ -24,6 +24,7 @@ const useHotelStore = () => {
     offset: -1,
     page: 1
   })
+
   // filtering
   const filter = ref<{
     offset?: number
