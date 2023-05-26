@@ -11,7 +11,7 @@ div.h-full.w-full
 
       .flex.items-center.justify-between
         NPagination(
-          v-model:page='pageShow',
+          v-model:page='page',
           :page-count='cPaging?.total_pages'
           @update:page='updatePage'
         )
@@ -36,7 +36,13 @@ const HotelCard = defineAsyncComponent(() => import('@/components/select/HotelCa
 const { currentHotel, hotels, paging, filter } = storeToRefs(useHotelsStore())
 // Get hotel function
 const { getHotels } = useHotelsStore()
-const { executeApi: fetchHotel, isLoading } = getHotels()
+
+const isLoading = ref(false)
+const fetchHotel = async () => {
+  isLoading.value = true
+  await getHotels().isFinished
+  isLoading.value = false
+}
 
 // Hotel empty -> show create hotel form
 // else -> show hotel card
@@ -47,15 +53,14 @@ const content = computed(() => {
 })
 
 // NaiveUI Pagination component
-const pageShow = ref(1)
+const page = ref(1)
 
 const cPaging = computed(() =>
   calculatePaging({
     offset: 6,
-    pageShow: pageShow.value,
-    sPage: paging.value.page,
-    sTotal: paging.value.total_items,
-    sData: hotels.value
+    page: page.value,
+    sData: hotels.value,
+    total_items: paging.value.total_items
   })
 )
 
@@ -79,7 +84,7 @@ watchDebounced(
   async () => {
     filter.value = {
       search: search.value,
-      offset: 9,
+      offset: 50,
       page: 1
     }
     await fetchHotel()
@@ -90,13 +95,11 @@ watchDebounced(
 // ---- HANDLE PAGING HOTEL ----
 
 const updatePage = async (page: number) => {
-  if (page * 6 <= paging.value.page * paging.value.offset) {
-    return
-  } else {
+  if (page * 6 > paging.value.page * paging.value.offset) {
     filter.value = {
       search: search.value,
       page: paging.value.page + 1,
-      offset: 9
+      offset: 50
     }
     await fetchHotel()
   }
@@ -107,7 +110,7 @@ onMounted(async () => {
   currentHotel.value = null
   // reset paging and call api hotels
   filter.value = {
-    offset: 9,
+    offset: 50,
     page: 1
   }
   await fetchHotel()

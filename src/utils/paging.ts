@@ -1,41 +1,34 @@
 interface IClientPaging<T> {
+  data: T[]
   total_pages: number
+  start: number
+  end: number
   page: number
   offset: number
-  pageShow: number
-  data: T[]
 }
 const calculatePaging = <T>({
-  sPage,
-  sTotal,
-  pageShow,
   offset,
-  sData
+  page,
+  sData,
+  total_items
 }: {
-  sPage: number
-  sTotal: number
-  pageShow: number
+  page: number
   offset: number
+  total_items: number
   sData: T[]
 }): IClientPaging<T> => {
-  const page = computed(() => {
-    if (pageShow % offset === 0 || pageShow * offset <= offset) {
-      return 1
-    } else {
-      return pageShow - sPage * offset + 1
-    }
-  })
-  const total_pages = computed(() => Math.ceil(sTotal / (offset * page.value)))
-  const start = computed(() => (page.value - 1) * offset)
-  const end = computed(() => page.value * offset)
+  const total_pages = computed(() => Math.ceil(total_items / offset))
+  const start = computed(() => (page - 1) * offset)
+  const end = computed(() => page * offset)
   const data = computed(() => sData.slice(start.value, end.value))
 
   return {
     data: data.value,
-    page: page.value,
     total_pages: total_pages.value,
-    offset,
-    pageShow
+    start: start.value,
+    end: end.value,
+    page: page,
+    offset
   }
 }
 
