@@ -17,12 +17,12 @@ WorkModal(v-model:show="showWorkList" :user-id='user.id')
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/dtos/user'
+import type { IUser } from '@/dtos/user'
 import UserModal from './UserModal.vue'
 import WorkModal from './WorkModal.vue'
 
 const props = defineProps<{
-  user: User
+  user: IUser
 }>()
 // Open close popover
 const show = ref(false)

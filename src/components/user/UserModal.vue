@@ -10,11 +10,11 @@ Modal(:show="show" @mask-click='closeModal()')
 <script setup lang="ts">
 import Modal from '../shared/modal/Modal.vue'
 import UserForm from './UserForm.vue'
-import type { User } from '@/dtos/user'
+import type { IUser } from '@/dtos/user'
 defineProps<{
   show: boolean
   type: 'add' | 'edit'
-  user?: User
+  user?: IUser
 }>()
 
 const emit = defineEmits<{
