@@ -7,12 +7,12 @@ div.h-full.w-full
       NAutoComplete(v-model:value='search'  :input-props="{autocomplete: 'disabled'}" :options='hotelOptions' style='width: 300px;' placeholder='Nhập khách sạn cần tìm' :disabled='isLoading')
     .w-full.h-full.mx-auto(v-if='!isEmpty')
       .grid.grid-cols-1.gap-4.bg-white.rounded-10.scrollbar-gradient(class='flex-wrap justify-around p-5 mb-3 overflow-auto md:grid-cols-3')
-        HotelCard(v-for='hotel in hotels' :hotel='hotel')
+        HotelCard(v-for='hotel in pagingData' :hotel='hotel')
 
       .flex.items-center.justify-between
         NPagination(
-          v-model:page='pagination.page',
-          :page-count='pagination.pageCount'
+          v-model:page='page',
+          :page-count='cPaging?.total_pages'
           @update:page='updatePage'
         )
     .p-6.rounded-lg.shadow-md.bg-white.overflow-auto.scrollbar-gradient(class='' ref='animate' v-else)
@@ -25,7 +25,8 @@ div.h-full.w-full
 // import HotelCard from '@/components/select/HotelCard.vue'
 // import Loading from '@/components/shared/Loading.vue'
 import { useHotelsStore } from '@/stores'
-import { NPagination, type PaginationInfo } from 'naive-ui'
+import { calculatePaging } from '@/utils/paging'
+import { NPagination } from 'naive-ui'
 // Components
 const Loading = defineAsyncComponent(() => import('@/components/shared/Loading.vue'))
 const HotelTabs = defineAsyncComponent(() => import('@/components/hotel/HotelTabs.vue'))
@@ -35,7 +36,13 @@ const HotelCard = defineAsyncComponent(() => import('@/components/select/HotelCa
 const { currentHotel, hotels, paging, filter } = storeToRefs(useHotelsStore())
 // Get hotel function
 const { getHotels } = useHotelsStore()
-const { executeApi: fetchHotel, isLoading } = getHotels()
+
+const isLoading = ref(false)
+const fetchHotel = async () => {
+  isLoading.value = true
+  await getHotels().isFinished
+  isLoading.value = false
+}
 
 // Hotel empty -> show create hotel form
 // else -> show hotel card
@@ -46,11 +53,18 @@ const content = computed(() => {
 })
 
 // NaiveUI Pagination component
-const pagination = computed<Partial<PaginationInfo>>(() => ({
-  page: paging.value.page,
-  pageSize: paging.value.offset,
-  pageCount: paging.value.total_pages
-}))
+const page = ref(1)
+
+const cPaging = computed(() =>
+  calculatePaging({
+    offset: 6,
+    page: page.value,
+    sData: hotels.value,
+    total_items: paging.value.total_items
+  })
+)
+
+const pagingData = computed(() => cPaging.value.data)
 
 // ---- HANDLE SEARCH HOTEL ----
 
@@ -70,7 +84,7 @@ watchDebounced(
   async () => {
     filter.value = {
       search: search.value,
-      offset: 9,
+      offset: 50,
       page: 1
     }
     await fetchHotel()
@@ -81,12 +95,14 @@ watchDebounced(
 // ---- HANDLE PAGING HOTEL ----
 
 const updatePage = async (page: number) => {
-  filter.value = {
-    search: search.value,
-    page,
-    offset: 9
+  if (page * 6 > paging.value.page * paging.value.offset) {
+    filter.value = {
+      search: search.value,
+      page: paging.value.page + 1,
+      offset: 50
+    }
+    await fetchHotel()
   }
-  await fetchHotel()
 }
 
 onMounted(async () => {
@@ -94,7 +110,7 @@ onMounted(async () => {
   currentHotel.value = null
   // reset paging and call api hotels
   filter.value = {
-    offset: 9,
+    offset: 50,
     page: 1
   }
   await fetchHotel()

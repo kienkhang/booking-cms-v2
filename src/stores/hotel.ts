@@ -24,6 +24,7 @@ const useHotelStore = () => {
     offset: -1,
     page: 1
   })
+
   // filtering
   const filter = ref<{
     offset?: number
@@ -39,42 +40,45 @@ const useHotelStore = () => {
   // Get hotel with role admin
   const getHotelAdmin = () => {
     const usedGetHotel = hotelsApi.getHotels(filter.value)
-    const { data, error, isFinished, execute } = usedGetHotel
-    // After get data -> reset paging to null
+    const { data, error, isFinished } = usedGetHotel
+
+    usedGetHotel.execute({ params: filter.value }).then(() => {
+      if (!error.value) {
+        // After get hotel & not error -> save global state
+        // Response is <data:{ data:[], paging:{}}>
+        hotels.value = data.value.data
+        paging.value = data.value.paging
+      }
+    })
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        // After get hotel & not error -> save global state
-        // Response is <data:{ data:[], paging:{}}>
-        if (!error.value) {
-          console.log('Lấy page:', data.value.paging)
-          hotels.value = data.value.data
-          paging.value = data.value.paging
-        }
-        // filter.value = null
+        // After get data -> reset paging to null
+        filter.value = null
       })
-    return { ...usedGetHotel, executeApi: () => execute({ params: filter.value }) }
+    return { ...usedGetHotel, executeApi: () => usedGetHotel.execute({ params: filter.value }) }
   }
   // Get hotel with role partner (hotelier | manager | staff)
   const getHotelPartner = () => {
     const usedGetHotel = hotelsApi.partnerGetHotel(filter.value)
-    const { data, error, isFinished, execute } = usedGetHotel
+    const { data, error, isFinished } = usedGetHotel
 
     // After get data -> reset paging to null
+    usedGetHotel.execute({ params: filter.value }).then(() => {
+      if (!error.value) {
+        // After get hotel & not error -> save global state
+        // Response is <data:{ data:[], paging:{}}>
+        hotels.value = data.value.data
+        paging.value = data.value.paging
+      }
+    })
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        // After get hotel & not error -> save global state
-        // Response is <data:{ data:[], paging:{}}>
-        if (!error.value) {
-          hotels.value = data.value.data
-          paging.value = data.value.paging
-        } else {
-          hotelId.value = null
-        }
-        // filter.value = null
+        // After get data -> reset paging to null
+        filter.value = null
       })
-    return { ...usedGetHotel, executeApi: () => execute({ params: filter.value }) }
+    return { ...usedGetHotel, executeApi: () => usedGetHotel.execute({ params: filter.value }) }
   }
 
   // Get Hotels
@@ -93,11 +97,8 @@ const useHotelStore = () => {
       id: hotelId.value
     }
     // Get hotel
-    if (getHotels()) {
-      const { executeApi } = getHotels()
-      await executeApi()
-      setCurrentHotel(hotels.value[0])
-    }
+    await getHotels()
+    setCurrentHotel(hotels.value[0])
   }
 
   // When ever hotelId change and not null -> get HotelLocalStore
