@@ -13,11 +13,11 @@ n-tabs.config-tab(
   n-tab-pane(name="infos" tab="Thông tin phòng" display-directive='show:lazy')
     room-info
   n-tab-pane(name="rateplans" tab="Gói giá" display-directive='show:lazy')
-    rateplan-list
+    rate-plan-table
 </template>
 
 <script setup lang="ts">
-import RateplanList from '@/components/room/RateplanList.vue'
+import RatePlanTable from '@/components/rateplan/RatePlanTable.vue'
 // import RoomForm from '@/components/room/RoomForm.vue'
 import RoomInfo from '@/components/room/RoomInfo.vue'
 import { NTabs, NTabPane } from 'naive-ui'
