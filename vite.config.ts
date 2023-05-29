@@ -38,8 +38,9 @@ export default defineConfig({
         'vue-router',
         'vue-i18n',
         '@vueuse/head',
-        '@vueuse/core',
+        // '@vueuse/core',
         {
+          '@vueuse/core': ['useStorage', 'useNow', 'whenever', 'until', 'refDebounced'],
           pinia: ['storeToRefs', 'defineStore'],
           'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar']
         }

@@ -17,7 +17,7 @@ specifiers:
   '@tailwindcss/line-clamp': ^0.4.4
   '@types/lodash-es': ^4.17.7
   '@types/node': ^18.14.2
-  '@vitejs/plugin-vue': ^4.0.0
+  '@vitejs/plugin-vue': ^4.2.0
   '@volar/vue-language-plugin-pug': ^1.2.0
   '@vue/eslint-config-prettier': ^7.1.0
   '@vue/eslint-config-typescript': ^11.0.2
@@ -91,7 +91,7 @@ devDependencies:
   '@iconify-json/ph': 1.1.5
   '@rushstack/eslint-patch': 1.2.0
   '@types/node': 18.15.11
-  '@vitejs/plugin-vue': 4.1.0_vite@4.2.1+vue@3.3.4
+  '@vitejs/plugin-vue': 4.2.3_vite@4.2.1+vue@3.3.4
   '@vue/eslint-config-prettier': 7.1.0_7bukkzi2qfqwzn63s5moor2wwy
   '@vue/eslint-config-typescript': 11.0.2_fnqogvjegtcohcqtttqiz2eapq
   '@vue/tsconfig': 0.1.3_@types+node@18.15.11
@@ -1002,8 +1002,8 @@ packages:
       vue: 3.3.4
     dev: true
 
-  /@vitejs/plugin-vue/4.1.0_vite@4.2.1+vue@3.3.4:
-    resolution: {integrity: sha512-++9JOAFdcXI3lyer9UKUV4rfoQ3T1RN8yDqoCLar86s0xQct5yblxAE+yWgRnU5/0FOlVCpTZpYSBV/bGWrSrQ==}
+  /@vitejs/plugin-vue/4.2.3_vite@4.2.1+vue@3.3.4:
+    resolution: {integrity: sha512-R6JDUfiZbJA9cMiguQ7jxALsgiprjBeHL5ikpXfJCH62pPHtI+JdJ5xWj6Ev73yXSlYl86+blXn1kZHQ7uElxw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.0.0
