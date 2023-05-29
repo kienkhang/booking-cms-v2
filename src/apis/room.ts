@@ -25,6 +25,10 @@ class Room {
     const url = path + `${roomId}/inventories`
     return useGet({ url, params, requiredToken: true })
   }
+  getRatePlans = (params: any | {}, roomId: string) => {
+    const url = path + `${roomId}/rateplans`
+    return useGet({ url, params, requiredToken: true })
+  }
 }
 
 const roomsApi = new Room()
