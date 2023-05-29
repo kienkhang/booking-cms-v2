@@ -1,4 +1,4 @@
-import { rateplansApi } from '@/apis/rateplan'
+import { roomsApi } from '@/apis/room'
 import type { IRatePlan } from '@/dtos'
 
 const useRatePlanStore = () => {
@@ -23,14 +23,26 @@ const useRatePlanStore = () => {
     [filter: string]: any
   }>()
 
-  const getRatePlans = () => {
-    // const usedGetRatePlans = rateplansApi
+  const getRatePlans = (roomId: string) => {
+    const usedGetRatePlans = roomsApi.getRatePlans(filter.value, roomId)
+
+    const { data, isFinished, execute, error } = usedGetRatePlans
+
+    // whenever finished && not error -> set rateplans and paging
+    whenever(isFinished, () => {
+      if (!error.value) {
+        ratePlans.value = data.value.data
+        paging.value = data.value.paging
+      }
+    })
+    return { ...usedGetRatePlans, executeApi: () => execute({ params: filter.value }) }
   }
 
   return {
-    ratePlans,
     paging,
-    filter
+    filter,
+    ratePlans,
+    getRatePlans
   }
 }
 
