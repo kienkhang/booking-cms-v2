@@ -1,9 +1,9 @@
 interface IRatePlan {
   id: string
   name: string
-  type: number
+  type: string
   status: number
-  activated: boolean
+  activate: boolean
   free_breakfast: boolean
   free_lunch: boolean
   free_dinner: boolean
