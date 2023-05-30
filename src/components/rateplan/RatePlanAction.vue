@@ -1,5 +1,5 @@
 <template lang="pug">
-NPopover(:show='show' trigger='click' @clickoutside="close" style='padding:4px')
+NPopover(:show='show' display-directive='show' trigger='click' @clickoutside="close" style='padding:4px')
   template(#trigger)
     icon-ic:outline-more-vert.w-5.h-5.cursor-pointer(@click='open()')
   div.select-none(@click='close()')
@@ -9,15 +9,13 @@ NPopover(:show='show' trigger='click' @clickoutside="close" style='padding:4px')
     .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='openEditModal()')
       icon-material-symbols:edit.w-4.h-4.flex-shrink-0
       span Chỉnh sửa
-    .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='')
-      NSwitch.w-full(v-model:value='activated' style="width:max-content")
-RatePlanModal(type='edit' v-model:show='showEditModal')
+RatePlanModal(type='edit' v-model:show='showEditModal' :rate-plan='ratePlan')
 </template>
 
 <script setup lang="ts">
 import { type IRatePlan } from '@/dtos'
 // Components
-import { NPopover, NSwitch } from 'naive-ui'
+import { NPopover } from 'naive-ui'
 import RatePlanModal from '../shared/modal/RatePlanModal.vue'
 // Define Props
 const props = defineProps<{
@@ -29,11 +27,10 @@ const open = () => (show.value = true)
 const close = () => (show.value = false)
 
 // ===== RATEPLAN HANDLER
-const activated = ref(false)
-
 // Rate Plan Modal handler
 const showEditModal = ref(false)
 const openEditModal = () => (showEditModal.value = true)
+
 const deleteRatePlan = () => {
   console.log('delete action', props.ratePlan.id)
 }
