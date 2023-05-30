@@ -43,6 +43,7 @@
     "@iconify-json/material-symbols": "^1.1.38",
     "@iconify-json/mdi": "^1.1.41",
     "@iconify-json/ph": "^1.1.5",
+    "@iconify/vue": "^4.1.1",
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/node": "^18.14.2",
     "@vitejs/plugin-vue": "^4.2.0",
