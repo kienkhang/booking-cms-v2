@@ -40,7 +40,7 @@ const { getHotels } = useHotelsStore()
 const isLoading = ref(false)
 const fetchHotel = async () => {
   isLoading.value = true
-  await getHotels().isFinished
+  await getHotels().executeApi()
   isLoading.value = false
 }
 
