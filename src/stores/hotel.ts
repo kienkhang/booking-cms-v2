@@ -42,20 +42,16 @@ const useHotelStore = () => {
     const usedGetHotel = hotelsApi.getHotels(filter.value)
     const { data, error, isFinished } = usedGetHotel
 
-    usedGetHotel.execute({ params: filter.value }).then(() => {
+    // usedGetHotel.execute({ params: filter.value })
+    whenever(isFinished, () => {
       if (!error.value) {
         // After get hotel & not error -> save global state
         // Response is <data:{ data:[], paging:{}}>
         hotels.value = data.value.data
         paging.value = data.value.paging
       }
+      filter.value = null
     })
-    until(isFinished)
-      .toBeTruthy()
-      .then(() => {
-        // After get data -> reset paging to null
-        filter.value = null
-      })
     return { ...usedGetHotel, executeApi: () => usedGetHotel.execute({ params: filter.value }) }
   }
   // Get hotel with role partner (hotelier | manager | staff)
@@ -64,29 +60,27 @@ const useHotelStore = () => {
     const { data, error, isFinished } = usedGetHotel
 
     // After get data -> reset paging to null
-    usedGetHotel.execute({ params: filter.value }).then(() => {
+    // usedGetHotel.execute({ params: filter.value })
+    whenever(isFinished, () => {
       if (!error.value) {
         // After get hotel & not error -> save global state
         // Response is <data:{ data:[], paging:{}}>
         hotels.value = data.value.data
         paging.value = data.value.paging
       }
+      filter.value = null
     })
-    until(isFinished)
-      .toBeTruthy()
-      .then(() => {
-        // After get data -> reset paging to null
-        filter.value = null
-      })
     return { ...usedGetHotel, executeApi: () => usedGetHotel.execute({ params: filter.value }) }
   }
 
   // Get Hotels
   const getHotels = () => {
+    const usedGetHotelAdmin = getHotelAdmin()
+    const usedGetHotelPartner = getHotelPartner()
     if (['ADMIN', 'SUPPERADMIN'].includes(role.value)) {
-      return getHotelAdmin()
+      return { ...usedGetHotelAdmin }
     } else if (role.value === 'HOTELIER') {
-      return getHotelPartner()
+      return { ...usedGetHotelPartner }
     }
   }
 
@@ -97,8 +91,14 @@ const useHotelStore = () => {
       id: hotelId.value
     }
     // Get hotel
-    await getHotels()
-    setCurrentHotel(hotels.value[0])
+
+    if (['ADMIN', 'SUPPERADMIN'].includes(role.value)) {
+      await getHotelAdmin().executeApi()
+      setCurrentHotel(hotels.value[0])
+    } else if (role.value === 'HOTELIER') {
+      await getHotelPartner().executeApi()
+      setCurrentHotel(hotels.value[0])
+    }
   }
 
   // When ever hotelId change and not null -> get HotelLocalStore
