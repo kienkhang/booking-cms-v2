@@ -1,4 +1,4 @@
-const path = 'hotels/'
+const path = 'hotels'
 const admin = 'admin/'
 class Hotel {
   createHotel = (data: any | {}) => {
@@ -6,7 +6,7 @@ class Hotel {
     return usePost({ url, data, requiredToken: true })
   }
   updateHotel = (data: any | {}, hotelId: string) => {
-    const url = path + hotelId
+    const url = path + '/' + hotelId
     return usePatch({ url, data, requiredToken: true })
   }
   getHotels = (params: any | {}) => {
@@ -26,7 +26,7 @@ class Hotel {
     return usePatch({ url, data, requiredToken: true })
   }
   sendPayout = (data: any | {}, hotelId: string) => {
-    const url = path + `${hotelId}/payout`
+    const url = path + '/' + `${hotelId}/payout`
     return usePost({ url, data, requiredToken: true })
   }
   resolvePayout = (data: any | {}, payoutId: string) => {
@@ -46,7 +46,7 @@ class Hotel {
     return useGet({ url, params, requiredToken: true })
   }
   getRoomsByHotel = (params: any | {}, hotelId: string) => {
-    const url = path + `${hotelId}/rooms`
+    const url = path + '/' + `${hotelId}/rooms`
     return useGet({ url, params, requiredToken: true })
   }
 }
