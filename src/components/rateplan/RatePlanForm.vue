@@ -85,10 +85,8 @@ const { executeApi: exeUpdate } = updateRatePlan(form, roomId.value)
 
 const doSubmit = async () => {
   if (!isEditForm.value) {
-    console.log('Add api')
     await exeCreate()
   } else {
-    console.log('Update api')
     await exeUpdate()
   }
 }
