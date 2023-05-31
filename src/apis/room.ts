@@ -13,11 +13,11 @@ class Room {
     const url = `${path}${roomId}`
     return useGet({ url, requiredToken: true })
   }
-  createRoomNight = (data: any | {}) => {
+  upsertRoomNight = (data: any | {}) => {
     const url = path + 'roomnights'
     return usePost({ url, data, requiredToken: true })
   }
-  createRatePakage = (data: any | {}) => {
+  upsertRatePakage = (data: any | {}) => {
     const url = path + 'ratepackages'
     return usePost({ url, data, requiredToken: true })
   }
