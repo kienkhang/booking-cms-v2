@@ -18,7 +18,10 @@ const useHotel = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        !error.value && getHotels() && message.success('Tạo khách sạn thành công')
+        if (!error.value) {
+          getHotels()
+          message.success('Tạo khách sạn thành công')
+        }
       })
 
     // return with custom useAxios struct
