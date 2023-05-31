@@ -40,7 +40,14 @@ export default defineConfig({
         '@vueuse/head',
         // '@vueuse/core',
         {
-          '@vueuse/core': ['useStorage', 'useNow', 'whenever', 'until', 'refDebounced'],
+          '@vueuse/core': [
+            'useStorage',
+            'useNow',
+            'whenever',
+            'until',
+            'refDebounced',
+            'watchDebounced'
+          ],
           pinia: ['storeToRefs', 'defineStore'],
           'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar']
         }
