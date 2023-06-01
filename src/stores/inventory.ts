@@ -2,9 +2,7 @@ import { roomsApi } from '@/apis/room'
 import { IInventory } from '@/dtos/inventory'
 
 const useInventoryStore = () => {
-  const { currentRoom } = useRoom()
-  const roomId = computed(() => currentRoom.value.id)
-  const inventories = ref<IInventory[]>([])
+  const inventories = ref<IInventory>(null)
 
   // dynamic paging
   const paging = ref<{
@@ -29,14 +27,15 @@ const useInventoryStore = () => {
     form: Ref<{
       month: number
       year: number
-    }>
+    }>,
+    roomId: Ref<string>
   ) => {
     const usedGetInventories = roomsApi.getInventories(form.value, roomId.value)
     const { data, execute, isFinished, error } = usedGetInventories
 
     whenever(isFinished, () => {
       if (!error.value) {
-        inventories.value = data.value.data
+        inventories.value = data.value
       }
     })
     return { ...usedGetInventories, executeApi: () => execute({ params: form.value }) }
