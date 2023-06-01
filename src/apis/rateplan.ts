@@ -1,4 +1,4 @@
-const path = 'rateplans/'
+const path = 'rateplans'
 // const admin = 'admin/'
 class RatePlan {
   createRatePlan = (data: any | {}) => {
@@ -6,7 +6,7 @@ class RatePlan {
     return usePost({ url, data, requiredToken: true })
   }
   updateRatePlan = (data: any | {}, rateplanId: string) => {
-    const url = path + rateplanId
+    const url = `${path}/${rateplanId}`
     return usePatch({ url, data, requiredToken: true })
   }
 }
