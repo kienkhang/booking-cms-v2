@@ -1,4 +1,4 @@
-const path = 'rooms/'
+const path = 'rooms'
 // const admin = 'admin/'
 class Room {
   createRoom = (data: any | {}) => {
@@ -14,19 +14,19 @@ class Room {
     return useGet({ url, requiredToken: true })
   }
   upsertRoomNight = (data: any | {}) => {
-    const url = path + 'roomnights'
+    const url = path + '/roomnights'
     return usePost({ url, data, requiredToken: true })
   }
   upsertRatePakage = (data: any | {}) => {
-    const url = path + 'ratepackages'
+    const url = path + '/ratepackages'
     return usePost({ url, data, requiredToken: true })
   }
   getInventories = (params: any | {}, roomId: string) => {
-    const url = path + `${roomId}/inventories`
+    const url = path + `/${roomId}/inventories`
     return useGet({ url, params, requiredToken: true })
   }
   getRatePlans = (params: any | {}, roomId: string) => {
-    const url = path + `${roomId}/rateplans`
+    const url = path + `/${roomId}/rateplans`
     return useGet({ url, params, requiredToken: true })
   }
 }
