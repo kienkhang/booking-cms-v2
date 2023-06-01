@@ -16,10 +16,9 @@ import useInventory from '@/composables/inventory/useInventory'
 import dayjs from 'dayjs'
 import { NDatePicker, NSelect } from 'naive-ui'
 const { setMonth, setYear, setRoom } = useInventory()
-const { getRooms } = useRoomStore()
+
 const { rooms } = useRoom()
 // ----------- SELECT ROOM ---------------
-
 const roomOptions = computed(() => {
   return rooms.value.map((room) => {
     return {
@@ -34,10 +33,7 @@ const roomSelected = ref<string | null>('')
 const updateRoom = () => {
   setRoom(roomSelected.value)
 }
-// Before mount -> call api get room
-onBeforeMount(() => {
-  getRooms().executeApi()
-})
+
 // When ever room options have value -> set default roomSelected
 whenever(roomOptions, () => {
   // set default selected

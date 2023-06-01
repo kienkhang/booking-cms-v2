@@ -19,7 +19,7 @@
             title="Chọn rate plan"
             filterable
             placeholder="Please select a rate plan"
-            :options="rateplanOptions"
+            :options="ratePlanOptions"
             style='width: max-content;'
             )
   .flex.flex-col.gap-2.select-mode.rounded-10.p-3.bg-cultured
@@ -49,18 +49,18 @@ const { mode, month, rateplan, year, adjustRate, room, selectedRatePackage, sele
   storeToRefs(useInventory())
 const { selectRate, selectRoomNight } = useInventory()
 
+const { ratePlans } = useRatePlan()
+
 // selected rateplan
 // rateplan options
-const rateplanOptions = [
-  {
-    label: 'Hoàn tiền',
-    value: 'rateplan1'
-  },
-  {
-    label: 'Không hoàn tiền',
-    value: 'rateplan2'
-  }
-]
+const ratePlanOptions = computed(() => {
+  return ratePlans.value.map((rp) => {
+    return {
+      label: rp.name,
+      value: rp.id
+    }
+  })
+})
 
 // Value day of week
 // dow: day of week
