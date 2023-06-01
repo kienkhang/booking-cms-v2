@@ -6,7 +6,7 @@ div.grid.grid-cols-12.text-center.select-none(v-if='inventories')
     .border.border-r-0.font-semibold.py-2.text-xs.bg-pink-200 Số phòng 
     .border.border-r-0.font-medium.border-t-0.py-2(class='text-xs line-clamp-1 overflow-ellipsis' v-for='ratePlan in ratePlanLists')
       span {{ratePlan.name}}
-  .col-span-11.overflow-auto.border.scrollbar-gradient
+  .col-span-11.overflow-auto.border.scrollbar-gradient.scroll-smooth(@wheel="wheel" ref='scrollContainer')
     //- Render days
     .flex.items-center.text-xs.font-bold
       DateCell(v-for='cell in calendar' :data='cell')
@@ -34,6 +34,18 @@ import RoomNightCell from './RoomNightCell.vue'
 import RatePackageCell from './RatePackageCell.vue'
 import useMutateInventory from '@/composables/inventory/useMutateInventory'
 import dayjs from 'dayjs'
+
+// ========= HORIZONTAL SCROLL HANDLER ===============
+
+// define scroll container
+const scrollContainer = ref<HTMLElement>(null)
+// scroll horizontal event
+const wheel = (e: WheelEvent) => {
+  // the bigger deltaY is, the faster scroll is
+  scrollContainer.value.scrollLeft += e.deltaY * 5
+}
+
+// ========= INVENTORY HANDLER ===============
 
 // Get ratePlans list
 const { ratePlans: ratePlanLists } = useRatePlan()
@@ -89,8 +101,6 @@ const ratePlans = computed(() => {
     }
   })
 })
-// const roomNightDatas = computed(() => renderRoomNights(year.value, month.value, roomnights))
-// const ratePackageDatas = computed(() => renderRatePakages(year.value, month.value, ratepackages))
 </script>
 
 <style scoped></style>

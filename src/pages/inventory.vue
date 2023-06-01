@@ -18,7 +18,7 @@ div.h-full.w-full
     InventoryTable
     div
       span.font-bold.text-red-600  Hướng dẫn: 
-      span.font-semibold.text-blue-600.text-xs  Giữ shift và lăn chuột để cuộn ngang
+      span.font-semibold.text-blue-600.text-xs  Lăn chuột để cuộn ngang
 </template>
 
 <script setup lang="ts">
