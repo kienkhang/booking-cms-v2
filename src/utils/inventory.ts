@@ -53,7 +53,7 @@ const ratepackages: IRatePackageCell[] = [
 const renderRoomNights = (
   realYear: number,
   realMonth: number,
-  roomNight: IRoomNightCell[]
+  roomNights: IRoomNightCell[]
 ): IRoomNightCell[] => {
   // Calculate days in month
   const dayOfMonth = dayjs().year(realYear).month(realMonth).daysInMonth()
@@ -63,9 +63,10 @@ const renderRoomNights = (
   const lastDate = dayjs().year(realYear).month(realMonth).date(dayOfMonth)
 
   // Filter list roomnight is between first and last month
-  const filteredRoomNight = roomNight.filter((rn) =>
-    dayjs(rn.availability_at).isBetween(firstDate, lastDate, 'year', '[]')
-  )
+  const filteredRoomNight =
+    roomNights?.filter((rn) =>
+      dayjs(rn.availability_at).isBetween(firstDate, lastDate, 'year', '[]')
+    ) || []
   // Create empty array, loop from first -> last month then fill cell
   // Each cell contain -> date(YYY-MM-DD), id and quanity
   const renderSource = []
@@ -93,7 +94,7 @@ const renderRoomNights = (
 const renderRatePakages = (
   realYear: number,
   realMonth: number,
-  ratePackage: IRatePackageCell[]
+  ratePackages: IRatePackageCell[]
 ): IRatePackageCell[] => {
   // Calculate days in month
   const dayOfMonth = dayjs().year(realYear).month(realMonth).daysInMonth()
@@ -103,9 +104,10 @@ const renderRatePakages = (
   const lastDate = dayjs().year(realYear).month(realMonth).date(dayOfMonth)
 
   // Filter list roomnight is between first and last month
-  const filteredRoomNight = ratePackage.filter((rn) =>
-    dayjs(rn.availability_at).isBetween(firstDate, lastDate, 'year', '[]')
-  )
+  const filteredRatePakages =
+    ratePackages?.filter((rn) =>
+      dayjs(rn.availability_at).isBetween(firstDate, lastDate, 'year', '[]')
+    ) || []
   // Create empty array, loop from first -> last month then fill cell
   // Each cell contain -> date(YYY-MM-DD), id and price
   const renderSource = []
@@ -120,10 +122,10 @@ const renderRatePakages = (
   // Then based-on room night data from api, fill data to cell if the date is the same
   const calculatedSource = renderSource.map((cell) => {
     // find cell matched data
-    const rn = filteredRoomNight.find((r) => r.availability_at === cell.availability_at)
+    const rp = filteredRatePakages.find((r) => r.availability_at === cell.availability_at)
     // if rn exist -> assign data to this cell
-    if (rn) {
-      return rn
+    if (rp) {
+      return rp
     }
     // else return cell
     return cell
