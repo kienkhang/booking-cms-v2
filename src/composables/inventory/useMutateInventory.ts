@@ -16,14 +16,14 @@ const useMutateInventory = () => {
   // get inventories from api
   const { getInventories } = useInventoryStore()
   // Get current month and year from useInventory
-  const { month, year } = storeToRefs(useInventory())
+  const { month, year, room: roomId } = storeToRefs(useInventory())
   // computed -> inventory query request
   const inventoryQuery = computed(() => ({
     month: month.value,
     year: year.value
   }))
   // desctructuring inventory
-  const { executeApi: fetchInventories } = getInventories(inventoryQuery)
+  // const { executeApi: fetchInventories } = getInventories(inventoryQuery, roomId)
 
   // mutate room night
   const upsertRoomNight = (form: Ref<UpsertRoomNight>) => {
@@ -35,7 +35,7 @@ const useMutateInventory = () => {
     // whenever finished -> re get inventories
     whenever(isFinished, () => {
       if (!error.value) {
-        fetchInventories()
+        getInventories(inventoryQuery, roomId).executeApi()
       }
     })
     return { ...usedUpsertRoomNight, executeApi: execute({ data: form.value }) }
@@ -50,15 +50,23 @@ const useMutateInventory = () => {
     // whenever finished -> re get inventories
     whenever(isFinished, () => {
       if (!error.value) {
-        fetchInventories()
+        getInventories(inventoryQuery, roomId).executeApi()
       }
     })
     return { ...usedUpsertRatePakage, executeApi: execute({ data: form.value }) }
   }
+
+  // Each month, year, room change -> fetch api get inventories
+  watch([month, year, room], () => {
+    // console.log('Thay đổi [month,year,room]')
+    getInventories(inventoryQuery, roomId).executeApi()
+  })
+
   return {
     inventories,
     upsertRatePakage,
     upsertRoomNight
+    // fetchInventories
   }
 }
 
