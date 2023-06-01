@@ -1,5 +1,5 @@
 interface IInventory {
-  roomnights: RoomNight[]
+  roomnight: RoomNight[]
   rateplans: RatePlan[]
 }
 
