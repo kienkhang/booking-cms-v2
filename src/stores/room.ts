@@ -56,9 +56,7 @@ const useRoomStore = () => {
     return {
       ...usedGetRoom,
       // Execute get hotel if not rooms
-      executeApi: () => {
-        usedGetRoom.execute()
-      }
+      executeApi: () => usedGetRoom.execute()
     }
   }
 
@@ -85,7 +83,7 @@ const useRoomStore = () => {
           roomId !== currentRoom.value.id && usedGetRoom.execute()
         } else {
           // Not hotel -> fetch room
-          usedGetRoom.execute()
+          return usedGetRoom.execute()
         }
       }
     }
