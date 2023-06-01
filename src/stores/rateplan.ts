@@ -23,8 +23,8 @@ const useRatePlanStore = () => {
     [filter: string]: any
   }>()
 
-  const getRatePlans = (roomId: string) => {
-    const usedGetRatePlans = roomsApi.getRatePlans(filter.value, roomId)
+  const getRatePlans = (roomId: Ref<string>) => {
+    const usedGetRatePlans = roomsApi.getRatePlans(filter.value, roomId.value)
 
     const { data, isFinished, execute, error } = usedGetRatePlans
 

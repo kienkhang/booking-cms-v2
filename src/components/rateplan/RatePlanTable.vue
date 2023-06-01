@@ -135,7 +135,7 @@ const { ratePlans } = useRatePlan()
 
 const { getRatePlans } = useRatePlanStore()
 
-const { executeApi, isLoading } = getRatePlans(roomId.value)
+const { executeApi, isLoading } = getRatePlans(roomId)
 
 onBeforeMount(() => {
   // if filter not null -> filter = null

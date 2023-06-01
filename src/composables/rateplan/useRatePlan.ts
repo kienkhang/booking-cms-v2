@@ -11,7 +11,8 @@ function useRatePlan() {
   const { ratePlans, paging, filter } = storeToRefs(useRatePlanStore())
   const { getRatePlans } = useRatePlanStore()
   // Descutructring fetch handler
-  const { executeApi: fetchRatePlan } = getRatePlans(currentRoom.value.id)
+  const roomId = computed(() => currentRoom.value?.id)
+  const { executeApi: fetchRatePlan } = getRatePlans(roomId)
 
   // CRUD HANDLER
   // Create Rate plan function
@@ -60,7 +61,8 @@ function useRatePlan() {
     paging,
     filter,
     createRatePlan,
-    updateRatePlan
+    updateRatePlan,
+    getRatePlans
   }
 }
 
