@@ -7,13 +7,11 @@ const instance = axios.create({
   }
 })
 
-const { getRToken } = useAuthStorage()
-const refreshToken = getRToken()
+const { getRToken, getToken } = useAuthStorage()
 
 instance.interceptors.response.use(
   (resp) => {
     if (resp.data) return resp.data
-
     return resp
   },
   async (error) => {
@@ -21,31 +19,42 @@ instance.interceptors.response.use(
     // Get status code
     const status = error?.response?.status
     // Get message jwt
-    const message = error?.response?.data.message //invalid or expired jwt
+    // invalid or expired jwt
+    const message = error?.response?.data.message
     // Get preConfig
-    const preConfig = error?.config
+    const preConfig = error.config
+    // =========================================================================
+    // !falsy_value = true
     // Check status and custom properties is "sent" meaning request is sended ?
     if (status === 401 && message === 'invalid or expired jwt' && !preConfig?._retry) {
+      // each error with 401 expired jwt -> get refreshToken
+      const refreshToken = getRToken()
+      // set retry = true
       preConfig._retry = true
+      // Destruct useAxios refresh token
+      const { data, executeAPI } = refresh({ refresh_token: refreshToken })
 
-      const { data, executeAPI, error } = refresh({ refresh_token: refreshToken })
-      // Execute refresh token
-      await executeAPI()
-      // If error -> logout
-      if (error.value) {
+      try {
+        await executeAPI()
+        // After execute -> Return preConfig with new access token
+        const newAccessToken = data.value?.access_token
+        preConfig.headers.Authorization = `Bearer ${newAccessToken}`
+        // after call success -> set retry to false
+        preConfig._retry = false
+        // resend request with axios(config)
+        return instance(preConfig)
+      } catch (tryError) {
         logout()
-        return
+        throw tryError
       }
-      // After execute -> Return preConfig with new access token
-      const newAccessToken = data.value?.access_token
-      instance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`
-      return instance(preConfig)
     }
     return Promise.reject(error)
   }
 )
 instance.interceptors.request.use(
   (req) => {
+    const access_token = getToken()
+    if (access_token) req.headers.Authorization = `Bearer ${access_token}`
     return req
   },
   (error) => {
