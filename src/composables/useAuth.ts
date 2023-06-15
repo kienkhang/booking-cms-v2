@@ -74,7 +74,6 @@ const useAuth = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        console.log('🐔🦢 ~ getMe ~ data:', data.value)
         accountStore().setAccount(data.value)
       })
     return {
