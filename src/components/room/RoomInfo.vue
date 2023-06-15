@@ -17,7 +17,7 @@ div
             .col-span-3
               span.font-semibold Mô tả
             .col-span-9
-              span.line-clamp-4 {{currentRoom?.description}}
+              span.line-clamp-4(v-html='currentRoom?.description')
     NCollapseItem(title='Phong cảnh và tiện ích' name='2')
       template(#header)
         .font-bold.text-lg Phong cảnh và tiện ích
