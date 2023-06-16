@@ -20,6 +20,16 @@ div
 <script setup lang="ts">
 import { NImage } from 'naive-ui'
 import { type IFormKitFile } from '@/dtos/shared'
+import { Image2Array } from '@/utils/format'
+
+// -------- Upload Image API ------------
+const { uploadPhotos, uploadBL } = useHotel()
+const { currentHotel: hotel } = storeToRefs(useHotelsStore())
+const hotelId = computed(() => hotel.value.id)
+const hotelPhotos = computed(() => Image2Array(hotel.value.hotel_photos))
+
+const { executeApi: doUploadBL } = uploadBL(hotelId.value)
+const { executeApi: doUploadPhotos } = uploadPhotos(hotelId.value)
 
 // -------- Bussiness License File ------------
 const bussinessLicenseFile = ref<IFormKitFile[]>([])
@@ -30,8 +40,8 @@ const blBlobUrl = computed(() => {
   }
 })
 
-const bLicenseSubmit = () => {
-  console.log('Bussiness License Submit')
+async function bLicenseSubmit() {
+  await doUploadBL({ images: bussinessLicenseFile.value[0].file, text: [] })
 }
 
 // -------- Hotel Image Files ------------
@@ -42,7 +52,26 @@ const previewBlobUrls = computed(() => {
   }
 })
 const hotelFilesSubmit = () => {
-  console.log('Hotel Submit')
+  // Get files
+  const files = hotelFiles.value.map((f) => f.file) as File[]
+  // Cách 1: Tạo ra formData chung cho 2 trường là images và text, loop for để add vào
+  const formData = new FormData()
+  // images fields
+  for (let i = 0; i < files.length; i++) {
+    formData.append('images', files[i])
+  }
+  // text fields 1
+  for (let i = 0; i < hotelPhotos.value.length; i++) {
+    formData.append('text', hotelPhotos.value[i])
+  }
+  // // text fields 2
+  // formData.append('text', JSON.stringify(hotelPhotos.value))
+  // // text field 3
+  // formData.append('text', JSON.stringify(JSON.stringify(hotelPhotos.value)))
+  doUploadPhotos(formData)
+
+  // Cách 2: Tạo ra form gồm images:File[] và text:string[]
+  // doUploadPhotos({ images: files, text: hotelPhotos.value })
 }
 
 const deleteBlobUrl = () => {

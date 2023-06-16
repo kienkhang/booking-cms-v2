@@ -54,9 +54,19 @@ class Hotel {
     const url = path + '/' + `${hotelId}/rooms`
     return useGet({ url, params, requiredToken: true })
   }
-  updatePhotos = (params: UploadPhoto, hotelId: string) => {
+  updatePhotos = (params: UploadPhoto | {}, hotelId: string) => {
     const url = `${path}/${hotelId}/photos`
-    return usePost({
+    return usePatch({
+      url,
+      data: params,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  }
+  updateBL = (params: { images: File } | {}, hotelId: string) => {
+    const url = `${path}/${hotelId}/business-license`
+    return usePatch({
       url,
       data: params,
       headers: {

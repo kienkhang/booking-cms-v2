@@ -75,6 +75,12 @@ div
       .flex.items-center.flex-wrap.gap-4
         .rounded-lg.overflow-hidden(v-for='photo in roomPhotos' class='max-h-[120px]')
           NImage(:width='200' :src='photo' object-fit='cover')
+    NCollapseItem(title='Giấy phép kinh doanh' name='5')
+      template(#header)
+        .font-bold.text-lg Giấy phép kinh doanh
+      .flex.items-center.flex-wrap.gap-4
+        .rounded-lg.overflow-hidden(class='max-h-[120px]')
+          NImage(:width='200' :src='currentHotel?.business_licence' object-fit='cover')
   
 </template>
 

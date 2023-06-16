@@ -74,7 +74,7 @@ const useHotelStore = () => {
 
   // Set current hotel with hotelId from localstorage
   async function getHotelLocalStore() {
-    if (!hotelId.value || currentHotel.value) return
+    // if (!hotelId.value || currentHotel.value) return
     filter.value = {
       id: hotelId.value
     }

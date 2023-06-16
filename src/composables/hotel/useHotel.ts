@@ -5,7 +5,7 @@ import { useHotelsStore } from '@/stores'
 const useHotel = () => {
   const message = useMessage()
   const { hotels, paging, filter } = storeToRefs(useHotelsStore())
-  const { getHotels } = useHotelsStore()
+  const { getHotelLocalStore } = useHotelsStore()
 
   // handle create hotel
   const createHotel = (form: Ref<IHotelAdd>) => {
@@ -19,7 +19,7 @@ const useHotel = () => {
       .toBeTruthy()
       .then(() => {
         if (!error.value) {
-          getHotels()
+          getHotelLocalStore()
           message.success('Tạo khách sạn thành công')
         }
       })
@@ -40,7 +40,7 @@ const useHotel = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        !error.value && getHotels() && message.success('Cập nhật khách sạn thành công')
+        !error.value && getHotelLocalStore() && message.success('Cập nhật khách sạn thành công')
       })
     // return with custom useAxios struct
     return {
@@ -49,12 +49,65 @@ const useHotel = () => {
     }
   }
 
+  const uploadPhotos = (hotelId: string) => {
+    const usedUpload = hotelsApi.updatePhotos({}, hotelId)
+    const { execute } = usedUpload
+
+    // With Form data
+    const executeApi = async (f: FormData) => {
+      try {
+        await execute({ data: f })
+        getHotelLocalStore()
+        message.success('Cập nhật thành công')
+      } catch (e) {
+        throw new Error(e)
+      }
+    }
+
+    // // With json
+    // const executeApi = async (f: { images: File[]; text: string[] }) => {
+    //   try {
+    //     await execute({ data: f })
+    //     getHotelLocalStore()
+    //     message.success('Cập nhật thành công')
+    //   } catch (e) {
+    //     throw new Error(e)
+    //   }
+    // }
+
+    return {
+      ...usedUpload,
+      executeApi
+    }
+  }
+  const uploadBL = (hotelId: string) => {
+    const usedUpload = hotelsApi.updateBL({}, hotelId)
+    const { execute } = usedUpload
+
+    const executeApi = async (f: { images: File; text: string[] }) => {
+      try {
+        await execute({ data: { ...f } })
+        getHotelLocalStore()
+        message.success('Cập nhật thành công')
+      } catch (e) {
+        throw new Error(e)
+      }
+    }
+
+    return {
+      ...usedUpload,
+      executeApi
+    }
+  }
+
   return {
     hotels,
     paging,
     filter,
     createHotel,
-    updateHotel
+    updateHotel,
+    uploadPhotos,
+    uploadBL
   }
 }
 export default useHotel
