@@ -33,7 +33,7 @@ interface IHotel {
   district: number
   province: number
   ward: number
-  bussiness_license: string
+  business_licence: string
   // Facilities
   hotel_facility?: {
     bar: boolean
@@ -62,7 +62,7 @@ interface IHotel {
   }
 }
 
-type IHotelAdd = Omit<IHotel, 'id' | 'hotel_photos' | 'bussiness_license'>
-type IHotelUpdate = Omit<IHotel, 'id' | 'hotel_photos' | 'bussiness_license'>
+type IHotelAdd = Omit<IHotel, 'id' | 'hotel_photos' | 'business_licence'>
+type IHotelUpdate = Omit<IHotel, 'id' | 'hotel_photos' | 'business_licence'>
 
 export { IHotel, IHotelAdd, IHotelUpdate }

@@ -73,8 +73,14 @@ div
       template(#header)
         .font-bold.text-lg Hình ảnh
       .flex.items-center.flex-wrap.gap-4
-        .rounded-lg.overflow-hidden(v-for='photo in roomPhotos' class='max-h-[120px]')
+        .rounded-lg.overflow-hidden(v-for='photo in hotelPhotos' class='max-h-[120px]')
           NImage(:width='200' :src='photo' object-fit='cover')
+    NCollapseItem(title='Hình ảnh' name='4')
+      template(#header)
+        .font-bold.text-lg Giấy phép kinh doanh
+      .flex.items-center.flex-wrap.gap-4
+        .rounded-lg.overflow-hidden(class='max-h-[120px]')
+          NImage(:width='200' :src='bussinessLicense' object-fit='cover')
   
 </template>
 
@@ -138,9 +144,11 @@ const hotelFacilities = computed<
   return facilities
 })
 // Hotel Photos
-const roomPhotos = computed(() => {
+const hotelPhotos = computed(() => {
   if (currentHotel.value?.hotel_photos) return Image2Array(currentHotel.value?.hotel_photos)
 })
+// Business License
+const bussinessLicense = computed(() => Image2Array(currentHotel.value?.business_licence)[0])
 // Hotel Banks
 const bankName = computed(() =>
   VIETNAM_BANKING_LIST.find((bank) => bank.code === currentHotel.value?.bank_name)
