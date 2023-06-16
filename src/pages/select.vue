@@ -37,11 +37,16 @@ const { currentHotel, hotels, paging, filter } = storeToRefs(useHotelsStore())
 // Get hotel function
 const { getHotels } = useHotelsStore()
 
+const usedGetHotel = getHotels()
+
 const isLoading = ref(false)
 const fetchHotel = async () => {
-  isLoading.value = true
-  await getHotels().executeApi()
-  isLoading.value = false
+  if (usedGetHotel) {
+    const { executeApi } = usedGetHotel
+    isLoading.value = true
+    await executeApi()
+    isLoading.value = false
+  }
 }
 
 // Hotel empty -> show create hotel form
