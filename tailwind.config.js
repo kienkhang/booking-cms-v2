@@ -18,7 +18,14 @@ module.exports = {
         'onyx-shade': '#c2c3c6',
         cultured: '#F4F4F4',
         'green-crayola': '#10A37F',
-        'green-ufo': '#22C55E'
+        'green-ufo': '#22C55E',
+        crayola: '#1BBA85',
+        'green-cyan': '#0D986A',
+        vivid: '#FF9900',
+        x11: '#A9A9A9',
+        cultured: '#F3F5F6',
+        platinum: '#E5E5E5',
+        'ghost-white': '#f7f9fb'
       },
       fontFamily: {
         manrope: ['Manrope', ...defaultTheme.fontFamily.serif],
@@ -35,7 +42,10 @@ module.exports = {
         scale: 'scale 0.2s ease-out'
       },
       boxShadow: {
-        chat: '0px 0px 10px rgba(0, 0, 0, 0.1)'
+        chat: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        input: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+        bar: '0px 0px 10px rgba(100, 124, 159, 0.25)',
+        card: '0px 24px 34px rgba(80, 79, 89, 0.14)'
       },
       borderRadius: {
         10: '10px'
