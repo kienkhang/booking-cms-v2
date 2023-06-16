@@ -23,7 +23,6 @@ module.exports = {
         'green-cyan': '#0D986A',
         vivid: '#FF9900',
         x11: '#A9A9A9',
-        cultured: '#F3F5F6',
         platinum: '#E5E5E5',
         'ghost-white': '#f7f9fb'
       },
