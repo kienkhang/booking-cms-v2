@@ -7,15 +7,31 @@ const navigationAuthGuard = (router: Router) => {
   const { getMe } = useAuth()
   const { account } = storeToRefs(accountStore())
   const { isLoggedIn } = useAuthStorage()
-  router.beforeEach((to, _, next) => {
+  const { getHotelLocalStore } = useHotelsStore()
+  const { hotelId } = useHotelStorage()
+  router.beforeEach(async (to, _, next) => {
     const requiredAuth = to.meta.requiredAuth
+    const requiredHotel = to.meta.requiredHotel
     // if reload or redirect to any page (logged in) but not account -> get me
-    if (!!account.value === false && isLoggedIn() && requiredAuth) {
-      getMe().executeAPI()
+    if (isLoggedIn() && !account.value) {
+      await getMe().executeAPI()
+      // if exist hotel in local and not having current Hotel -> get hotel
+      if (hotelId.value && requiredHotel) {
+        getHotelLocalStore()
+      }
+      // from catch navigate to "/" and to catch case reload
+      // if need hotel and not hotel saved in store -> goto select
+      if (requiredHotel && !hotelId.value) {
+        next({ name: 'select' })
+      }
+    } else if (account.value && hotelId.value && requiredHotel) {
+      getHotelLocalStore()
+    } else if (requiredHotel && !hotelId.value) {
+      next({ name: 'select' })
     }
     // from catch navigate to "/" and to catch case reload
     // if need authen and not login -> goto login
-    if (requiredAuth === true && !isLoggedIn()) {
+    if (requiredAuth && !isLoggedIn()) {
       next({ name: 'auth' })
     }
     // else next
@@ -23,24 +39,6 @@ const navigationAuthGuard = (router: Router) => {
   })
 }
 
-const navigationHotelGuard = (router: Router) => {
-  const { getHotelLocalStore } = useHotelsStore()
-  const { hotelId } = useHotelStorage()
-  router.beforeEach((to, _, next) => {
-    const requiredHotel = to.meta.requiredHotel
-    // if exist hotel in local and not having current Hotel -> get hotel
-    if (hotelId.value && requiredHotel) {
-      getHotelLocalStore()
-    }
-    // from catch navigate to "/" and to catch case reload
-    // if need hotel and not hotel saved in store -> goto select
-    if (requiredHotel === true && !hotelId.value) {
-      next({ name: 'select' })
-    }
-    // else next
-    else next()
-  })
-}
 // Setup Pinia
 // https://pinia.vuejs.org/
 export const install: UserModule = ({ isClient, initialState, app, router }) => {
@@ -54,5 +52,4 @@ export const install: UserModule = ({ isClient, initialState, app, router }) => 
 
   // Navigation guard
   navigationAuthGuard(router)
-  navigationHotelGuard(router)
 }

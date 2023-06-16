@@ -37,68 +37,68 @@ const useHotelStore = () => {
     currentHotel.value = hotel
   }
 
-  // Get hotel with role admin
-  const getHotelAdmin = () => {
-    const usedGetHotel = hotelsApi.getHotels(filter.value)
-    const { data, error, isFinished } = usedGetHotel
-
-    // usedGetHotel.execute({ params: filter.value })
-    whenever(isFinished, () => {
-      if (!error.value) {
-        // After get hotel & not error -> save global state
-        // Response is <data:{ data:[], paging:{}}>
-        hotels.value = data.value.data
-        paging.value = data.value.paging
-      }
-      filter.value = null
-    })
-    return { ...usedGetHotel, executeApi: () => usedGetHotel.execute({ params: filter.value }) }
-  }
-  // Get hotel with role partner (hotelier | manager | staff)
-  const getHotelPartner = () => {
-    const usedGetHotel = hotelsApi.partnerGetHotel(filter.value)
-    const { data, error, isFinished } = usedGetHotel
-
-    // After get data -> reset paging to null
-    // usedGetHotel.execute({ params: filter.value })
-    whenever(isFinished, () => {
-      if (!error.value) {
-        // After get hotel & not error -> save global state
-        // Response is <data:{ data:[], paging:{}}>
-        hotels.value = data.value.data
-        paging.value = data.value.paging
-      }
-      filter.value = null
-    })
-    return { ...usedGetHotel, executeApi: () => usedGetHotel.execute({ params: filter.value }) }
-  }
-
-  // Get Hotels
-  const getHotels = () => {
-    const usedGetHotelAdmin = getHotelAdmin()
-    const usedGetHotelPartner = getHotelPartner()
+  // }
+  function selectHotelGetter() {
     if (['ADMIN', 'SUPPERADMIN'].includes(role.value)) {
-      return { ...usedGetHotelAdmin }
+      return hotelsApi.getHotels(filter.value)
     } else if (role.value === 'HOTELIER') {
-      return { ...usedGetHotelPartner }
+      return hotelsApi.partnerGetHotel(filter.value)
+    }
+  }
+
+  function getHotels() {
+    const usedGetHotel = selectHotelGetter()
+
+    if (usedGetHotel) {
+      const { execute, data } = usedGetHotel
+
+      return {
+        ...usedGetHotel,
+        executeApi: async () => {
+          try {
+            await execute({ params: filter.value })
+            // biding data
+            hotels.value = data.value.data
+            paging.value = data.value.paging
+            // reset filter
+            filter.value = null
+          } catch (e) {
+            throw e
+          }
+        }
+      }
+    } else {
+      return null
     }
   }
 
   // Set current hotel with hotelId from localstorage
-  const getHotelLocalStore = async () => {
+  async function getHotelLocalStore() {
     if (!hotelId.value || currentHotel.value) return
     filter.value = {
       id: hotelId.value
     }
     // Get hotel
+    const usedGetHotel = getHotels()
 
-    if (['ADMIN', 'SUPPERADMIN'].includes(role.value)) {
-      await getHotelAdmin().executeApi()
-      setCurrentHotel(hotels.value[0])
-    } else if (role.value === 'HOTELIER') {
-      await getHotelPartner().executeApi()
-      setCurrentHotel(hotels.value[0])
+    if (usedGetHotel) {
+      const { executeApi } = usedGetHotel
+      try {
+        await executeApi()
+        setCurrentHotel(hotels.value[0])
+      } catch (e) {
+        console.log(e)
+        throw e
+      }
     }
+
+    // if (['ADMIN', 'SUPPERADMIN'].includes(role.value)) {
+    //   await getHotelAdmin().executeApi()
+    //   setCurrentHotel(hotels.value[0])
+    // } else if (role.value === 'HOTELIER') {
+    //   await getHotelPartner().executeApi()
+    //   setCurrentHotel(hotels.value[0])
+    // }
   }
 
   // When ever hotelId change and not null -> get HotelLocalStore
@@ -113,8 +113,6 @@ const useHotelStore = () => {
     currentHotel,
     paging,
     filter,
-    getHotelAdmin,
-    getHotelPartner,
     getHotelLocalStore,
     setCurrentHotel,
     getHotels
