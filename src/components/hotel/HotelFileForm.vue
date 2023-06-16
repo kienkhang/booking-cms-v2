@@ -11,7 +11,7 @@ div
     FormKit(type='form' :actions='false' @submit='hotelFilesSubmit()' style='width: 100%; padding: 16px;')
       FormKit(type='file' name='fileimage' id='fileimage' enctype='multipart/form-data' v-model='hotelFiles' multiple)
       FormKit(type='submit' name='update-img' input-class='w-max') Cập nhật
-    .grid.grid-cols-3.gap-2.border.rounded-10.p-2
+    .flex.items-center.gap-5.flex-wrap.border.rounded-10.p-4(v-if='hotelFiles.length > 0')
       figure(v-for='img in previewBlobUrls' class='w-max')
         NImage(width="200" :src='img')
     //- UploadImageForm(:files='files' @upload='upload' @change-file='changeFile')
@@ -20,6 +20,16 @@ div
 <script setup lang="ts">
 import { NImage } from 'naive-ui'
 import { type IFormKitFile } from '@/dtos/shared'
+import { Image2Array } from '@/utils/format'
+
+// -------- Hotel Default File ------------
+const { currentHotel: hotel } = storeToRefs(useHotelsStore())
+const hotelPhotos = computed(() => Image2Array(hotel.value.hotel_photos))
+
+// -------- Hotel Upload API ------------
+const { uploadBL, uploadPhotos } = useHotel()
+const { executeApi: updateBL } = uploadBL(hotel.value.id)
+const { executeApi: updatePhotos } = uploadPhotos(hotel.value.id)
 
 // -------- Bussiness License File ------------
 const bussinessLicenseFile = ref<IFormKitFile[]>([])
@@ -30,8 +40,12 @@ const blBlobUrl = computed(() => {
   }
 })
 
-const bLicenseSubmit = () => {
-  console.log('Bussiness License Submit')
+async function bLicenseSubmit() {
+  await updateBL({
+    images: bussinessLicenseFile.value[0].file,
+    // because upload new file, so no need to keep old image
+    text: []
+  })
 }
 
 // -------- Hotel Image Files ------------
@@ -41,8 +55,21 @@ const previewBlobUrls = computed(() => {
     return hotelFiles.value.map((f) => URL.createObjectURL(f.file))
   }
 })
-const hotelFilesSubmit = () => {
-  console.log('Hotel Submit')
+async function hotelFilesSubmit() {
+  const files = hotelFiles.value.map((f) => f.file)
+  const imgData = new FormData()
+  for (let i = 0; i < files.length; i++) {
+    imgData.append('images', files[i])
+  }
+  // for (let i = 0; i < hotelPhotos.value.length; i++) {
+  //   imgData.append('text', hotelPhotos.value[i])
+  // }
+  imgData.append('text', JSON.stringify(JSON.stringify(hotelPhotos.value)))
+  // const oldImgData = new FormData()
+  // oldImgData.append('text', JSON.stringify(hotelPhotos.value))
+  // formData.append('text',hotelPhotos.value)
+  await updatePhotos(imgData)
+  // getHotelLocalStore()
 }
 
 const deleteBlobUrl = () => {

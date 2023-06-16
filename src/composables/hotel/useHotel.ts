@@ -5,10 +5,10 @@ import { useHotelsStore } from '@/stores'
 const useHotel = () => {
   const message = useMessage()
   const { hotels, paging, filter } = storeToRefs(useHotelsStore())
-  const { getHotels } = useHotelsStore()
+  const { getHotelLocalStore } = useHotelsStore()
 
   // handle create hotel
-  const createHotel = (form: Ref<IHotelAdd>) => {
+  function createHotel(form: Ref<IHotelAdd>) {
     // call api
     const usedCreateHotel = hotelsApi.createHotel(form.value)
     // destructuring useAxios struct
@@ -19,7 +19,7 @@ const useHotel = () => {
       .toBeTruthy()
       .then(() => {
         if (!error.value) {
-          getHotels()
+          getHotelLocalStore()
           message.success('Tạo khách sạn thành công')
         }
       })
@@ -30,8 +30,8 @@ const useHotel = () => {
       executeApi: () => execute({ data: { ...form.value } })
     }
   }
-  // handle create hotel
-  const updateHotel = (form: Ref<IHotelUpdate>, hotelId: string) => {
+  // handle update hotel
+  function updateHotel(form: Ref<IHotelUpdate>, hotelId: string) {
     // call api
     const usedUpdateHotel = hotelsApi.updateHotel(form.value, hotelId)
     // destructuring useAxios struct
@@ -40,12 +40,52 @@ const useHotel = () => {
     until(isFinished)
       .toBeTruthy()
       .then(() => {
-        !error.value && getHotels() && message.success('Cập nhật khách sạn thành công')
+        !error.value && getHotelLocalStore() && message.success('Cập nhật khách sạn thành công')
       })
     // return with custom useAxios struct
     return {
       ...usedUpdateHotel,
       executeApi: () => execute({ data: { ...form.value } })
+    }
+  }
+  // handle upload image file
+  function uploadPhotos(hotelId: string) {
+    const usedUpload = hotelsApi.updatePhotos({}, hotelId)
+
+    const { execute } = usedUpload
+
+    return {
+      ...usedUpload,
+      executeApi: async (f: FormData) => {
+        try {
+          await execute({ data: f })
+          await getHotelLocalStore()
+          message.success('Cập nhật hình ảnh thành công')
+        } catch (e) {
+          message.success('Cập nhật hình ảnh thất bại')
+          throw new Error(e)
+        }
+      }
+    }
+  }
+  // handle upload business license
+  function uploadBL(hotelId: string) {
+    const usedUpload = hotelsApi.updateBL({}, hotelId)
+
+    const { execute } = usedUpload
+
+    return {
+      ...usedUpload,
+      executeApi: async (f: { images: File; text: string[] }) => {
+        try {
+          await execute({ data: { ...f } })
+          await getHotelLocalStore()
+          message.success('Cập nhật hình ảnh thành công')
+        } catch (e) {
+          message.success('Cập nhật hình ảnh thất bại')
+          throw new Error(e)
+        }
+      }
     }
   }
 
@@ -54,7 +94,9 @@ const useHotel = () => {
     paging,
     filter,
     createHotel,
-    updateHotel
+    updateHotel,
+    uploadPhotos,
+    uploadBL
   }
 }
 export default useHotel
