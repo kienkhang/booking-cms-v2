@@ -73,13 +73,14 @@ div
       template(#header)
         .font-bold.text-lg Hình ảnh
       .flex.items-center.flex-wrap.gap-4
-        .rounded-lg.overflow-hidden(v-for='photo in hotelPhotos' class='max-h-[120px]')
-          NImage(:width='200' :src='photo' object-fit='cover')
+        figure.rounded-lg.overflow-hidden(v-for='photo in hotelPhotos' class='max-h-[120px] relative select-none')
+          icon-mdi:close-circle.absolute.w-6.h-6.top-2.right-2.cursor-pointer.text-red-500.transition-all(class='hover:opacity-80' @click='removeImage')
+          NImage(:width='200' :src='photo' object-fit='cover' class='group')
     NCollapseItem(title='Hình ảnh' name='4')
       template(#header)
         .font-bold.text-lg Giấy phép kinh doanh
       .flex.items-center.flex-wrap.gap-4
-        .rounded-lg.overflow-hidden(class='max-h-[120px]')
+        figure.rounded-lg.overflow-hidden(class='max-h-[120px]')
           NImage(:width='200' :src='bussinessLicense' object-fit='cover')
   
 </template>
@@ -91,7 +92,9 @@ import _omit from 'lodash-es/omit'
 import _capitalize from 'lodash-es/capitalize'
 import { Image2Array } from '@/utils/format'
 import { VIETNAM_BANKING_LIST } from '@/constant/bank'
-// const route = useRoute()
+
+//
+const dialog = useDialog()
 
 // ============== GET ROOM BY ID ===============
 const { currentHotel } = storeToRefs(useHotelsStore())
@@ -153,6 +156,16 @@ const bussinessLicense = computed(() => Image2Array(currentHotel.value?.business
 const bankName = computed(() =>
   VIETNAM_BANKING_LIST.find((bank) => bank.code === currentHotel.value?.bank_name)
 )
+
+// Handler remove image
+function removeImage() {
+  dialog.warning({
+    title: 'Xoá hình ảnh',
+    content: 'Bạn có muốn xoá hình ảnh này ?',
+    negativeText: 'Huỷ bỏ',
+    positiveText: 'Xác nhận'
+  })
+}
 </script>
 
 <style scoped></style>
