@@ -1,5 +1,10 @@
 const path = 'hotels'
 const admin = 'admin'
+
+interface UploadPhoto {
+  images: FormData
+  text: string
+}
 class Hotel {
   createHotel = (data: any | {}) => {
     const url = path
@@ -48,6 +53,16 @@ class Hotel {
   getRoomsByHotel = (params: any | {}, hotelId: string) => {
     const url = path + '/' + `${hotelId}/rooms`
     return useGet({ url, params, requiredToken: true })
+  }
+  updatePhotos = (params: UploadPhoto, hotelId: string) => {
+    const url = `${path}/${hotelId}/photos`
+    return usePost({
+      url,
+      data: params,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   }
 }
 
