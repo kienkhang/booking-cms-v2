@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   //- Loading(v-if='isLoading')
-  NCollapse(display-directive='show' :default-expanded-names="['1','2','3','4']")
+  NCollapse(display-directive='show' :default-expanded-names="['1','2','3','4','5']")
     NCollapseItem(title='Thông tin' name='1')
       template(#arrow)
         
@@ -73,7 +73,8 @@ div
       template(#header)
         .font-bold.text-lg Hình ảnh
       .flex.items-center.flex-wrap.gap-4
-        .rounded-lg.overflow-hidden(v-for='photo in roomPhotos' class='max-h-[120px]')
+        .rounded-lg.overflow-hidden(v-for='photo in hotelPhotos' class='max-h-[120px] relative')
+          icon-mdi:close-circle.absolute.w-5.h-5.text-red-500.top-1.right-1.cursor-pointer(@click='deletePhotos(photo)' class='hover:opacity-80')
           NImage(:width='200' :src='photo' object-fit='cover')
     NCollapseItem(title='Giấy phép kinh doanh' name='5')
       template(#header)
@@ -144,13 +145,45 @@ const hotelFacilities = computed<
   return facilities
 })
 // Hotel Photos
-const roomPhotos = computed(() => {
+const hotelPhotos = computed(() => {
   if (currentHotel.value?.hotel_photos) return Image2Array(currentHotel.value?.hotel_photos)
 })
 // Hotel Banks
 const bankName = computed(() =>
   VIETNAM_BANKING_LIST.find((bank) => bank.code === currentHotel.value?.bank_name)
 )
+
+// Delete image
+const dialog = useDialog()
+
+const { uploadPhotos } = useHotel()
+
+const hotelId = computed(() => currentHotel.value?.id)
+
+function deletePhotos(photoUrl: string) {
+  const { executeApi: doUploadPhotos } = uploadPhotos(hotelId.value)
+  const restPhotos = hotelPhotos.value.filter((photo) => photo !== photoUrl)
+
+  const formData = new FormData()
+  restPhotos.forEach((photo) => {
+    formData.append('text', photo)
+  })
+
+  dialog.warning({
+    title: 'Xoá hình ảnh',
+    content: 'Bạn có chắc là xoá hình ảnh này ?',
+    negativeText: 'Huỷ',
+    positiveText: 'Xoá',
+    onPositiveClick: async () => {
+      try {
+        await doUploadPhotos(formData)
+        dialog.destroyAll()
+      } catch (error) {
+        dialog.destroyAll()
+      }
+    }
+  })
+}
 </script>
 
 <style scoped></style>

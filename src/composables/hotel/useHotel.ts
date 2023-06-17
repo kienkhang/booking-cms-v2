@@ -60,6 +60,7 @@ const useHotel = () => {
         getHotelLocalStore()
         message.success('Cập nhật thành công')
       } catch (e) {
+        message.error('Cập nhật thất bại')
         throw new Error(e)
       }
     }
@@ -84,7 +85,7 @@ const useHotel = () => {
     const usedUpload = hotelsApi.updateBL({}, hotelId)
     const { execute } = usedUpload
 
-    const executeApi = async (f: { images: File; text: string[] }) => {
+    const executeApi = async (f: { images: File; text?: string[] }) => {
       try {
         await execute({ data: { ...f } })
         getHotelLocalStore()

@@ -41,7 +41,7 @@ const blBlobUrl = computed(() => {
 })
 
 async function bLicenseSubmit() {
-  await doUploadBL({ images: bussinessLicenseFile.value[0].file, text: [] })
+  await doUploadBL({ images: bussinessLicenseFile.value[0].file })
 }
 
 // -------- Hotel Image Files ------------
@@ -51,7 +51,7 @@ const previewBlobUrls = computed(() => {
     return hotelFiles.value.map((f) => URL.createObjectURL(f.file))
   }
 })
-const hotelFilesSubmit = () => {
+async function hotelFilesSubmit() {
   // Get files
   const files = hotelFiles.value.map((f) => f.file) as File[]
   // Cách 1: Tạo ra formData chung cho 2 trường là images và text, loop for để add vào
@@ -68,7 +68,7 @@ const hotelFilesSubmit = () => {
   // formData.append('text', JSON.stringify(hotelPhotos.value))
   // // text field 3
   // formData.append('text', JSON.stringify(JSON.stringify(hotelPhotos.value)))
-  doUploadPhotos(formData)
+  await doUploadPhotos(formData)
 
   // Cách 2: Tạo ra form gồm images:File[] và text:string[]
   // doUploadPhotos({ images: files, text: hotelPhotos.value })
