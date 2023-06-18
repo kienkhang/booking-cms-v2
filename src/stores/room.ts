@@ -77,14 +77,7 @@ const useRoomStore = () => {
       ...usedGetRoom,
       // Execute get hotel if not current room
       executeApi: () => {
-        // Check current room
-        if (currentRoom.value) {
-          // If current room change -> refetch room
-          roomId !== currentRoom.value.id && usedGetRoom.execute()
-        } else {
-          // Not hotel -> fetch room
-          return usedGetRoom.execute()
-        }
+        usedGetRoom.execute()
       }
     }
   }
