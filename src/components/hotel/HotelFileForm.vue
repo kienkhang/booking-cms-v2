@@ -11,9 +11,13 @@ div
     FormKit(type='form' :actions='false' @submit='hotelFilesSubmit()' style='width: 100%; padding: 16px;')
       FormKit(type='file' name='fileimage' id='fileimage' enctype='multipart/form-data' v-model='hotelFiles' multiple)
       FormKit(type='submit' name='update-img' input-class='w-max') Cập nhật
-    .grid.grid-cols-3.gap-2.border.rounded-10.p-2
+    .flex.flex-wrap.gap-4(v-if='previewBlobUrls')
       figure(v-for='img in previewBlobUrls' class='w-max')
-        NImage(width="200" :src='img')
+        NImage(
+          width="200" 
+          :src='img' 
+          object-fit="cover"
+          )
     //- UploadImageForm(:files='files' @upload='upload' @change-file='changeFile')
 </template>
 

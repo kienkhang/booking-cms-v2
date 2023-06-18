@@ -19,7 +19,7 @@ function useRoom() {
       .toBeTruthy()
       .then(() => {
         if (!error.value) {
-          getRooms()
+          getRooms().executeApi()
           message.success('Tạo khách sạn thành công')
           return
         }
@@ -41,6 +41,7 @@ function useRoom() {
       .toBeTruthy()
       .then(() => {
         if (!error.value) {
+          getRooms().executeApi()
           message.success('Cập nhật khách sạn thành công')
           return
         }
@@ -53,6 +54,27 @@ function useRoom() {
     }
   }
 
+  const uploadPhotos = (roomId: string) => {
+    const usedUpload = roomsApi.updatePhotos({}, roomId)
+    const { execute } = usedUpload
+
+    // With Form data
+    const executeApi = async (f: FormData) => {
+      try {
+        await execute({ data: f })
+        getRooms().executeApi()
+        message.success('Cập nhật thành công')
+      } catch (e) {
+        message.error('Cập nhật thất bại')
+        throw new Error(e)
+      }
+    }
+    return {
+      ...usedUpload,
+      executeApi
+    }
+  }
+
   return {
     rooms,
     currentRoom,
@@ -60,7 +82,8 @@ function useRoom() {
     paging,
     filter,
     createRoom,
-    updateRoom
+    updateRoom,
+    uploadPhotos
   }
 }
 export default useRoom
