@@ -34,7 +34,6 @@ div
         type='submit'
         name='uploadimage'
         id='uploadimage'
-        @click='doUpload',
         prefixIcon='mdi:cloud-upload'
       )
         span.font-medium Xác nhận
@@ -53,7 +52,7 @@ const fileRef = ref<HTMLInputElement | null>(null)
 const hotelFiles = ref<File[]>([])
 
 // Call api to submit images
-const { currentRoom: room } = useRoom()
+const { currentRoom: room, getRoomById } = useRoom()
 const roomPhotos = computed(() => Image2Array(room.value.photos))
 
 const { uploadPhotos } = useRoom()
@@ -92,7 +91,8 @@ function onChangeFile() {
 
 // 3. Upload image
 async function doUpload() {
-  const { executeApi } = uploadPhotos(room.value.id)
+  const { executeApi: postPhotos } = uploadPhotos(room.value.id)
+  const { executeApi: fetchRoom } = getRoomById(room.value.id)
   const formData = new FormData()
 
   // load new image
@@ -104,7 +104,8 @@ async function doUpload() {
     formData.append('text', image)
   })
   // call api
-  await executeApi(formData)
+  await postPhotos(formData)
+  await fetchRoom()
 }
 
 // const roomFiles = ref<IFormKitFile[]>([])

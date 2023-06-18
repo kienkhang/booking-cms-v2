@@ -62,22 +62,20 @@ const useRoomStore = () => {
 
   const getRoomById = (roomId: string) => {
     const usedGetRoom = roomsApi.getDetails(roomId)
-    const { data, error, isFinished } = usedGetRoom
-
-    // After get data ->  save global state && reset paging to null
-    until(isFinished)
-      .toBeTruthy()
-      .then(() => {
-        if (!error.value) {
-          currentRoom.value = data.value
-        }
-      })
+    const { data } = usedGetRoom
 
     return {
       ...usedGetRoom,
       // Execute get hotel if not current room
-      executeApi: () => {
-        usedGetRoom.execute()
+      executeApi: async () => {
+        try {
+          await usedGetRoom.execute()
+          // After get data ->  save global state && reset paging to null
+          currentRoom.value = data.value
+          paging.value = null
+        } catch (e) {
+          return e
+        }
       }
     }
   }

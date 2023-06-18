@@ -7,7 +7,7 @@ function useRoom() {
   // Import state from store
   const { rooms, currentRoom, roomCount, filter, paging } = storeToRefs(useRoomStore())
   // Import actions from store
-  const { getRooms } = useRoomStore()
+  const { getRooms, getRoomById } = useRoomStore()
 
   // Create room
   function createRoom(form: Ref<Omit<IRoom, 'id' | 'photos'>>) {
@@ -81,6 +81,8 @@ function useRoom() {
     roomCount,
     paging,
     filter,
+    getRooms,
+    getRoomById,
     createRoom,
     updateRoom,
     uploadPhotos
