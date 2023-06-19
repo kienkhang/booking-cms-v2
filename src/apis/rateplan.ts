@@ -2,7 +2,7 @@ const path = 'rateplans'
 // const admin = 'admin/'
 class RatePlan {
   createRatePlan = (data: any | {}) => {
-    const url = path
+    const url = `${path}/`
     return usePost({ url, data, requiredToken: true })
   }
   updateRatePlan = (data: any | {}, rateplanId: string) => {
