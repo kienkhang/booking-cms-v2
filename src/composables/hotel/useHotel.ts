@@ -30,8 +30,9 @@ const useHotel = () => {
       executeApi: () => execute({ data: { ...form.value } })
     }
   }
+
   // handle update hotel
-  function updateHotel(form: Ref<IHotelUpdate>, hotelId: string) {
+  const updateHotel = (form: Ref<IHotelUpdate>, hotelId: string) => {
     // call api
     const usedUpdateHotel = hotelsApi.updateHotel(form.value, hotelId)
     // destructuring useAxios struct
@@ -46,46 +47,6 @@ const useHotel = () => {
     return {
       ...usedUpdateHotel,
       executeApi: () => execute({ data: { ...form.value } })
-    }
-  }
-  // handle upload image file
-  function uploadPhotos(hotelId: string) {
-    const usedUpload = hotelsApi.updatePhotos({}, hotelId)
-
-    const { execute } = usedUpload
-
-    return {
-      ...usedUpload,
-      executeApi: async (f: FormData) => {
-        try {
-          await execute({ data: f })
-          await getHotelLocalStore()
-          message.success('Cập nhật hình ảnh thành công')
-        } catch (e) {
-          message.success('Cập nhật hình ảnh thất bại')
-          throw new Error(e)
-        }
-      }
-    }
-  }
-  // handle upload business license
-  function uploadBL(hotelId: string) {
-    const usedUpload = hotelsApi.updateBL({}, hotelId)
-
-    const { execute } = usedUpload
-
-    return {
-      ...usedUpload,
-      executeApi: async (f: { images: File; text: string[] }) => {
-        try {
-          await execute({ data: { ...f } })
-          await getHotelLocalStore()
-          message.success('Cập nhật hình ảnh thành công')
-        } catch (e) {
-          message.success('Cập nhật hình ảnh thất bại')
-          throw new Error(e)
-        }
-      }
     }
   }
 
@@ -104,17 +65,6 @@ const useHotel = () => {
         throw new Error(e)
       }
     }
-
-    // // With json
-    // const executeApi = async (f: { images: File[]; text: string[] }) => {
-    //   try {
-    //     await execute({ data: f })
-    //     getHotelLocalStore()
-    //     message.success('Cập nhật thành công')
-    //   } catch (e) {
-    //     throw new Error(e)
-    //   }
-    // }
 
     return {
       ...usedUpload,
