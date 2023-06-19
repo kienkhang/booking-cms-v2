@@ -72,7 +72,6 @@ div
 
 <script setup lang="ts">
 import { Image2Array } from '@/utils/format'
-import useFileInput from '@/composables/useFileInput'
 // Component
 import { NImage } from 'naive-ui'
 const Button = defineAsyncComponent(() => import('../shared/button/Button.vue'))
