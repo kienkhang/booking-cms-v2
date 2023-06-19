@@ -29,7 +29,11 @@ export default defineConfig({
   plugins: [
     vue({
       include: [/\.vue$/, /\.md$/],
-      reactivityTransform: true
+      reactivityTransform: true,
+      script: {
+        defineModel: true,
+        propsDestructure: true
+      }
     }),
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
