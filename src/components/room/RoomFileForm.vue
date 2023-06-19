@@ -66,26 +66,34 @@ function chooseFiles() {
 }
 // 2. Onchange file to check files <= 2 MB ?
 function onChangeFile() {
+  let isLarge = false
   // If exist target
   if (fileRef.value) {
+    deleteBlobUrl()
     // binding files get from input
     const files = [...fileRef.value.files]
-    files.forEach((file) => {
-      // Check if a file is an image ?
-      if (!file.type.includes('image')) {
-        message.error('File phải là hình ảnh')
-        hotelFiles.value = []
-        return
-      }
-      // check file > 2 MB
-      if (file.size > 1024 * 1024 * 2) {
-        message.error('File không được lớn hơn 2MB')
-        hotelFiles.value = []
-        return
-      }
+
+    // if files.length > 0 loop for
+    files.length > 0 &&
+      files.forEach((file) => {
+        // Check if a file is an image ?
+        if (!file.type.includes('image')) {
+          message.error('File phải là hình ảnh')
+          isLarge = true
+          return
+        }
+        // check file > 2 MB
+        if (file.size > 1024 * 1024 * 2) {
+          message.error('File không được lớn hơn 2MB')
+          isLarge = true
+          return
+        }
+      })
+    // if not exist image is Large => concat hotelFiles
+    if (!isLarge) {
       // Concat files to
-      hotelFiles.value = hotelFiles.value.concat(file)
-    })
+      hotelFiles.value = [].concat(files)
+    }
   }
 }
 
@@ -128,8 +136,8 @@ onBeforeUnmount(() => {
 })
 
 function clearPhotos() {
-  hotelFiles.value = []
   deleteBlobUrl()
+  hotelFiles.value = []
 }
 </script>
 
