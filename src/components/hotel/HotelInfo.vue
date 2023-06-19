@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   //- Loading(v-if='isLoading')
-  NCollapse(display-directive='show' :default-expanded-names="['1','2','3','4']")
+  NCollapse(display-directive='show' :default-expanded-names="['1','2','3','4','5']")
     NCollapseItem(title='Thông tin' name='1')
       template(#arrow)
         
@@ -73,15 +73,15 @@ div
       template(#header)
         .font-bold.text-lg Hình ảnh
       .flex.items-center.flex-wrap.gap-4
-        figure.rounded-lg.overflow-hidden(v-for='photo in hotelPhotos' class='max-h-[120px] relative select-none')
-          icon-mdi:close-circle.absolute.w-6.h-6.top-2.right-2.cursor-pointer.text-red-500.transition-all(class='hover:opacity-80' @click='removeImage')
-          NImage(:width='200' :src='photo' object-fit='cover' class='group')
-    NCollapseItem(title='Hình ảnh' name='4')
+        .rounded-lg.overflow-hidden(v-for='photo in hotelPhotos' class='max-h-[120px] relative')
+          icon-mdi:close-circle.absolute.w-5.h-5.text-red-500.top-1.right-1.cursor-pointer(@click='deletePhotos(photo)' class='hover:opacity-80')
+          NImage(:width='200' :src='photo' object-fit='cover')
+    NCollapseItem(title='Giấy phép kinh doanh' name='5')
       template(#header)
         .font-bold.text-lg Giấy phép kinh doanh
       .flex.items-center.flex-wrap.gap-4
-        figure.rounded-lg.overflow-hidden(class='max-h-[120px]')
-          NImage(:width='200' :src='bussinessLicense' object-fit='cover')
+        .rounded-lg.overflow-hidden(class='max-h-[120px]')
+          NImage(:width='200' :src='currentHotel?.business_licence' object-fit='cover')
   
 </template>
 
@@ -92,9 +92,6 @@ import _omit from 'lodash-es/omit'
 import _capitalize from 'lodash-es/capitalize'
 import { Image2Array } from '@/utils/format'
 import { VIETNAM_BANKING_LIST } from '@/constant/bank'
-
-//
-const dialog = useDialog()
 
 // ============== GET ROOM BY ID ===============
 const { currentHotel } = storeToRefs(useHotelsStore())
@@ -150,20 +147,40 @@ const hotelFacilities = computed<
 const hotelPhotos = computed(() => {
   if (currentHotel.value?.hotel_photos) return Image2Array(currentHotel.value?.hotel_photos)
 })
-// Business License
-const bussinessLicense = computed(() => Image2Array(currentHotel.value?.business_licence)[0])
 // Hotel Banks
 const bankName = computed(() =>
   VIETNAM_BANKING_LIST.find((bank) => bank.code === currentHotel.value?.bank_name)
 )
 
-// Handler remove image
-function removeImage() {
+// Delete image
+const dialog = useDialog()
+
+const { uploadPhotos } = useHotel()
+
+const hotelId = computed(() => currentHotel.value?.id)
+
+function deletePhotos(photoUrl: string) {
+  const { executeApi: doUploadPhotos } = uploadPhotos(hotelId.value)
+  const restPhotos = hotelPhotos.value.filter((photo) => photo !== photoUrl)
+
+  const formData = new FormData()
+  restPhotos.forEach((photo) => {
+    formData.append('text', photo)
+  })
+
   dialog.warning({
     title: 'Xoá hình ảnh',
-    content: 'Bạn có muốn xoá hình ảnh này ?',
-    negativeText: 'Huỷ bỏ',
-    positiveText: 'Xác nhận'
+    content: 'Bạn có chắc là xoá hình ảnh này ?',
+    negativeText: 'Huỷ',
+    positiveText: 'Xoá',
+    onPositiveClick: async () => {
+      try {
+        await doUploadPhotos(formData)
+        dialog.destroyAll()
+      } catch (error) {
+        dialog.destroyAll()
+      }
+    }
   })
 }
 </script>

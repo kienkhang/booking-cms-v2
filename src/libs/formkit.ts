@@ -31,7 +31,7 @@ export const themeClass = {
   },
   'family:button': {
     input:
-      '$reset inline-flex items-center justify-center active:focus:scale-95 hover:bg-opacity-90 transition-all bg-crayola text-white text-sm font-medium py-3 px-6 rounded-lg focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2 formkit-disabled:bg-x11 formkit-loading:before:w-4 formkit-loading:before:h-4 formkit-loading:before:mr-2 formkit-loading:before:border formkit-loading:before:border-2 formkit-loading:before:border-r-transparent formkit-loading:before:rounded-3xl formkit-loading:before:border-white formkit-loading:before:animate-spin',
+      '$reset inline-flex items-center justify-center gap-2 active:focus:scale-95 hover:bg-opacity-90 transition-all bg-crayola text-white text-sm font-medium py-2 px-4 rounded-lg focus-visible:outline-2 focus-visible:outline-crayola focus-visible:outline-offset-2 formkit-disabled:bg-x11 formkit-loading:before:w-4 formkit-loading:before:h-4 formkit-loading:before:mr-2 formkit-loading:before:border formkit-loading:before:border-2 formkit-loading:before:border-r-transparent formkit-loading:before:rounded-3xl formkit-loading:before:border-white formkit-loading:before:animate-spin',
     wrapper: 'mb-1',
     prefixIcon: '$reset block w-4 -ml-2 mr-2 stretch',
     suffixIcon: '$reset block w-4 ml-2 stretch'
@@ -130,7 +130,7 @@ export const themeClass = {
       'absolute top-[calc(100%_+_0.5em)] drop-shadow-[0_0_1.25em_rgba(0,0,0,.25)] rounded-md p-5 bg-white z-10',
     panelHeader:
       'grid grid-cols-[2.5em_1fr_2.5em] justify-center items-center border-b-2 mb-4 pb-4',
-    input: 'selection:bg-blue-400',
+    input: 'selection:bg-crayola',
     monthsHeader: 'flex items-center justify-center col-start-2 col-end-2',
     timeHeader: 'flex items-center justify-center col-start-2 col-end-2',
     overlayPlaceholder: 'text-gray-400',

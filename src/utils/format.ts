@@ -6,7 +6,7 @@ const VND = new Intl.NumberFormat('vi-VN', {
 const Image2Array = (text: string) => {
   if (!text) return []
   const imgs = text.split(';')
-  return imgs || []
+  return imgs
 }
 
 export { VND, Image2Array }

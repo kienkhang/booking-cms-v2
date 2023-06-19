@@ -89,6 +89,58 @@ const useHotel = () => {
     }
   }
 
+  const uploadPhotos = (hotelId: string) => {
+    const usedUpload = hotelsApi.updatePhotos({}, hotelId)
+    const { execute } = usedUpload
+
+    // With Form data
+    const executeApi = async (f: FormData) => {
+      try {
+        await execute({ data: f })
+        getHotelLocalStore()
+        message.success('Cập nhật thành công')
+      } catch (e) {
+        message.error('Cập nhật thất bại')
+        throw new Error(e)
+      }
+    }
+
+    // // With json
+    // const executeApi = async (f: { images: File[]; text: string[] }) => {
+    //   try {
+    //     await execute({ data: f })
+    //     getHotelLocalStore()
+    //     message.success('Cập nhật thành công')
+    //   } catch (e) {
+    //     throw new Error(e)
+    //   }
+    // }
+
+    return {
+      ...usedUpload,
+      executeApi
+    }
+  }
+  const uploadBL = (hotelId: string) => {
+    const usedUpload = hotelsApi.updateBL({}, hotelId)
+    const { execute } = usedUpload
+
+    const executeApi = async (f: { images: File; text?: string[] }) => {
+      try {
+        await execute({ data: { ...f } })
+        getHotelLocalStore()
+        message.success('Cập nhật thành công')
+      } catch (e) {
+        throw new Error(e)
+      }
+    }
+
+    return {
+      ...usedUpload,
+      executeApi
+    }
+  }
+
   return {
     hotels,
     paging,

@@ -11,9 +11,13 @@ div
     FormKit(type='form' :actions='false' @submit='hotelFilesSubmit()' style='width: 100%; padding: 16px;')
       FormKit(type='file' name='fileimage' id='fileimage' enctype='multipart/form-data' v-model='hotelFiles' multiple)
       FormKit(type='submit' name='update-img' input-class='w-max') Cập nhật
-    .flex.items-center.gap-5.flex-wrap.border.rounded-10.p-4(v-if='hotelFiles.length > 0')
+    .flex.flex-wrap.gap-4(v-if='previewBlobUrls')
       figure(v-for='img in previewBlobUrls' class='w-max')
-        NImage(width="200" :src='img')
+        NImage(
+          width="200" 
+          :src='img' 
+          object-fit="cover"
+          )
     //- UploadImageForm(:files='files' @upload='upload' @change-file='changeFile')
 </template>
 
@@ -22,14 +26,14 @@ import { NImage } from 'naive-ui'
 import { type IFormKitFile } from '@/dtos/shared'
 import { Image2Array } from '@/utils/format'
 
-// -------- Hotel Default File ------------
+// -------- Upload Image API ------------
+const { uploadPhotos, uploadBL } = useHotel()
 const { currentHotel: hotel } = storeToRefs(useHotelsStore())
+const hotelId = computed(() => hotel.value.id)
 const hotelPhotos = computed(() => Image2Array(hotel.value.hotel_photos))
 
-// -------- Hotel Upload API ------------
-const { uploadBL, uploadPhotos } = useHotel()
-const { executeApi: updateBL } = uploadBL(hotel.value.id)
-const { executeApi: updatePhotos } = uploadPhotos(hotel.value.id)
+const { executeApi: doUploadBL } = uploadBL(hotelId.value)
+const { executeApi: doUploadPhotos } = uploadPhotos(hotelId.value)
 
 // -------- Bussiness License File ------------
 const bussinessLicenseFile = ref<IFormKitFile[]>([])
@@ -41,11 +45,7 @@ const blBlobUrl = computed(() => {
 })
 
 async function bLicenseSubmit() {
-  await updateBL({
-    images: bussinessLicenseFile.value[0].file,
-    // because upload new file, so no need to keep old image
-    text: []
-  })
+  await doUploadBL({ images: bussinessLicenseFile.value[0].file, text: [] })
 }
 
 // -------- Hotel Image Files ------------
@@ -56,20 +56,26 @@ const previewBlobUrls = computed(() => {
   }
 })
 async function hotelFilesSubmit() {
-  const files = hotelFiles.value.map((f) => f.file)
-  const imgData = new FormData()
+  // Get files
+  const files = hotelFiles.value.map((f) => f.file) as File[]
+  // Cách 1: Tạo ra formData chung cho 2 trường là images và text, loop for để add vào
+  const formData = new FormData()
+  // images fields
   for (let i = 0; i < files.length; i++) {
-    imgData.append('images', files[i])
+    formData.append('images', files[i])
   }
-  // for (let i = 0; i < hotelPhotos.value.length; i++) {
-  //   imgData.append('text', hotelPhotos.value[i])
-  // }
-  imgData.append('text', JSON.stringify(JSON.stringify(hotelPhotos.value)))
-  // const oldImgData = new FormData()
-  // oldImgData.append('text', JSON.stringify(hotelPhotos.value))
-  // formData.append('text',hotelPhotos.value)
-  await updatePhotos(imgData)
-  // getHotelLocalStore()
+  // text fields 1
+  for (let i = 0; i < hotelPhotos.value.length; i++) {
+    formData.append('text', hotelPhotos.value[i])
+  }
+  // // text fields 2
+  // formData.append('text', JSON.stringify(hotelPhotos.value))
+  // // text field 3
+  // formData.append('text', JSON.stringify(JSON.stringify(hotelPhotos.value)))
+  await doUploadPhotos(formData)
+
+  // Cách 2: Tạo ra form gồm images:File[] và text:string[]
+  // doUploadPhotos({ images: files, text: hotelPhotos.value })
 }
 
 const deleteBlobUrl = () => {

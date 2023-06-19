@@ -5,29 +5,46 @@ class Room {
     const url = path
     return usePost({ url, data, requiredToken: true })
   }
+
   updateRoom = (data: any | {}, roomId: string) => {
     const url = `${path}/${roomId}`
     return usePatch({ url, data, requiredToken: true })
   }
+
   getDetails = (roomId: string) => {
     const url = `${path}/${roomId}`
     return useGet({ url, requiredToken: true })
   }
+
   upsertRoomNight = (data: any | {}) => {
     const url = path + '/roomnights'
     return usePost({ url, data, requiredToken: true })
   }
+
   upsertRatePakage = (data: any | {}) => {
     const url = path + '/ratepackages'
     return usePost({ url, data, requiredToken: true })
   }
+
   getInventories = (params: any | {}, roomId: string) => {
     const url = path + `/${roomId}/inventories`
     return useGet({ url, params, requiredToken: true })
   }
+
   getRatePlans = (params: any | {}, roomId: string) => {
     const url = path + `/${roomId}/rateplans`
     return useGet({ url, params, requiredToken: true })
+  }
+
+  updatePhotos = (params: FormData | {}, roomId: string) => {
+    const url = `${path}/${roomId}/photos`
+    return usePatch({
+      url,
+      data: params,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   }
 }
 

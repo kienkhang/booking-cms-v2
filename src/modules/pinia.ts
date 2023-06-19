@@ -43,13 +43,16 @@ function navigationHotelGuard(router: Router) {
   const { account } = storeToRefs(accountStore())
   // Destruct get Hotel from local function
   const { getHotelLocalStore } = useHotelsStore()
+
+  // Destruct hotels from store
+  const { currentHotel: hotel } = storeToRefs(useHotelsStore())
   // Destruct hotelId from localstorage
   const { hotelId } = useHotelStorage()
   router.beforeEach((to, from, next) => {
     // Check location to required hotel
     const requiredHotel = to.meta.requiredHotel
     // if exist hotel in local and not having current Hotel -> get hotel
-    if (hotelId.value && requiredHotel && account.value) {
+    if (hotelId.value && !hotel.value && requiredHotel && account.value) {
       getHotelLocalStore()
     }
     // from catch navigate to "/" and to catch case reload

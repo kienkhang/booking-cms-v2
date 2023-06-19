@@ -42,8 +42,9 @@ div
       template(#header)
         .font-bold.text-lg Hình ảnh
       .flex.items-center.flex-wrap.gap-4
-        .rounded-lg.overflow-hidden(v-for='photo in roomPhotos' class='max-h-[120px]')
-          NImage(:width='200' :src='photo' object-fit='cover')
+        .rounded-lg.overflow-hidden(v-for='photo in roomPhotos' class='max-h-[120px] relative')
+          icon-mdi:close-circle.absolute.w-5.h-5.text-red-500.bg-white.rounded-full.top-1.right-1.cursor-pointer(@click='deletePhotos(photo)' class='hover:opacity-80')
+          NImage(:width='200' :src='photo' object-fit='cover' lazy)
   
 </template>
 
@@ -65,10 +66,10 @@ const { currentRoom } = storeToRefs(useRoomStore())
 const { getRoomById } = useRoomStore()
 
 // Call API and Destruct Loading
-const { isLoading, executeApi } = getRoomById(roomId.value)
+const { isLoading, executeApi: fetchRoom } = getRoomById(roomId.value)
 
-onMounted(() => {
-  executeApi()
+onMounted(async () => {
+  await fetchRoom()
 })
 // Room Views
 const roomViews = computed<
@@ -122,9 +123,38 @@ const roomFacilities = computed<
   return facilities
 })
 // Room Photo
-const roomPhotos = computed(() => {
-  if (currentRoom.value?.photos) return Image2Array(currentRoom.value?.photos)
-})
+const roomPhotos = computed(() => Image2Array(currentRoom.value?.photos))
+
+// Delete image
+const dialog = useDialog()
+
+const { uploadPhotos } = useRoom()
+
+function deletePhotos(photoUrl: string) {
+  const { executeApi: doUploadPhotos } = uploadPhotos(roomId.value)
+  const restPhotos = roomPhotos.value.filter((photo) => photo !== photoUrl)
+
+  const formData = new FormData()
+  restPhotos.forEach((photo) => {
+    formData.append('text', photo)
+  })
+
+  dialog.warning({
+    title: 'Xoá hình ảnh',
+    content: 'Bạn có chắc là xoá hình ảnh này ?',
+    negativeText: 'Huỷ',
+    positiveText: 'Xoá',
+    onPositiveClick: async () => {
+      try {
+        await doUploadPhotos(formData)
+        await fetchRoom()
+        dialog.destroyAll()
+      } catch (error) {
+        dialog.destroyAll()
+      }
+    }
+  })
+}
 </script>
 
 <style scoped></style>
