@@ -31,37 +31,35 @@ const InventoryTable = defineAsyncComponent(
   () => import('@/components/inventory/InventoryTable.vue')
 )
 
+const router = useRouter()
+const mess = useMessage()
+
 // Call api
 // FLOW ===> room -> after having room call { rateplan and inventories}
-// destructuring room selected from useInventory
-const { room: selectedRoom, rateplan: selectedRatePlan, month, year } = storeToRefs(useInventory())
+
+const { inventories } = useMutateInventory()
 // Destructuring <list room> from room store, and fetch function
 const { getRooms } = useRoomStore()
 const { executeApi: fetchRoom } = getRooms()
 // === destructuring list room
 const { rooms } = useRoom()
 
-// Destructuring fetch inventory function
-const { getInventories } = useInventoryStore()
-// ==>Computed inventory query with month & year
-const inventoryQuery = computed(() => ({
-  month: month.value,
-  year: year.value
-}))
-
-// Destructuring <list ratePlans> from useRatePlan
-const { ratePlans, getRatePlans } = useRatePlan()
-
 // Before mount -> call api get room
 onBeforeMount(async () => {
   // Get room first then set selected room
   await fetchRoom()
-  // Get inventory
-  selectedRoom.value = rooms.value[0].id
-  await getInventories(inventoryQuery, selectedRoom).executeApi()
-  // Get rateplan then set selected rate plan
-  await getRatePlans(selectedRoom).executeApi()
-  selectedRatePlan.value = ratePlans.value[0].id
+  if (rooms.value.length <= 0) {
+    mess.error('Vui lòng tạo phòng')
+    router.push('/hotel')
+  }
+  // reset inventory
+  inventories.value = null
+  // // Get inventory
+  // selectedRoom.value = rooms.value[0].id
+  // await getInventories(inventoryQuery, selectedRoom).executeApi()
+  // // Get rateplan then set selected rate plan
+  // await getRatePlans(selectedRoom).executeApi()
+  // selectedRatePlan.value = ratePlans.value[0].id
 })
 </script>
 

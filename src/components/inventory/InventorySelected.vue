@@ -14,9 +14,14 @@
 <script setup lang="ts">
 import useInventory from '@/composables/inventory/useInventory'
 import dayjs from 'dayjs'
+// Components
 import { NDatePicker, NSelect } from 'naive-ui'
-const { setMonth, setYear, setRoom } = useInventory()
 
+// Hooks from naiveui
+// const mess = useMessage()
+
+// Set time with use inventory
+const { setMonth, setYear, setRoom } = useInventory()
 const { rooms } = useRoom()
 // ----------- SELECT ROOM ---------------
 const roomOptions = computed(() => {
@@ -34,13 +39,25 @@ const updateRoom = () => {
   setRoom(roomSelected.value)
 }
 
-// When ever room options have value -> set default roomSelected
-whenever(roomOptions, () => {
-  // set default selected
-  roomSelected.value = roomOptions.value[0].value
-  // set room in inventory
-  updateRoom()
+// Destructuring fetch inventory function
+const { getInventories } = useInventoryStore()
+const {} = storeToRefs(useInventory())
+const { getRatePlans } = useRatePlan()
+const { query, roomId } = useMutateInventory()
+// Each month, year, room change -> fetch api get inventories
+watch([query, roomId], async () => {
+  console.log('Thay đổi [month,year,room]')
+  await getInventories(query, roomId).executeApi()
+  await getRatePlans(roomId).executeApi()
 })
+// Every time the room is updated, call
+// // When ever room options have value -> set default roomSelected
+// whenever(roomOptions, () => {
+//   // set default selected
+//   roomSelected.value = roomOptions.value[0].value
+//   // set room in inventory
+//   updateRoom()
+// })
 // ----------- SELECT MONTH & YEAR ---------------
 const timestamp = ref<number>(new Date().getTime())
 const selectedMonth = computed(() => dayjs(timestamp.value).month())
