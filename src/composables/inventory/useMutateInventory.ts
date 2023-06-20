@@ -18,7 +18,7 @@ const useMutateInventory = () => {
   // Get current month and year from useInventory
   const { month, year, room: roomId } = storeToRefs(useInventory())
   // computed -> inventory query request
-  const inventoryQuery = computed(() => ({
+  const query = computed(() => ({
     month: month.value,
     year: year.value
   }))
@@ -26,44 +26,46 @@ const useMutateInventory = () => {
   // const { executeApi: fetchInventories } = getInventories(inventoryQuery, roomId)
 
   // mutate room night
-  const upsertRoomNight = (form: Ref<UpsertRoomNight>) => {
+  const upsertRoomNight = () => {
     // Call api
-    const usedUpsertRoomNight = roomsApi.upsertRoomNight(form.value)
+    const usedUpsertRoomNight = roomsApi.upsertRoomNight({})
     // destructuring api
-    const { isFinished, execute, error } = usedUpsertRoomNight
+    const { execute } = usedUpsertRoomNight
 
-    // whenever finished -> re get inventories
-    whenever(isFinished, () => {
-      if (!error.value) {
-        getInventories(inventoryQuery, roomId).executeApi()
+    async function executeApi(form: UpsertRoomNight) {
+      try {
+        await execute({ data: form })
+        getInventories(query, roomId).executeApi()
+      } catch (e) {
+        throw new Error(e)
       }
-    })
-    return { ...usedUpsertRoomNight, executeApi: execute({ data: form.value }) }
+    }
+
+    return { ...usedUpsertRoomNight, executeApi }
   }
   // mutate rate package
-  const upsertRatePakage = (form: Ref<upsertRatePakage>) => {
+  const upsertRatePakage = () => {
     // Call api
-    const usedUpsertRatePakage = roomsApi.upsertRatePakage(form.value)
+    const usedUpsertRatePakage = roomsApi.upsertRatePakage({})
     // destructuring api
-    const { isFinished, execute, error } = usedUpsertRatePakage
+    const { execute } = usedUpsertRatePakage
 
-    // whenever finished -> re get inventories
-    whenever(isFinished, () => {
-      if (!error.value) {
-        getInventories(inventoryQuery, roomId).executeApi()
+    async function executeApi(form: upsertRatePakage) {
+      try {
+        await execute({ data: form })
+        getInventories(query, roomId).executeApi()
+      } catch (e) {
+        throw new Error(e)
       }
-    })
-    return { ...usedUpsertRatePakage, executeApi: execute({ data: form.value }) }
-  }
+    }
 
-  // Each month, year, room change -> fetch api get inventories
-  watch([month, year, room], () => {
-    // console.log('Thay đổi [month,year,room]')
-    getInventories(inventoryQuery, roomId).executeApi()
-  })
+    return { ...usedUpsertRatePakage, executeApi }
+  }
 
   return {
     inventories,
+    query,
+    roomId,
     upsertRatePakage,
     upsertRoomNight
     // fetchInventories

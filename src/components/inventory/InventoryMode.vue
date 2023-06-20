@@ -28,9 +28,10 @@
         NRadio(key='rate' :value='true' label='Giá')
         NRadio(key='roomnight' :value='false' label='Số phòng')
     FormKit(type='form' :actions='false' @submit='doSubmit' name='update-inventory')
-      FormKit(type='number' name='price' label='Giá tiền' step=500 validation='required|number|min:0' :value='100000' v-if='adjustRate')
-      FormKit(type='number' name='quanity' label='Số phòng' step=1 validation='required|number|min:0' :value='1' v-else)
-      FormKit(type='submit') Cập nhật
+      .flex.flex-col.gap-4
+        FormKit(type='number' name='price' label='Giá tiền' input-class='bg-white' step=500 validation='required|number|min:0'  :value='100000' v-if='adjustRate')
+        FormKit(type='number' name='quanity' label='Số phòng' input-class='bg-white' step=1 validation='required|number|min:0'  :value='1' v-else)
+        FormKit(type='submit') Cập nhật
       
 
 </template>
@@ -42,6 +43,9 @@ import dayjs from 'dayjs'
 import remove from 'lodash-es/remove'
 // Component
 import { NCheckbox, NRadio, NRadioGroup, NSelect } from 'naive-ui'
+
+// Hooks from naive-ui
+const mess = useMessage()
 
 // ------------- DAY OF WEEK SELECT MODE & SELECT TABLE --------------
 // Radio select -> Free or DayOfWeek "mode"
@@ -155,29 +159,48 @@ watch([selectedDates], () => {
     })
   }
 })
-// When rateplan change -> reset rate package and reset d check
-watch([rateplan, room], () => {
+
+function clearSelect() {
   selectedRatePackage.value = []
   selectedRoomNight.value = []
   d.value = d.value.map((i) => ({ ...i, check: false }))
+}
+// When rateplan change -> reset rate package and reset d check
+watch([rateplan, room], () => {
+  clearSelect()
 })
 
 // ------------- UPDATE TABLE --------------
-const doSubmit = (data: any) => {
+
+const { upsertRatePakage, upsertRoomNight } = useMutateInventory()
+const { executeApi: doUpsertRate } = upsertRatePakage()
+const { executeApi: doUpsertRoomNight } = upsertRoomNight()
+
+const doSubmit = async (data: any) => {
   // update room night
   if (!adjustRate.value) {
     const selectedDate = selectedRoomNight.value.map((rn) => rn.date)
+    if (selectedDate.length <= 0) {
+      mess.warning('Chưa có ngày nào được chọn')
+      return
+    }
     const submitData = {
       room_type_id: room.value,
       selected_date: JSON.stringify(selectedDate),
-      quantity: data?.quanity
+      quantity: +data?.quanity
     }
-    console.log('🐔🦢 ~ doSubmit ~ submitData:', submitData)
+    await doUpsertRoomNight(submitData)
+    clearSelect()
   }
   // update rate package
   else {
-    const submitData = [...selectedRatePackage.value].map((rp) => ({ ...rp, price: data?.price }))
-    console.log('🐔🦢 ~ doSubmit ~ submitData:', submitData)
+    if (selectedRatePackage.value.length <= 0) {
+      mess.warning('Chưa có gói nào được chọn')
+      return
+    }
+    const submitData = [...selectedRatePackage.value].map((rp) => ({ ...rp, price: +data?.price }))
+    await doUpsertRate({ data: submitData })
+    clearSelect()
   }
 }
 

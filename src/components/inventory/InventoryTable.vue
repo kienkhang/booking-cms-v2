@@ -1,5 +1,5 @@
 <template lang="pug">
-div.grid.grid-cols-12.text-center.select-none(v-if='inventories')
+div.grid.grid-cols-12.text-center.select-none(v-if='showInventories')
   //- Table content
   .col-span-1
     .border.border-r-0.border-b-0.h-10
@@ -35,6 +35,9 @@ import RatePackageCell from './RatePackageCell.vue'
 import useMutateInventory from '@/composables/inventory/useMutateInventory'
 import dayjs from 'dayjs'
 
+// Hooks from naive ui
+const mess = useMessage()
+
 // ========= HORIZONTAL SCROLL HANDLER ===============
 
 // define scroll container
@@ -53,6 +56,13 @@ const { ratePlans: ratePlanLists } = useRatePlan()
 // Get inventory from store
 const { inventories } = useMutateInventory()
 
+const showInventories = computed(() => {
+  if (inventories.value && inventories.value.rateplans) {
+    return true
+  }
+  return false
+})
+
 // date from database non formatted -> '2019-01-25T02:00:00.000Z' (ISO 8601 string)
 // we can formated date with YYYY-MM-DD type
 const formatedInventories = computed(() => {
@@ -64,7 +74,7 @@ const formatedInventories = computed(() => {
         availability_at: dayjs(inv.availability_at).format('YYYY-MM-DD')
       })),
       // return rateplans
-      rateplans: inventories.value.rateplans.map((rp) => {
+      rateplans: inventories.value.rateplans?.map((rp) => {
         return {
           // return rateplan_id
           rateplan_id: rp.rateplan_id,
@@ -91,7 +101,7 @@ const roomNights = computed(() =>
 
 // render rate plans follow year and month
 const ratePlans = computed(() => {
-  return formatedInventories.value?.rateplans.map((r) => {
+  return formatedInventories.value?.rateplans?.map((r) => {
     return {
       // render rate package follow rate plan
       // render ratepland id
@@ -100,6 +110,14 @@ const ratePlans = computed(() => {
       ratePackages: renderRatePakages(year.value, month.value, r.prices)
     }
   })
+})
+
+watch(inventories, () => {
+  if (!inventories.value?.rateplans) {
+    mess.error('Phòng chưa có gói giá, vui lòng vào Phòng > Chi tiết phòng > Gói giá để tạo', {
+      duration: 5000
+    })
+  }
 })
 </script>
 

@@ -31,14 +31,18 @@ const useInventoryStore = () => {
     roomId: Ref<string>
   ) => {
     const usedGetInventories = roomsApi.getInventories(form.value, roomId.value)
-    const { data, execute, isFinished, error } = usedGetInventories
+    const { data, execute } = usedGetInventories
 
-    whenever(isFinished, () => {
-      if (!error.value) {
+    async function executeApi() {
+      try {
+        await execute({ data: form.value })
         inventories.value = data.value
+      } catch (e) {
+        throw new Error(e)
       }
-    })
-    return { ...usedGetInventories, executeApi: () => execute({ params: form.value }) }
+    }
+
+    return { ...usedGetInventories, executeApi }
   }
 
   return {
