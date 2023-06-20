@@ -11,6 +11,8 @@ interface upsertRatePakage {
 }
 
 const useMutateInventory = () => {
+  // Hoosk from naive ui
+  const mess = useMessage()
   // inventories state
   const { inventories } = storeToRefs(useInventoryStore())
   // get inventories from api
@@ -36,7 +38,9 @@ const useMutateInventory = () => {
       try {
         await execute({ data: form })
         getInventories(query, roomId).executeApi()
+        mess.success('Cập nhật thành công')
       } catch (e) {
+        mess.error('Cập nhật thất bại')
         throw new Error(e)
       }
     }
@@ -54,7 +58,9 @@ const useMutateInventory = () => {
       try {
         await execute({ data: form })
         getInventories(query, roomId).executeApi()
+        mess.success('Cập nhật thành công')
       } catch (e) {
+        mess.error('Cập nhật thất bại')
         throw new Error(e)
       }
     }
