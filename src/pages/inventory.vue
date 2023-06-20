@@ -16,9 +16,6 @@ div.h-full.w-full
     InventoryMode
     //- Choose day to update (get inventory from store and render table)
     InventoryTable
-    div
-      span.font-bold.text-red-600  Hướng dẫn: 
-      span.font-semibold.text-blue-600.text-xs  Lăn chuột để cuộn ngang
 </template>
 
 <script setup lang="ts">
@@ -54,12 +51,6 @@ onBeforeMount(async () => {
   }
   // reset inventory
   inventories.value = null
-  // // Get inventory
-  // selectedRoom.value = rooms.value[0].id
-  // await getInventories(inventoryQuery, selectedRoom).executeApi()
-  // // Get rateplan then set selected rate plan
-  // await getRatePlans(selectedRoom).executeApi()
-  // selectedRatePlan.value = ratePlans.value[0].id
 })
 </script>
 

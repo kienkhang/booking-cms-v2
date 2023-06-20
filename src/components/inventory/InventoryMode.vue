@@ -1,6 +1,6 @@
 <template lang="pug">
-.flex.items-center.justify-between
-  .flex.flex-col.gap-2.select-mode.rounded-10.p-3.bg-cultured(ref='rootAnimate')
+.flex.flex-col(class='lg:justify-center lg:flex-row')
+  .flex.flex-col.gap-2.select-mode.rounded-10.p-3.bg-cultured.mb-4(ref='rootAnimate' class='lg:mr-16 lg:mb-0') 
     .flex.items-center.gap-2
       NRadioGroup(v-model:value='mode' name='mode-group')
         NRadio(key='free-mode' value='free' label='Chọn tự do')

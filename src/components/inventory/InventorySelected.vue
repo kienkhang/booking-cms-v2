@@ -1,14 +1,24 @@
 <template lang="pug">
-.flex.items-center.justify-between
-  NSelect(v-model:value="roomSelected"
-          title="Chọn phòng"
-          filterable
-          placeholder="Please select a song"
-          :options="roomOptions"
-          style='width: max-content;'
-          @update:value='updateRoom()'
-          )
-  NDatePicker(v-model:value="timestamp" type="month" clearable @update:value='updateTime()')
+.flex.flex-col(class='lg:justify-center lg:flex-row')
+  .flex.flex-col.gap-2.select-none.mb-4(class='lg:mr-16 lg:mb-0')
+    span.font-bold Phòng
+    NSelect(v-model:value="roomSelected"
+            label='Phòng'
+            filterable
+            placeholder="Please select a room"
+            :options="roomOptions"
+            style='width: max-content;'
+            @update:value='updateRoom()'
+            )
+  .flex.flex-col.gap-2.select-none
+    span.font-bold Thời gian
+    NDatePicker(
+      v-model:value="timestamp"
+      type="month" 
+      clearable 
+      style='width: max-content;'
+      @update:value='updateTime()'
+      )
 </template>
 
 <script setup lang="ts">
@@ -33,7 +43,7 @@ const roomOptions = computed(() => {
   })
 })
 // Biding room selected ref
-const roomSelected = ref<string | null>('')
+const roomSelected = ref<string | null>(null)
 // Update room selected
 const updateRoom = () => {
   setRoom(roomSelected.value)

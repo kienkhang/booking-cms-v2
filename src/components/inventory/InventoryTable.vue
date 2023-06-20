@@ -1,21 +1,27 @@
 <template lang="pug">
-div.grid.grid-cols-12.text-center.select-none(v-if='showInventories')
-  //- Table content
-  .col-span-1
-    .border.border-r-0.border-b-0.h-10
-    .border.border-r-0.font-semibold.py-2.text-xs.bg-pink-200 Số phòng 
-    .border.border-r-0.font-medium.border-t-0.py-2(class='text-xs line-clamp-1 overflow-ellipsis' v-for='ratePlan in ratePlanLists')
-      span {{ratePlan.name}}
-  .col-span-11.overflow-auto.border.scrollbar-gradient.scroll-smooth(@wheel="wheel" ref='scrollContainer')
-    //- Render days
-    .flex.items-center.text-xs.font-bold
-      DateCell(v-for='cell in calendar' :data='cell')
-    //- Render room nights
-    .flex.items-center.font-bold(class='text-xs')
-      RoomNightCell(v-for='cell in roomNights' :data='cell')
-    //- Render rate packages
-    .flex.items-center.font-bold(class='text-xs' v-for='ratePlan in ratePlans' :key='ratePlan.ratePlanId')
-      RatePackageCell(v-for='cell in ratePlan.ratePackages' :data='cell' :ratePlan='ratePlan.ratePlanId')
+div.select-none
+  .grid.grid-cols-12.text-center(v-if='showInventories')
+    //- Table content
+    .col-span-2
+      .border.border-r-0.border-b-0.h-10
+      .border.border-r-0.font-semibold.py-2.text-xs.bg-pink-200 Số phòng 
+      .border.border-r-0.font-medium.border-t-0.py-2(class='text-xs line-clamp-1 overflow-ellipsis' v-for='ratePlan in ratePlanLists')
+        span {{ratePlan.name}}
+    .col-span-10.overflow-auto.border.scrollbar-gradient.scroll-smooth(@wheel="wheel" ref='scrollContainer')
+      //- Render days
+      .flex.items-center.text-xs.font-bold
+        DateCell(v-for='cell in calendar' :data='cell')
+      //- Render room nights
+      .flex.items-center.font-bold(class='text-xs')
+        RoomNightCell(v-for='cell in roomNights' :data='cell')
+      //- Render rate packages
+      .flex.items-center.font-bold(class='text-xs' v-for='ratePlan in ratePlans' :key='ratePlan.ratePlanId')
+        RatePackageCell(v-for='cell in ratePlan.ratePackages' :data='cell' :ratePlan='ratePlan.ratePlanId')
+  .mt-4(v-if='showInventories')
+    span.font-bold.text-red-600  Hướng dẫn: 
+    span.font-semibold.text-blue-600.text-xs  Lăn chuột để cuộn ngang
+  NEmpty(description='Cần chọn phòng có gói giá để bắt đầu thiết lập' size='huge' v-else)
+
 </template>
 
 <script setup lang="ts">
@@ -34,6 +40,7 @@ import RoomNightCell from './RoomNightCell.vue'
 import RatePackageCell from './RatePackageCell.vue'
 import useMutateInventory from '@/composables/inventory/useMutateInventory'
 import dayjs from 'dayjs'
+import { NEmpty } from 'naive-ui'
 
 // Hooks from naive ui
 const mess = useMessage()
@@ -45,7 +52,7 @@ const scrollContainer = ref<HTMLElement>(null)
 // scroll horizontal event
 const wheel = (e: WheelEvent) => {
   // the bigger deltaY is, the faster scroll is
-  scrollContainer.value.scrollLeft += e.deltaY * 5
+  scrollContainer.value.scrollLeft += e.deltaY * 2
 }
 
 // ========= INVENTORY HANDLER ===============
