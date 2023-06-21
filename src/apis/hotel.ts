@@ -12,47 +12,47 @@ class Hotel {
   }
 
   updateHotel = (data: any | {}, hotelId: string) => {
-    const url = path + '/' + hotelId
+    const url = `${path}/${hotelId}`
     return usePatch({ url, data, requiredToken: true })
   }
 
   getHotels = (params: any | {}) => {
-    const url = admin + '/hotels'
+    const url = `${admin}/hotels`
     return useGet({ url, params, requiredToken: true })
   }
 
   acceptHotel = (data: any | {}, hotelId: string) => {
-    const url = admin + `/accept/${hotelId}`
+    const url = `${admin}/accept/${hotelId}`
     return usePatch({ url, data, requiredToken: true })
   }
 
   updateCmsrate = (data: any | {}, hotelId: string) => {
-    const url = admin + `/update-cmsrate/${hotelId}`
+    const url = `${admin}/update-cmsrate/${hotelId}`
     return usePatch({ url, data, requiredToken: true })
   }
 
   updateRating = (data: any | {}, hotelId: string) => {
-    const url = admin + `/update-rating/${hotelId}`
+    const url = `${admin}/update-rating/${hotelId}`
     return usePatch({ url, data, requiredToken: true })
   }
 
   sendPayout = (data: any | {}, hotelId: string) => {
-    const url = path + '/' + `${hotelId}/payout`
+    const url = `${path}/${hotelId}/payout`
     return usePost({ url, data, requiredToken: true })
   }
 
   resolvePayout = (data: any | {}, payoutId: string) => {
-    const url = admin + `/payouts/${payoutId}`
+    const url = `${admin}/payouts/${payoutId}`
     return usePatch({ url, data, requiredToken: true })
   }
 
   getPayouts = (params: any | {}) => {
-    const url = admin + '/payouts'
+    const url = `${admin}/payouts`
     return useGet({ url, params, requiredToken: true })
   }
 
   getPayoutDetails = (params: any | {}, hotelId: string) => {
-    const url = admin + `/payouts/${hotelId}`
+    const url = `${admin}/payouts/${hotelId}`
     return useGet({ url, params, requiredToken: true })
   }
 
@@ -62,7 +62,7 @@ class Hotel {
   }
 
   getRoomsByHotel = (params: any | {}, hotelId: string) => {
-    const url = path + '/' + `${hotelId}/rooms`
+    const url = `${path}/${hotelId}/rooms`
     return useGet({ url, params, requiredToken: true })
   }
   updatePhotos = (params: UploadPhoto | {}, hotelId: string) => {

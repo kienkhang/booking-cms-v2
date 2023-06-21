@@ -49,7 +49,55 @@ const useHotel = () => {
       executeApi: () => execute({ data: { ...form.value } })
     }
   }
+  // ======== RATING & COMMISSION RATE HANDLER ========
+  function settingCmsr(hotelId: string) {
+    const usedSetting = hotelsApi.updateCmsrate({}, hotelId)
 
+    const { execute } = usedSetting
+    async function executeApi(commission_rate: number) {
+      try {
+        await execute({
+          data: {
+            commission_rate
+          }
+        })
+        message.success('Cập nhật thành công')
+        getHotelLocalStore()
+      } catch (e) {
+        message.error('Cập nhật thất bại')
+        throw new Error(e)
+      }
+    }
+    return {
+      ...usedSetting,
+      executeApi
+    }
+  }
+  function updateRating(hotelId: string) {
+    const usedUpdate = hotelsApi.updateRating({}, hotelId)
+
+    const { execute } = usedUpdate
+    async function executeApi(rating: number) {
+      try {
+        await execute({
+          data: {
+            rating
+          }
+        })
+        message.success('Cập nhật thành công')
+        getHotelLocalStore()
+      } catch (e) {
+        message.error('Cập nhật thất bại')
+        throw new Error(e)
+      }
+    }
+    return {
+      ...usedUpdate,
+      executeApi
+    }
+  }
+
+  // ======== IMAGE HANDLER =============
   const uploadPhotos = (hotelId: string) => {
     const usedUpload = hotelsApi.updatePhotos({}, hotelId)
     const { execute } = usedUpload
@@ -98,7 +146,9 @@ const useHotel = () => {
     createHotel,
     updateHotel,
     uploadPhotos,
-    uploadBL
+    uploadBL,
+    settingCmsr,
+    updateRating
   }
 }
 export default useHotel

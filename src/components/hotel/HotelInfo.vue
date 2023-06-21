@@ -27,7 +27,35 @@ div
             .col-span-3
               span.font-semibold Xếp hạng
             .col-span-9
-              NRate( readonly allow-half :value='3.5')
+              .flex.items-center.justify-between
+                NRate( readonly  :value='currentHotel?.rating' v-if='!isEditRating')
+                NRate( v-model:value='rating' v-if='isEditRating')
+                .flex.items-center.gap-2(v-auto-animate v-if='isAdmin')
+                  Button(size="small" type='button' class='text-white bg-red-500' @click='isEditRating=false' v-if='isEditRating') Huỷ bỏ
+                  Button(size="small" type='button' name='submit-update-cmsr' :class='["text-white bg-green-crayola",{"pointer-events-none cursor-not-allowed":uploading}]' @press='doUpdateRating' v-if='isEditRating')
+                    icon-custom-load.w-4.h-4.animate-spin(v-if='uploading')
+                    span(v-else) Cập nhật
+                  Button(size="small" type='button' class='text-white bg-blue-500' @click='isEditRating=true' v-else) Chỉnh sửa
+        .grid.grid-cols-12.room-overview
+            .col-span-3
+              span.font-semibold Tỉ lệ hoa hồng
+            .col-span-9
+                .flex.items-center.justify-between
+                  span.font-bold.text-lg(v-if='!isEditCmsr') {{ currentHotel?.commission_rate * 100 }}%
+                  NInputNumber(
+                    v-model:value='commissionRate'
+                    :step='0.01'
+                    :min='0'
+                    :max='1'
+                    style='width:max-content'
+                    v-else
+                  )
+                  .flex.items-center.gap-2(v-auto-animate v-if='isAdmin')
+                    Button(size="small" type='button' class='text-white bg-red-500' @click='isEditCmsr=false' v-if='isEditCmsr') Huỷ bỏ
+                    Button(size="small" type='button' name='submit-update-cmsr' :class='["text-white bg-green-crayola",{"pointer-events-none cursor-not-allowed":uploading}]' @press='doUpdateCmsr' v-if='isEditCmsr')
+                      icon-custom-load.w-4.h-4.animate-spin(v-if='settingup')
+                      span(v-else) Cập nhật
+                    Button(size="small" type='button' class='text-white bg-blue-500' @click='isEditCmsr=true' v-else) Chỉnh sửa
     NCollapseItem(title='Thông tin ngân hàng' name='2')
       template(#arrow)
         
@@ -87,14 +115,19 @@ div
 
 <script setup lang="ts">
 // import Loading from '../shared/Loading.vue'
-import { NCollapse, NCollapseItem, NImage, NRate } from 'naive-ui'
+import { NCollapse, NCollapseItem, NImage, NInputNumber, NRate } from 'naive-ui'
 import _omit from 'lodash-es/omit'
 import _capitalize from 'lodash-es/capitalize'
 import { Image2Array } from '@/utils/format'
 import { VIETNAM_BANKING_LIST } from '@/constant/bank'
+import Button from '../shared/button/Button.vue'
+
+// Authorization
+const { isAdmin } = storeToRefs(useAccountsStore())
 
 // ============== GET ROOM BY ID ===============
 const { currentHotel } = storeToRefs(useHotelsStore())
+const hotelId = computed(() => currentHotel.value?.id)
 
 // Hotel Types
 const hotelTypes = computed<
@@ -152,12 +185,30 @@ const bankName = computed(() =>
   VIETNAM_BANKING_LIST.find((bank) => bank.code === currentHotel.value?.bank_name)
 )
 
+// Edit rating & commission rate
+const rating = ref(2)
+const commissionRate = ref(currentHotel.value.commission_rate ?? 0.1)
+const isEditRating = ref(false)
+const isEditCmsr = ref(false)
+const { settingCmsr, updateRating } = useHotel()
+const { isLoading: settingup } = settingCmsr(hotelId.value)
+const { isLoading: uploading } = updateRating(hotelId.value)
+
+async function doUpdateRating() {
+  const { executeApi: mutateUpdateRating } = updateRating(hotelId.value)
+  await mutateUpdateRating(rating.value)
+  isEditRating.value = false
+}
+async function doUpdateCmsr() {
+  const { executeApi: mutateCmsr } = settingCmsr(hotelId.value)
+  await mutateCmsr(commissionRate.value)
+  isEditCmsr.value = false
+}
+
 // Delete image
 const dialog = useDialog()
 
 const { uploadPhotos } = useHotel()
-
-const hotelId = computed(() => currentHotel.value?.id)
 
 function deletePhotos(photoUrl: string) {
   const { executeApi: doUploadPhotos } = uploadPhotos(hotelId.value)
