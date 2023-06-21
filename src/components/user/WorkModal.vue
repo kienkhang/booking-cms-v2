@@ -26,7 +26,7 @@ const emit = defineEmits<{
 const closeModal = () => emit('update:show', false)
 
 // ADD HOTEL HANDLER
-const { getWorks, createWork } = useWork()
+const { createWork } = useWork()
 const { works } = storeToRefs(useWork())
 const hotels = computed(() => works.value.hotels)
 
@@ -40,10 +40,6 @@ const { executeApi: addWork } = createWork(form)
 async function doAddWork() {
   await addWork()
 }
-
-onMounted(() => {
-  getWorks(props.userId).executeApi()
-})
 </script>
 
 <style scoped></style>

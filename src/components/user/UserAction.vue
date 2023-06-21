@@ -9,7 +9,7 @@ NPopover(:show='show' trigger='click' @clickoutside="close" style='padding:4px')
     .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='openUpdateModal()')
       icon-material-symbols:edit.w-4.h-4.flex-shrink-0
       span Chỉnh sửa
-    .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='openWorkListModal()')
+    .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='openWorkListModal()' v-if='updateWorkListAble')
       icon-ic:round-local-hotel.w-4.h-4.flex-shrink-0
       span Nơi làm việc
 UserModal(type='edit' v-model:show="showUpdate" :user='user')
@@ -41,8 +41,17 @@ const update = () => {
 }
 
 const updateWorkListAble = computed(
-  () => props.user.role === 'STAFF' || props.user.role === 'MANAGER'
+  // 5 is manager
+  // 4 is staff
+  () => props.user.role === '5' || props.user.role === '4'
 )
+
+const { getWorks } = useWork()
+
+// When open modal -> getWorks for user modal
+whenever(showWorkList, () => {
+  getWorks(props.user.id).executeApi()
+})
 </script>
 
 <style scoped></style>
