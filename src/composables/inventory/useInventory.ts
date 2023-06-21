@@ -17,7 +17,7 @@ const useInventory = () => {
   const adjustRate = ref(false)
   const toggleAdjustRate = () => (adjustRate.value = !adjustRate.value)
   // rateplan choosen when select rate in dayOfWeek mode
-  const rateplan = ref('rateplanid')
+  const rateplan = ref('')
   const { ratePlans } = useRatePlan()
   whenever(ratePlans, () => {
     rateplan.value = ratePlans.value[0]?.id
