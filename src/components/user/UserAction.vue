@@ -39,6 +39,10 @@ const openWorkListModal = () => (showWorkList.value = true)
 const update = () => {
   console.log(props.user.id)
 }
+
+const updateWorkListAble = computed(
+  () => props.user.role === 'STAFF' || props.user.role === 'MANAGER'
+)
 </script>
 
 <style scoped></style>
