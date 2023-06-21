@@ -16,15 +16,15 @@
     SidebarItem(:activated='route.name==="user"' label='User' page='user')
       template(#icon)
         icon-mdi:user.w-6.h-6
-    SidebarItem(:activated='route.name==="cmsr"' label='Tỉ lệ hoa hồng' page='cmsr')
-      template(#icon)
-        icon-custom-rate.w-6.h-6
+    //- SidebarItem(:activated='route.name==="cmsr"' label='Tỉ lệ hoa hồng' page='cmsr')
+    //-   template(#icon)
+    //-     icon-custom-rate.w-6.h-6
     SidebarItem(:activated='route.name==="report"' label='Thống kê' page='report')
       template(#icon)
         icon-custom-money.w-6.h-6
-    SidebarItem(:activated='route.name==="test"' label='Upload file' page='test')
-      template(#icon)
-        icon-custom-error.w-6.h-6
+    //- SidebarItem(:activated='route.name==="test"' label='Upload file' page='test')
+    //-   template(#icon)
+    //-     icon-custom-error.w-6.h-6
 
 </template>
 
