@@ -81,7 +81,7 @@ const { createRatePlan, updateRatePlan } = useRatePlan()
 
 const { executeApi: exeCreate } = createRatePlan(form)
 
-const { executeApi: exeUpdate } = updateRatePlan(form, roomId.value)
+const { executeApi: exeUpdate } = updateRatePlan(form, props.ratePlan.id)
 
 const doSubmit = async () => {
   if (!isEditForm.value) {
