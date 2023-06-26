@@ -21,4 +21,5 @@ import UsersTable from '@/components/user/UsersTable.vue'
 <route lang="yaml">
 meta:
   layout: dashboard
+  requiredAuth: true
 </route>
