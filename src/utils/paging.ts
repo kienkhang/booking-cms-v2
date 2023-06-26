@@ -10,17 +10,23 @@ const calculatePaging = <T>({
   offset,
   page,
   sData,
-  total_items
+  total_items,
+  server_page,
+  server_offset
 }: {
   page: number
   offset: number
   total_items: number
-  sData: T[]
+  server_page: number
+  server_offset: number
+  sData: Ref<T[]>
 }): IClientPaging<T> => {
+  const end = computed(() => {
+    return offset * page - (server_page - 1) * server_offset
+  })
+  const start = computed(() => end.value - offset)
   const total_pages = computed(() => Math.ceil(total_items / offset))
-  const start = computed(() => (page - 1) * offset)
-  const end = computed(() => page * offset)
-  const data = computed(() => sData.slice(start.value, end.value))
+  const data = computed(() => sData.value.slice(start.value, end.value))
 
   return {
     data: data.value,
