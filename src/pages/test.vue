@@ -71,14 +71,14 @@ const { executeApi: fetchHotels } = getHotels()
 const pagination = reactive({
   page: 1,
   // client_offset -> offset per page
-  pageSize: 2,
+  pageSize: 3,
   // toal_page ->
   pageCount: paging.value.total_pages
 })
 
 const cPaging = computed(() =>
   calculatePaging({
-    offset: 2,
+    offset: 3,
     page: pagination.page,
     sData: hotels,
     total_items: paging.value.total_items,
@@ -102,12 +102,12 @@ function callApiChange() {
   // Increment page filter
   // if( client_page * client_offset > server_page * server_offset)
   if (pagination.page * pagination.pageSize > filter.value.page * filter.value.offset) {
-    filter.value.page += 1
+    filter.value.page = Math.ceil(pagination.page / (filter.value.offset / pagination.pageSize))
     fetchHotels()
   }
   // Decrement page filter
   else if ((filter.value.page - 1) * filter.value.offset >= pagination.page * pagination.pageSize) {
-    filter.value.page -= 1
+    filter.value.page = Math.ceil(pagination.page / (filter.value.offset / pagination.pageSize))
     fetchHotels()
   }
 }
