@@ -20,6 +20,7 @@ div
   NPagination(
         v-model:page='pagination.page',
         :page-count='cPaging?.total_pages'
+        @update-page='callApiChange'
       )
 </template>
 
@@ -86,34 +87,17 @@ const cPaging = computed(() =>
     server_offset: paging.value.offset
   })
 )
-
 const pagingData = computed(() => cPaging.value.data)
-
-whenever(paging, () => {
-  // pagination.itemCount = paging.value.total_items
-  pagination.pageCount = paging.value.total_pages
-})
-
-// function updatePage(page:number){
-//   pagination
-// }
-
 function callApiChange() {
-  // Increment page filter
-  // if( client_page * client_offset > server_page * server_offset)
-  if (pagination.page * pagination.pageSize > filter.value.page * filter.value.offset) {
-    filter.value.page = Math.ceil(pagination.page / (filter.value.offset / pagination.pageSize))
+  cPaging.value.changeServerPage(() => {
+    filter.value.page = cPaging.value.alpha
     fetchHotels()
-  }
-  // Decrement page filter
-  else if ((filter.value.page - 1) * filter.value.offset >= pagination.page * pagination.pageSize) {
-    filter.value.page = Math.ceil(pagination.page / (filter.value.offset / pagination.pageSize))
-    fetchHotels()
-  }
+  })
 }
 
-watch(pagination, () => {
-  callApiChange()
+// When fetch successful paging, exist totalPage -> assign pageCount
+whenever(paging, () => {
+  pagination.pageCount = paging.value.total_pages
 })
 
 onMounted(() => {
