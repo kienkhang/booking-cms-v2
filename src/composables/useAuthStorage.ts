@@ -9,8 +9,9 @@ const useAuthStorage = () => {
   const getToken = (): string => get(token)
   const getRToken = (): string => get(refresh)
 
-  const setToken = (value: string) => set(token, value, { path: '/' })
-  const setRToken = (value: string) => set(refresh, value, { path: '/' })
+  const setToken = (value: string) => set(token, value, { domain: import.meta.env.VITE_APP_DOMAIN })
+  const setRToken = (value: string) =>
+    set(refresh, value, { domain: import.meta.env.VITE_APP_DOMAIN })
 
   const removeToken = () => {
     remove(token)
