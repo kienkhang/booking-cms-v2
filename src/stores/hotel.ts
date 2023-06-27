@@ -61,7 +61,7 @@ const useHotelStore = () => {
             hotels.value = data.value.data
             paging.value = data.value.paging
             // reset filter
-            filter.value = null
+            // filter.value = null
           } catch (e) {
             throw new Error(e)
           }

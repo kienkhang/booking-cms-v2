@@ -10,10 +10,24 @@ div
           button(type="submit" class='p-2 text-white bg-green-500 rounded-md') {{ isLoading ? "Loading...":"Send" }}
     div(v-for='file in files' v-if='files')
       span {{ file.name }}
+
+  //- test call page
+  NDataTable(
+    :columns='columns',
+    :data='pagingData'
+    :pagination='false'
+   )
+  NPagination(
+        v-model:page='pagination.page',
+        :page-count='cPaging?.total_pages'
+        @update-page='callApiChange'
+      )
 </template>
 
 <script setup lang="ts">
 import { uploadFiles } from '@/apis/file'
+import { calculatePaging } from '@/utils/paging'
+import { type DataTableColumns, NDataTable, NPagination } from 'naive-ui'
 
 const files = ref<File[]>([])
 const { execute, isLoading } = uploadFiles({})
@@ -30,9 +44,73 @@ const doSubmit = async () => {
     await execute({ data: formData })
   }
 }
+
+// test call page
+function createColumn(): DataTableColumns<
+  {
+    id: string
+    name: string
+  }[]
+> {
+  return [
+    {
+      title: 'ID',
+      key: 'id'
+    },
+    {
+      title: 'Name',
+      key: 'name'
+    }
+  ]
+}
+
+const columns = createColumn()
+const { hotels, filter, paging } = storeToRefs(useHotelsStore())
+const { getHotels } = useHotelsStore()
+const { executeApi: fetchHotels } = getHotels()
+
+const pagination = reactive({
+  page: 1,
+  // client_offset -> offset per page
+  pageSize: 3,
+  // toal_page ->
+  pageCount: paging.value.total_pages
+})
+
+const cPaging = computed(() =>
+  calculatePaging({
+    offset: 3,
+    page: pagination.page,
+    sData: hotels,
+    total_items: paging.value.total_items,
+    server_page: paging.value.page,
+    server_offset: paging.value.offset
+  })
+)
+const pagingData = computed(() => cPaging.value.data)
+function callApiChange() {
+  cPaging.value.changeServerPage(() => {
+    filter.value.page = cPaging.value.alpha
+    fetchHotels()
+  })
+}
+
+// When fetch successful paging, exist totalPage -> assign pageCount
+whenever(paging, () => {
+  pagination.pageCount = paging.value.total_pages
+})
+
+onMounted(() => {
+  filter.value = {
+    page: 1,
+    offset: 6
+  }
+  fetchHotels()
+})
 </script>
 
 <route lang="yaml">
 meta:
   layout: dashboard
+  requiredAuth: true
 </route>

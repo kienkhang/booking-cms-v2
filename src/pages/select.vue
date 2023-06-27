@@ -64,11 +64,12 @@ const cPaging = computed(() =>
   calculatePaging({
     offset: 6,
     page: page.value,
-    sData: hotels.value,
-    total_items: paging.value.total_items
+    sData: hotels,
+    total_items: paging.value.total_items,
+    server_offset: paging.value.offset,
+    server_page: paging.value.page
   })
 )
-
 const pagingData = computed(() => cPaging.value.data)
 
 // ---- HANDLE SEARCH HOTEL ----
@@ -87,27 +88,25 @@ const hotelOptions = computed(() => {
 watchDebounced(
   search,
   async () => {
+    // Reset page from BE
     filter.value = {
       search: search.value,
       offset: 50,
       page: 1
     }
+    // Reset page from FE
+    page.value = 1
     await fetchHotel()
   },
   { debounce: 1000 }
 )
 
 // ---- HANDLE PAGING HOTEL ----
-
-const updatePage = async (page: number) => {
-  if (page * 6 > paging.value.page * paging.value.offset) {
-    filter.value = {
-      search: search.value,
-      page: paging.value.page + 1,
-      offset: 50
-    }
-    await fetchHotel()
-  }
+const updatePage = async () => {
+  cPaging.value.changeServerPage(() => {
+    filter.value.page = cPaging.value.alpha
+    fetchHotel()
+  })
 }
 
 onMounted(async () => {

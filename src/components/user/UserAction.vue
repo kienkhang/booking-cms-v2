@@ -9,11 +9,11 @@ NPopover(:show='show' trigger='click' @clickoutside="close" style='padding:4px')
     .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='openUpdateModal()')
       icon-material-symbols:edit.w-4.h-4.flex-shrink-0
       span Chỉnh sửa
-    .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' @click='openWorkListModal()' v-if='updateWorkListAble')
+    .flex.items-center.gap-2.px-2.py-1.cursor-pointer(class='hover:bg-slate-50' v-if='updateWorkListAble' @click='openWorkListModal()')
       icon-ic:round-local-hotel.w-4.h-4.flex-shrink-0
       span Nơi làm việc
 UserModal(type='edit' v-model:show="showUpdate" :user='user')
-WorkModal(v-model:show="showWorkList" :user-id='user.id')
+WorkModal(v-model:show="showWorkList" :user-id='user.id' v-if='updateWorkListAble')
 </template>
 
 <script setup lang="ts">
@@ -31,10 +31,14 @@ const close = () => (show.value = false)
 // open close modal
 // --- update user modal ----
 const showUpdate = ref(false)
-const openUpdateModal = () => (showUpdate.value = true)
+const openUpdateModal = () => {
+  showUpdate.value = true
+}
 // --- user's work modal ----
 const showWorkList = ref(false)
-const openWorkListModal = () => (showWorkList.value = true)
+const openWorkListModal = () => {
+  showWorkList.value = true
+}
 
 const update = () => {
   console.log(props.user.id)
