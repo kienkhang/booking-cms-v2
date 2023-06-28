@@ -91,7 +91,7 @@ watchDebounced(
     // Reset page from BE
     filter.value = {
       search: search.value,
-      offset: 50,
+      offset: 48,
       page: 1
     }
     // Reset page from FE
@@ -114,7 +114,7 @@ onMounted(async () => {
   currentHotel.value = null
   // reset paging and call api hotels
   filter.value = {
-    offset: 50,
+    offset: 48,
     page: 1
   }
   await fetchHotel()
