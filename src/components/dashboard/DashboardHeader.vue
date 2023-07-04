@@ -5,7 +5,8 @@ div.flex.items-center(class='h-[100px] gap-2.5 py-4 px-5 bg-white')
     icon-custom-siphoria-notext(class='w-max h-[80px]')
     .font-bold.text-lg Siphoria
   .main-header.flex.items-center.flex-grow.justify-between
-    DashboardSearch
+    //- DashboardSearch
+    .p-2
     .flex.items-center.gap-5
       DashboardNotification
       DashboardAvatar
