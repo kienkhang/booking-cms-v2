@@ -41,6 +41,12 @@ NForm(
       style='width:100%'
       :is-date-disabled='disablePreviousDate'
     )
+  NFormItem(label='Except')
+    NSelect(
+      multiple 
+      v-model:value='form.except_room'
+      :options='exceptOptions'
+    )
   NFormItem(style='width:100%')
     NButton(class='w-full p-3 border' @click='doSubmit') Submit
 
@@ -56,7 +62,8 @@ import {
   NForm,
   NFormItem,
   NInput,
-  NButton
+  NButton,
+  NSelect
 } from 'naive-ui'
 import dayjs from 'dayjs'
 import voucher_codes from 'voucher-code-generator'
@@ -78,6 +85,23 @@ whenever(hotelId, () => {
   form.value.hotel_id = hotelId.value
 })
 
+// ======= HANDLE SELECT EXCEPT ROOM ========
+// Get room to bind value
+const { rooms } = storeToRefs(useRoomStore())
+const { getRooms } = useRoomStore()
+const { executeApi: fetchRooms } = getRooms()
+onMounted(() => fetchRooms())
+
+// Define options
+const exceptOptions = computed(() => {
+  return rooms.value.map((room) => {
+    return {
+      label: room.name,
+      value: room.id
+    }
+  })
+})
+
 // Define from ref
 const formRef = ref<FormInst | null>(null)
 // Define form value
@@ -88,7 +112,8 @@ const form = ref({
   discount: 0.15,
   begin_at: +dayjs(),
   end_at: +dayjs(),
-  code: ''
+  code: '',
+  except_room: []
 })
 // Define form rules
 const rules = ref<FormRules>({

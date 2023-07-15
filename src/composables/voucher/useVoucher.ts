@@ -18,8 +18,26 @@ function useVoucher() {
     }
   }
 
+  function updateVoucher(form: Ref<{} | any>, voucherId: string) {
+    const usedUpdate = voucherApi.update(form, voucherId)
+
+    const { execute } = usedUpdate
+    async function callUpdate(format: any) {
+      try {
+        await execute({ data: format })
+      } catch (error) {
+        throw error
+      }
+    }
+    return {
+      ...usedUpdate,
+      callUpdate
+    }
+  }
+
   return {
-    createVoucher
+    createVoucher,
+    updateVoucher
   }
 }
 

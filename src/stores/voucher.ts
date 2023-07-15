@@ -3,7 +3,7 @@ import { calculatePaging } from '@/utils/paging'
 
 const useVoucherStore = defineStore('store__voucher', () => {
   // State & value
-  const vouchers = ref([])
+  const vouchers = ref<IVoucher[]>([])
   // server response paging
   const paging = ref<IResponsePaging>({
     offset: 0,
@@ -25,7 +25,7 @@ const useVoucherStore = defineStore('store__voucher', () => {
       page: page.value,
       server_offset: paging.value.offset,
       server_page: paging.value.page,
-      sData: vouchers,
+      serverData: vouchers,
       total_items: paging.value.total_items
     })
   )

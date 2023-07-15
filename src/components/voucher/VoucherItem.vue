@@ -2,27 +2,44 @@
 .bg-white.rounded-lg.w-64.border.overflow-hidden
   .flex.flex-col
     .flex.items-center.gap-4.px-4.py-3.shadow-md.bg-crayola.text-white
-      icon-mdi-voucher-outline.w-6.h-6.flex-shrink-0
-      span.text-lg.font-bold.line-clamp-2 Chiến dịch du lịch khắp nơi mùa hè
-    .px-4.py-3
+      icon-mdi:pencil.w-5.h-5.flex-shrink-0.cursor-pointer(class='hover:animate-pulse' @click='openModal()')
+      span.text-lg.font-bold.line-clamp-2 {{ voucher.name }}
+    .px-4.py-3.space-y-4
       .flex.items-center.justify-between
         span.font-bold Code
-        span XXXXXXX
+        span {{ voucher.code }}
       .flex.items-center.justify-between
         span.font-bold Expire
         span {{ format }}
-      
+  NModal(
+    :show='show'
+    @mask-click='closeModal'
+  )
+    .bg-white.rounded-lg.max-w-lg.w-full.px-5.pt-6(class='overflow-auto scroll-hide')
+      EditVoucherForm(@close-modal='closeModal' :voucher='voucher')
 
 </template>
 
 <script setup lang="ts">
 import dayjs from 'dayjs'
+import { NModal } from 'naive-ui'
+import EditVoucherForm from './EditVoucherForm.vue'
 
-const begin = useNow()
-const end = useNow()
-const format = `${dayjs(begin.value).format('YYYY-MM-DD')} - ${dayjs(end.value).format(
-  'YYYY-MM-DD'
-)}`
+const props = defineProps<{
+  voucher: IVoucher
+}>()
+
+const format = `${dayjs(props.voucher.begin_at).format('YYYY-MM-DD')} - ${dayjs(
+  props.voucher.end_at
+).format('YYYY-MM-DD')}`
+
+const show = ref(false)
+function closeModal() {
+  show.value = false
+}
+function openModal() {
+  show.value = true
+}
 </script>
 
 <style scoped></style>

@@ -32,12 +32,20 @@ NForm(
       v-model:value='form.begin_at'
       type='date'
       style='width:100%'
+      :is-date-disabled='disablePreviousDate'
     )
   NFormItem( label='End' path='end_at')
     NDatePicker(
       v-model:value='form.end_at'
       type='date'
       style='width:100%'
+      :is-date-disabled='disablePreviousDate'
+    )
+  NFormItem(label='Except')
+    NSelect(
+      multiple 
+      v-model:value='form.except_room'
+      :options='exceptOptions'
     )
   NFormItem(style='width:100%')
     NButton(class='w-full p-3 border' @click='doSubmit') Submit
@@ -54,38 +62,49 @@ import {
   NForm,
   NFormItem,
   NInput,
-  NButton
+  NButton,
+  NSelect
 } from 'naive-ui'
 import dayjs from 'dayjs'
 import voucher_codes from 'voucher-code-generator'
 
 const props = defineProps<{
-  voucher: {}
+  voucher: IVoucher
 }>()
 
-// Get hotel from store
-const { currentHotel: hotel } = storeToRefs(useHotelsStore())
-const hotelId = computed(() => {
-  if (hotel.value) {
-    return hotel.value.id
-  }
-})
-// Whenever exist hotelid -> set hotel id
-whenever(hotelId, () => {
-  form.value.hotel_id = hotelId.value
+const emit = defineEmits<{
+  (e: 'close-modal'): void
+}>()
+
+// ======= HANDLE SELECT EXCEPT ROOM ========
+// Get room to bind value
+const { rooms } = storeToRefs(useRoomStore())
+const { getRooms } = useRoomStore()
+const { executeApi: fetchRooms } = getRooms()
+onMounted(() => fetchRooms())
+
+// Define options
+const exceptOptions = computed(() => {
+  return rooms.value.map((room) => {
+    return {
+      label: room.name,
+      value: room.id
+    }
+  })
 })
 
 // Define from ref
 const formRef = ref<FormInst | null>(null)
 // Define form value
 const form = ref({
-  hotel_id: hotelId.value,
-  activate: false,
-  name: '',
-  discount: 0.15,
-  begin_at: +dayjs(),
-  end_at: +dayjs(),
-  code: ''
+  hotel_id: props.voucher.hotel_id,
+  activate: props.voucher.activated,
+  name: props.voucher.name,
+  discount: props.voucher.discount,
+  begin_at: +dayjs(props.voucher.begin_at),
+  end_at: +dayjs(props.voucher.end_at),
+  code: props.voucher.code,
+  except_room: []
 })
 // Define form rules
 const rules = ref<FormRules>({
@@ -110,16 +129,32 @@ function generateCode() {
   form.value.code = codes[0]
 }
 
+// Call api create voucher
+const { updateVoucher } = useVoucher()
+const { callUpdate } = updateVoucher(form, props.voucher.id)
+
 // Submit
 function doSubmit(e: MouseEvent) {
   e.preventDefault()
   formRef.value?.validate((errors) => {
     if (!errors) {
-      console.log('form', { ...form.value })
+      const format = {
+        ...form.value,
+        begin_at: dayjs(form.value.begin_at).format('YYYY-MM-DD'),
+        end_at: dayjs(form.value.end_at).format('YYYY-MM-DD')
+      }
+      console.log('form', { ...format })
+      callUpdate(format)
+      emit('close-modal')
     } else {
       // console.log(errors)
     }
   })
+}
+
+// // disable previous dates
+function disablePreviousDate(ts: number) {
+  return ts < Date.now()
 }
 </script>
 
