@@ -1,6 +1,11 @@
 import { voucherApi } from '@/apis/voucher'
 
 function useVoucher() {
+  const { hotelId } = useHotelStorage()
+  // Get voucher
+  const { getVouchers } = useVoucherStore()
+  const { executeApi: fetchVouchers } = getVouchers(hotelId.value)
+
   function createVoucher(form: Ref<{} | any>) {
     const usedCreate = voucherApi.create(form)
 
@@ -8,6 +13,7 @@ function useVoucher() {
     async function callCreate(format: any) {
       try {
         await execute({ data: format })
+        fetchVouchers()
       } catch (error) {
         throw error
       }
@@ -25,6 +31,7 @@ function useVoucher() {
     async function callUpdate(format: any) {
       try {
         await execute({ data: format })
+        fetchVouchers()
       } catch (error) {
         throw error
       }

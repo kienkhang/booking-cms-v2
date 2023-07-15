@@ -11,14 +11,9 @@ const { hotelId } = useHotelStorage()
 //   form.value.hotel_id = hotelId.value
 // })
 
-// Gedt voucher
+// Get voucher
 const { getVouchers } = useVoucherStore()
-
-async function fetchVouchers() {
-  const { executeApi } = getVouchers(hotelId.value)
-
-  await executeApi()
-}
+const { executeApi: fetchVouchers } = getVouchers(hotelId.value)
 
 onMounted(() => {
   fetchVouchers()
