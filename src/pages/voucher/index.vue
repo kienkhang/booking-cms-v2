@@ -5,12 +5,7 @@ div
 
 <script setup lang="ts">
 // Get hotel from store
-const { currentHotel: hotel } = storeToRefs(useHotelsStore())
-const hotelId = computed(() => {
-  if (hotel.value) {
-    return hotel.value.id
-  }
-})
+const { hotelId } = useHotelStorage()
 // Whenever exist hotelid -> set hotel id
 // whenever(hotelId, () => {
 //   form.value.hotel_id = hotelId.value
@@ -25,10 +20,8 @@ async function fetchVouchers() {
   await executeApi()
 }
 
-watch(hotelId, () => {
-  if (hotelId.value) {
-    fetchVouchers()
-  }
+onMounted(() => {
+  fetchVouchers()
 })
 </script>
 
