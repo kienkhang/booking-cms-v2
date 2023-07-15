@@ -81,7 +81,7 @@ const cPaging = computed(() =>
   calculatePaging({
     offset: 3,
     page: pagination.page,
-    sData: hotels,
+    serverData: hotels,
     total_items: paging.value.total_items,
     server_page: paging.value.page,
     server_offset: paging.value.offset
