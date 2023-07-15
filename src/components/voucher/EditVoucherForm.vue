@@ -104,7 +104,7 @@ const form = ref({
   begin_at: +dayjs(props.voucher.begin_at),
   end_at: +dayjs(props.voucher.end_at),
   code: props.voucher.code,
-  except_room: []
+  except_room: props.voucher.excepts.map((ex) => ex.room_type_id)
 })
 // Define form rules
 const rules = ref<FormRules>({
