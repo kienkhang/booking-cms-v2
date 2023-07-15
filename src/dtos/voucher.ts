@@ -34,5 +34,10 @@ interface IVoucher {
     discount_hotel: number
     room_types: any
   }
-  excepts: any[]
+  excepts: {
+    created_at: string
+    updated_at: string
+    voucher_id: string
+    room_type_id: string
+  }[]
 }
