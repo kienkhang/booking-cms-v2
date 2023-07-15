@@ -4,7 +4,7 @@ div.h-full.w-full
     NBreadcrumb
       NBreadcrumbItem
         .page-title.font-bold.text-2xl Hotel
-    Button(@press="open" color='text-white' bgcolor='bg-orange-600' size='medium' @click='gotoSelect()')
+    Button(color='text-white' bgcolor='bg-orange-600' size='medium' @click='gotoSelect()')
       icon-ic:round-keyboard-return.w-6.h-6.flex-shrink-0
       .font-bold Chọn khách sạn
   .flex.items-center.mb-2.cursor-pointer.select-none.text-roman-silver.w-max
@@ -22,10 +22,6 @@ import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui'
 // Route & Router
 const router = useRouter()
 const gotoSelect = () => router.push({ name: 'select' })
-
-// Add room modal
-const show = ref(false)
-const open = () => (show.value = true)
 
 // Animate screen
 const [animate] = useAutoAnimate({})
