@@ -29,9 +29,12 @@ const props = defineProps<{
   voucher: IVoucher
 }>()
 
-const format = `${dayjs(props.voucher.begin_at).format('YYYY-MM-DD')} - ${dayjs(
-  props.voucher.end_at
-).format('YYYY-MM-DD')}`
+const format = computed(
+  () =>
+    `${dayjs(props.voucher.begin_at).format('YYYY-MM-DD')} - ${dayjs(props.voucher.end_at).format(
+      'YYYY-MM-DD'
+    )}`
+)
 
 const show = ref(false)
 function closeModal() {
