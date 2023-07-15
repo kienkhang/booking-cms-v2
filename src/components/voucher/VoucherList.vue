@@ -1,6 +1,6 @@
 <template lang="pug">
 div.grid.grid-cols-3.gap-5
-  .voucher-item(v-for='voucher in vouchers')
+  .voucher-item(v-for='voucher in vouchers' :key='voucher.id')
     VoucherItem(:voucher='voucher')
 
 
