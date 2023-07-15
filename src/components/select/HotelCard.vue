@@ -18,13 +18,15 @@ import type { IHotel } from '@/dtos'
 import emptyPhoto from '@/assets/images/hotela.jpg'
 import { Image2Array } from '@/utils/format'
 
-const router = useRouter()
-
-const { hotelId } = useHotelStorage()
-
 const props = defineProps<{
   hotel: IHotel
 }>()
+
+const router = useRouter()
+const route = useRoute()
+const from = route.redirectedFrom
+
+const { hotelId } = useHotelStorage()
 
 const overlayPhoto = computed(() => {
   if (props.hotel.hotel_photos) {
@@ -36,8 +38,18 @@ const overlayPhoto = computed(() => {
 })
 
 const selectHotel = () => {
-  hotelId.value = props.hotel.id
-  router.push('/')
+  if (from && from.name !== 'select') {
+    hotelId.value = props.hotel.id
+    router.push({
+      name: from.name,
+      params: from.params,
+      query: from.query
+    })
+  } else {
+    router.push({
+      name: 'hotel'
+    })
+  }
 }
 </script>
 
