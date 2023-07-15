@@ -5,7 +5,7 @@ NForm(
   :model='form'
 )
   NFormItem(label='Kích hoạt', path='activate')
-    NSwitch.w-full(v-model:value='form.activate' style="width:max-content")
+    NSwitch.w-full(v-model:value='form.activated' style="width:max-content")
   NFormItem( label='Tên voucher' path='name')
     NInput(
       placeholder="Input voucher name",
@@ -98,7 +98,7 @@ const formRef = ref<FormInst | null>(null)
 // Define form value
 const form = ref({
   hotel_id: props.voucher.hotel_id,
-  activate: props.voucher.activated,
+  activated: props.voucher.activated,
   name: props.voucher.name,
   discount: props.voucher.discount,
   begin_at: +dayjs(props.voucher.begin_at),
