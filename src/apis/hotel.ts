@@ -65,6 +65,7 @@ class Hotel {
     const url = `${path}/${hotelId}/rooms`
     return useGet({ url, params, requiredToken: true })
   }
+
   updatePhotos = (params: UploadPhoto | {}, hotelId: string) => {
     const url = `${path}/${hotelId}/photos`
     return usePatch({
@@ -75,6 +76,7 @@ class Hotel {
       }
     })
   }
+
   updateBL = (data: { images: File } | {}, hotelId: string) => {
     const url = `${path}/${hotelId}/business-license`
     return usePatch({
@@ -85,6 +87,11 @@ class Hotel {
       },
       requiredToken: true
     })
+  }
+
+  getVouchers = (params: any | {}, hotelId: string) => {
+    const url = `${path}/${hotelId}/vouchers`
+    return useGet({ url, params, requiredToken: true })
   }
 }
 

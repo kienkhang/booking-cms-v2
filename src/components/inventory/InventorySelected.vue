@@ -51,7 +51,6 @@ const updateRoom = () => {
 
 // Destructuring fetch inventory function
 const { getInventories } = useInventoryStore()
-const {} = storeToRefs(useInventory())
 const { getRatePlans } = useRatePlan()
 const { query, roomId } = useMutateInventory()
 // Each month, year, room change -> fetch api get inventories

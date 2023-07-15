@@ -2,8 +2,6 @@
 div.h-full.w-full
   .flex.items-center.justify-between.h-12
     .page-title.font-bold.text-2xl Hotel
-    Button(@press="hi()" color='text-white' bgcolor='bg-green-500' size='large')
-      .font-bold Hello
   .flex.items-center.mb-2.cursor-pointer.select-none.text-roman-silver.w-max
     icon-custom-left-arrow.h-4.w-auto
     span.text-sm.font-semibold Trở về
@@ -11,11 +9,7 @@ div.h-full.w-full
     div This is hotel page
 </template>
 
-<script setup lang="ts">
-import Button from '@/components/shared/button/Button.vue'
-
-const hi = () => console.log('HI')
-</script>
+<script setup lang="ts"></script>
 
 <route lang="yaml">
 meta:
