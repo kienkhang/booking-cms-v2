@@ -13,7 +13,7 @@ import type { IRatePlan } from '@/dtos'
 import Modal from './Modal.vue'
 import RatePlanForm from '@/components/rateplan/RatePlanForm.vue'
 // Define Props
-const props = defineProps<{
+defineProps<{
   show: boolean
   type: 'add' | 'edit'
   ratePlan?: IRatePlan
@@ -23,17 +23,19 @@ const emit = defineEmits<{
   (e: 'update:show', value: boolean): void
 }>()
 // Define Models
-const show = computed({
-  set() {
-    emit('update:show', !show.value)
-  },
-  get() {
-    return props.show
-  }
-})
+// const show = computed({
+//   set() {
+//     emit('update:show', !show.value)
+//   },
+//   get() {
+//     return props.show
+//   }
+// })
 
 // close modal
-const closeModal = () => (show.value = false)
+const closeModal = () => {
+  emit('update:show', false)
+}
 </script>
 
 <style scoped></style>

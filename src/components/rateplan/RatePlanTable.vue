@@ -6,7 +6,7 @@
         icon-ic:round-plus.w-6.h-6.flex-shrink-0
         .font-bold Thêm
   NDataTable(:columns='columns' :data='ratePlans' :bordered='true' :pagination='pagination' :loading='isLoading')
-RatePlanModal(type='add' v-model:show='visible')
+  RatePlanModal(type='add' v-model:show='visible')
 
 </template>
 

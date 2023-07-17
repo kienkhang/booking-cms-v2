@@ -46,7 +46,7 @@ const options = ref([
 const isEditForm = computed(() => props.type === 'edit')
 
 // get roomId from url
-const roomId = computed(() => route.params.id as string)
+const roomId = computed(() => route.params?.id as string)
 
 // create form
 const form = ref({
@@ -81,7 +81,7 @@ const { createRatePlan, updateRatePlan } = useRatePlan()
 
 const { executeApi: exeCreate } = createRatePlan(form)
 
-const { executeApi: exeUpdate } = updateRatePlan(form, props.ratePlan.id)
+const { executeApi: exeUpdate } = updateRatePlan(form, props.ratePlan?.id)
 
 const doSubmit = async () => {
   if (!isEditForm.value) {
