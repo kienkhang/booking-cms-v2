@@ -38,8 +38,8 @@ const overlayPhoto = computed(() => {
 })
 
 const selectHotel = () => {
+  hotelId.value = props.hotel.id
   if (from && from.name !== 'select') {
-    hotelId.value = props.hotel.id
     router.push({
       name: from.name,
       params: from.params,
