@@ -20,7 +20,7 @@ const accountStore = () => {
   const isStaff = computed(() => role.value === 'STAFF')
   const isManager = computed(() => role.value === 'MANAGER')
 
-  const setAccount = (acc: IUser) => {
+  const setAccount = (acc: IUser | undefined) => {
     account.value = acc
   }
 

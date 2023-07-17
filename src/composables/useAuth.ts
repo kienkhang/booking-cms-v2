@@ -4,6 +4,8 @@ import accountStore from '@/stores/account'
 
 const useAuth = () => {
   const { setToken, setRToken, removeToken } = useAuthStorage()
+  const { setAccount } = useAccountsStore()
+
   const login = (form: { email: string; password: string }) => {
     const usedLogin = authApi.login({})
     const { execute, isFinished, data } = usedLogin
@@ -82,9 +84,8 @@ const useAuth = () => {
     }
   }
   const logout = () => {
-    return new Promise((resolve) => {
-      resolve(removeToken())
-    })
+    removeToken()
+    setAccount(null)
   }
 
   return {
