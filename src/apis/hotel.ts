@@ -57,7 +57,7 @@ class Hotel {
   }
 
   partnerGetHotel = (params: any | {}) => {
-    const url = path
+    const url = `${path}/`
     return useGet({ url, params, requiredToken: true })
   }
 

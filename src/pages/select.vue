@@ -16,7 +16,7 @@ div.h-full.w-full
           @update:page='updatePage'
         )
     .p-6.rounded-lg.shadow-md.bg-white.overflow-auto.scrollbar-gradient(class='' ref='animate' v-else)
-      HotelTabs
+      HotelInfoForm
 
 </template>
 
@@ -24,12 +24,13 @@ div.h-full.w-full
 // import HotelTabs from '@/components/hotel/HotelTabs.vue'
 // import HotelCard from '@/components/select/HotelCard.vue'
 // import Loading from '@/components/shared/Loading.vue'
+import HotelInfoForm from '@/components/hotel/HotelInfoForm.vue'
 import { useHotelsStore } from '@/stores'
 import { calculatePaging } from '@/utils/paging'
 import { NPagination } from 'naive-ui'
 // Components
 const Loading = defineAsyncComponent(() => import('@/components/shared/Loading.vue'))
-const HotelTabs = defineAsyncComponent(() => import('@/components/hotel/HotelTabs.vue'))
+// const HotelTabs = defineAsyncComponent(() => import('@/components/hotel/HotelTabs.vue'))
 const HotelCard = defineAsyncComponent(() => import('@/components/select/HotelCard.vue'))
 // Get account store
 // Get hotel store
@@ -51,7 +52,7 @@ const fetchHotel = async () => {
 
 // Hotel empty -> show create hotel form
 // else -> show hotel card
-const isEmpty = computed(() => !!currentHotel.value === false && !hotels.value)
+const isEmpty = computed(() => !!currentHotel.value === false && hotels.value.length <= 0)
 const content = computed(() => {
   if (isEmpty.value) return 'Bạn chưa có khách sạn, vui lòng liên lạc với quản trị viên'
   else return 'Chọn khách sạn để thao tác'

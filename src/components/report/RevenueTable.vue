@@ -195,9 +195,9 @@ const columns = createColumns({
 })
 
 // ========== HANDLE SEND PAYOUT REQUEST ========
-
+const payoutSelects = computed(() => ({ payments: checkedRowKeys.value }))
 const { send } = useRequestPayout()
-const { executeApi: callSend } = send(checkedRowKeys, hotelId.value)
+const { executeApi: callSend } = send(payoutSelects, hotelId.value)
 
 function sendPayout() {
   dialog.info({

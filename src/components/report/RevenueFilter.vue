@@ -51,6 +51,13 @@ const revenueOptions = [
     value: 'paid'
   }
 ]
+
+const { filter } = storeToRefs(useReport())
+
+function getToday() {}
+function getAWeekAgo() {}
+
+function getAMonthAgo() {}
 </script>
 
 <style scoped></style>
