@@ -1,6 +1,9 @@
 import { hotelsApi } from '@/apis/hotel'
 
 function useRequestPayout() {
+  const { getReports } = useReport()
+  const { executeApi: fetchReports } = getReports()
+
   function send(data: Ref<any | {}>, hotelId: string) {
     const usedSend = hotelsApi.sendPayout(data, hotelId)
 
@@ -9,6 +12,7 @@ function useRequestPayout() {
     async function executeApi() {
       try {
         await execute({ data: data.value })
+        fetchReports()
       } catch (error) {
         throw error
       }

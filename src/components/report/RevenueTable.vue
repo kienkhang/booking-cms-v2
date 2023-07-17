@@ -94,7 +94,7 @@ function createColumns({
     {
       type: 'selection',
       disabled(row) {
-        return ['send', 'paid'].includes(row.payout_status)
+        return ['sent', 'paid'].includes(row.payout_status)
       }
     },
     {
@@ -207,6 +207,8 @@ function sendPayout() {
     negativeText: 'Huỷ',
     async onPositiveClick() {
       await callSend()
+      // Reset checkbox
+      checkedRowKeys.value = []
       dialog.destroyAll()
     },
     onNegativeClick() {
