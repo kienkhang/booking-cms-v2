@@ -67,6 +67,10 @@ const useReport = defineStore('__useReport', () => {
     }
   }
 
+  watch(hotelId, () => {
+    filter.value.id = hotelId.value
+  })
+
   return {
     reports,
     summary,

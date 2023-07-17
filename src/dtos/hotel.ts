@@ -35,8 +35,8 @@ interface IHotel {
   ward: number
   business_licence: string
   // Rating and comission rate
-  rating: number
-  commission_rate: number
+  rating?: number
+  commission_rate?: number
   // Facilities
   hotel_facility?: {
     bar: boolean
