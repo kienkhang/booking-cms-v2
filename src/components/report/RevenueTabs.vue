@@ -13,23 +13,8 @@
 <script setup lang="ts">
 import RevenueTabItem from './RevenueTabItem.vue'
 
-const selectedTab = ref('report')
-
-// List tabs
-const tabs = [
-  {
-    key: 'report',
-    name: 'Report'
-  },
-  {
-    key: 'payout',
-    name: 'Payout'
-  }
-]
-
-function changeTab(value: string) {
-  selectedTab.value = value
-}
+const { selectedTab } = storeToRefs(useReportTab())
+const { changeTab, tabs } = useReportTab()
 </script>
 
 <style scoped></style>
