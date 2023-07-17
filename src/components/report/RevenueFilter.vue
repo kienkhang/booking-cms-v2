@@ -83,10 +83,19 @@ watch(dateRange, () => {
   filter.value.to = dateRange.value[1]
 })
 
+// Handle search
+const { getReports } = useReport()
+const { executeApi: fetchReports } = getReports()
+
+onMounted(() => {
+  fetchReports()
+})
+
 function doSearch() {
-  console.log('filter', filter.value)
+  fetchReports()
 }
 
+// get date with button
 function getToday() {
   if (dateRange.value) {
     dateRange.value[0] = dayjs().subtract(1, 'day').format('YYYY-MM-DD')

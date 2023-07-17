@@ -44,8 +44,6 @@ const { filter, page, calculatedPaging } = storeToRefs(useReport())
 const { getReports } = useReport()
 const { executeApi: fetchReports, isLoading } = getReports()
 
-onMounted(() => fetchReports())
-
 // data filled
 type TableData = {
   // index:number

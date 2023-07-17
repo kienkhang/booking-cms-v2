@@ -14,10 +14,9 @@ const useGetPayouts = defineStore('report__useGetPayout', () => {
   })
   // client request paging with filter
   const filter = ref<IRequestFilter>({
-    id: hotelId.value,
     page: 1,
     offset: 54,
-    from: dayjs().format('YYYY-MM-DD'),
+    from: dayjs().subtract(1, 'month').format('YYYY-MM-DD'),
     to: dayjs().format('YYYY-MM-DD')
   })
   // Client page
@@ -35,7 +34,7 @@ const useGetPayouts = defineStore('report__useGetPayout', () => {
   )
 
   function getPayoutsAdmin() {
-    const usedGet = hotelsApi.getPayoutsAdmin()
+    const usedGet = hotelsApi.getPayoutsAdmin(filter.value)
 
     const { execute, data } = usedGet
 
@@ -43,7 +42,7 @@ const useGetPayouts = defineStore('report__useGetPayout', () => {
     const executeApi = async () => {
       try {
         // execute-> call api
-        await execute()
+        await execute({ params: filter.value })
         payouts.value = data.value.data
         paging.value = data.value.paging
         // push log
@@ -61,7 +60,7 @@ const useGetPayouts = defineStore('report__useGetPayout', () => {
   }
 
   function getPayoutsPartner() {
-    const usedGet = hotelsApi.getPayoutsPartner(hotelId.value)
+    const usedGet = hotelsApi.getPayoutsPartner(filter, hotelId.value)
 
     const { execute, data } = usedGet
 
@@ -69,7 +68,7 @@ const useGetPayouts = defineStore('report__useGetPayout', () => {
     const executeApi = async () => {
       try {
         // execute-> call api
-        await execute()
+        await execute({ params: filter.value })
         payouts.value = data.value.data
         paging.value = data.value.paging
         // push log

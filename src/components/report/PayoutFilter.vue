@@ -77,8 +77,13 @@ watch(dateRange, () => {
   filter.value.to = dateRange.value[1]
 })
 
+// handle search
+const { getPayoutsPartner } = useGetPayouts()
+const { executeApi: fetchPayoutsPartner } = getPayoutsPartner()
+onMounted(() => fetchPayoutsPartner())
+
 function doSearch() {
-  console.log('filter', filter.value)
+  fetchPayoutsPartner()
 }
 
 function getToday() {

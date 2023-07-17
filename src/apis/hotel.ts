@@ -105,7 +105,7 @@ class Hotel {
     return useGet({ url, params, requiredToken: true })
   }
 
-  getPayoutsPartner = (hotelId: string) => {
+  getPayoutsPartner = (params: any | {}, hotelId: string) => {
     const url = `${path}/payouts/${hotelId}`
     return useGet({
       url,
@@ -113,10 +113,11 @@ class Hotel {
     })
   }
 
-  getPayoutsAdmin = () => {
+  getPayoutsAdmin = (params: any | {}) => {
     const url = `${admin}/payouts`
     return useGet({
       url,
+      params,
       requiredToken: true
     })
   }

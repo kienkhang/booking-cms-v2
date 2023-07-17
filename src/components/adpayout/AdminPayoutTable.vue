@@ -9,7 +9,7 @@ div
       :row-key='rowKey'
       @update:checked-row-keys='handleCheck'
     )
-    .flex.flex-row-reverse.mt-6 
+    .flex.flex-row-reverse.mt-6
       NPagination(
         v-model:page='page'
         :page-count='calculatedPaging?.total_pages'
@@ -23,6 +23,7 @@ import dayjs from 'dayjs'
 import { useClipboard } from '@vueuse/core'
 import { Icon } from '@iconify/vue'
 import Button from '../shared/button/Button.vue'
+import { VND } from '@/utils/format'
 
 // Import mess hook
 const mess = useMessage()
@@ -43,11 +44,12 @@ type TableData = {
   payout_id: string
   hotel_name: string
   total_request: number
-  total_price: number
+  total_price: string
   hotel_bank: string
-  resolve: boolean
   payer_name: string
   payment_date: string
+  resolve: boolean
+  resolve_label: string
 }
 const data = computed<TableData[]>(() =>
   calculatedPaging.value.data.map((payment) => {
@@ -56,11 +58,15 @@ const data = computed<TableData[]>(() =>
       payout_id: payment.id,
       hotel_name: payment.hotel.name,
       total_request: payment.total_request,
-      total_price: payment.total_price,
+      total_price: VND.format(payment.total_price),
       hotel_bank: `${payment.hotel.bank_beneficiary} - ${payment.hotel.bank_name} - ${payment.hotel.bank_account}`,
-      payer_name: payment?.payer.full_name ?? 'Chưa có',
-      payment_date: dayjs(payment.updated_at).format('YYYY-MM-DD'),
-      resolve: payment.resolve
+      payer_name: payment?.payer?.full_name ?? 'Chưa có',
+      payment_date:
+        payment.created_at === payment.updated_at
+          ? 'Chưa có'
+          : dayjs(payment.updated_at).format('YYYY-MM-DD'),
+      resolve: payment.resolve,
+      resolve_label: payment.resolve ? 'Đã thanh toán' : 'Chưa thanh toán'
     }
   })
 )
@@ -85,12 +91,6 @@ function createColumns({
   copyBooking: (bookingId: string) => void
 }): DataTableColumns<TableData> {
   return [
-    {
-      type: 'selection',
-      disabled(row) {
-        return row.resolve
-      }
-    },
     {
       title: 'Gửi ngày',
       key: 'open_at'
@@ -156,7 +156,7 @@ function createColumns({
     },
     {
       title: 'Trạng thái thanh toán',
-      key: 'resolve'
+      key: 'resolve_label'
     },
     {
       title: 'Người thanh toán',
@@ -173,14 +173,16 @@ function createColumns({
         return h(
           Button,
           {
-            class: 'text-white bg-red-500',
+            class: `${
+              row.resolve ? 'bg-gray-500 text-white pointer-events-none' : 'text-white bg-red-500'
+            }`,
             size: 'small',
             onPress() {
               // call api with row
-              console.log(row.payout_id)
+              resolveRequest(row.payout_id)
             }
           },
-          'Thanh toán'
+          () => `${row.resolve ? 'Đã thanh toán' : 'Thanh toán'}`
         )
       }
     }
@@ -207,7 +209,7 @@ const columns = createColumns({
     const { executeApi: callResolve } = resolvePayout(payoutId)
     dialog.info({
       title: 'Thông báo',
-      content: 'Thao tác sẽ gửi yêu cầu thanh toán đến khách sạn. Bạn chắc chắn ?',
+      content: 'Thao tác sẽ ghi nhận là đã chuyển khoản cho khách sạn. Bạn chắc chắn ?',
       positiveText: 'Đồng ý',
       negativeText: 'Huỷ',
       async onPositiveClick() {

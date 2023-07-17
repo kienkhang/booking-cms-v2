@@ -23,7 +23,7 @@ const useReport = defineStore('report__useReport', () => {
     id: hotelId.value,
     page: 1,
     offset: 54,
-    from: dayjs().format('YYYY-MM-DD'),
+    from: dayjs().subtract(1, 'month').format('YYYY-MM-DD'),
     to: dayjs().format('YYYY-MM-DD')
   })
   // Client page
