@@ -71,6 +71,14 @@ const bindingForm = () => {
   name.value = props.ratePlan.name
   type.value = props.ratePlan.type
 }
+const clearForm = () => {
+  activate.value = true
+  free_breakfast.value = false
+  free_dinner.value = false
+  free_lunch.value = false
+  name.value = ''
+  type.value = ''
+}
 // if is edit form -> biding value to form
 if (isEditForm.value) {
   bindingForm()
@@ -86,8 +94,10 @@ const { executeApi: exeUpdate } = updateRatePlan(form, props.ratePlan?.id)
 const doSubmit = async () => {
   if (!isEditForm.value) {
     await exeCreate()
+    clearForm()
   } else {
     await exeUpdate()
+    clearForm()
   }
 }
 </script>

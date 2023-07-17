@@ -202,6 +202,46 @@ const bindingEditRoom = () => {
   roomFacilities.kitchen_tool = currentRoom.value.room_type_facility.kitchen_tool
 }
 
+function clearForm() {
+  // Room Info Binding
+  roomInfo.activated = true
+  roomInfo.bathroom_nums = 2
+  roomInfo.bed_nums = 1
+  roomInfo.description = ''
+  roomInfo.max_adult = 2
+  roomInfo.max_children = 1
+  roomInfo.name = ''
+  // Room View Binding
+  roomViews.bay = false
+  roomViews.ocean = false
+  roomViews.sea = false
+  roomViews.city = false
+  roomViews.garden = false
+  roomViews.lake = false
+  roomViews.mountain = false
+  roomViews.river = false
+  roomViews.private_balcony = false
+  // Room Facilites Biding
+  roomFacilities.air_conditional = false
+  roomFacilities.tivi = false
+  roomFacilities.kitchen = false
+  roomFacilities.private_pool = false
+  roomFacilities.iron = false
+  roomFacilities.sofa = false
+  roomFacilities.desk = false
+  roomFacilities.soundproof = false
+  roomFacilities.towels = false
+  roomFacilities.toiletries = false
+  roomFacilities.fruit = false
+  roomFacilities.shower = false
+  roomFacilities.slippers = false
+  roomFacilities.hairdry = false
+  roomFacilities.bbq = false
+  roomFacilities.wine = false
+  roomFacilities.fryer = false
+  roomFacilities.kitchen_tool = false
+}
+
 // If reload edit room page -> biding whenever have cuurentRoom
 watch(currentRoom, () => {
   if (currentRoom.value) {
@@ -260,10 +300,12 @@ const { executeApi: update } = updateRoom(data, roomId.value)
 const doSubmit = async () => {
   if (isEdit.value) {
     await update()
+    clearForm()
     // router.push({ name: 'room' })
     return
   } else {
     await create()
+    clearForm()
     return
   }
 }
