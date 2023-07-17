@@ -93,6 +93,11 @@ class Hotel {
     const url = `${path}/${hotelId}/vouchers`
     return useGet({ url, params, requiredToken: true })
   }
+
+  getRevenue = (params: any | {}) => {
+    const url = `${path}/revenue`
+    return useGet({ url, params, requiredToken: true })
+  }
 }
 
 const hotelsApi = new Hotel()
