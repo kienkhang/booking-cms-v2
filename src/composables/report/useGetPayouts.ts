@@ -1,16 +1,10 @@
 import { hotelsApi } from '@/apis/hotel'
 import { calculatePaging } from '@/utils/paging'
 import dayjs from 'dayjs'
-
-const useReport = defineStore('report__useReport', () => {
+const useGetPayouts = defineStore('report__useGetPayout', () => {
   const { hotelId } = useHotelStorage()
   // State & value
-  const reports = ref<IReport[]>([])
-  const summary = ref<ISummary>({
-    paid_count: 0,
-    revenue: 0,
-    unpaid_count: 0
-  })
+  const payouts = ref<IPayoutRequest[]>([])
   // server response paging
   const paging = ref<IResponsePaging>({
     offset: 0,
@@ -30,18 +24,18 @@ const useReport = defineStore('report__useReport', () => {
   const page = ref(1)
   // client paging
   const calculatedPaging = computed(() =>
-    calculatePaging<IReport>({
+    calculatePaging<IPayoutRequest>({
       offset: 6,
       page: page.value,
       server_offset: paging.value.offset,
       server_page: paging.value.page,
-      serverData: reports,
+      serverData: payouts,
       total_items: paging.value.total_items
     })
   )
 
-  function getReports() {
-    const usedGet = hotelsApi.getRevenue(filter.value)
+  function getPayoutsAdmin() {
+    const usedGet = hotelsApi.getPayoutsAdmin()
 
     const { execute, data } = usedGet
 
@@ -50,8 +44,33 @@ const useReport = defineStore('report__useReport', () => {
       try {
         // execute-> call api
         await execute()
-        reports.value = data.value.data
-        summary.value = data.value.summary
+        payouts.value = data.value.data
+        paging.value = data.value.paging
+        // push log
+      } catch (e: any) {
+        // push log
+
+        throw new Error(e)
+      }
+    }
+
+    return {
+      ...usedGet,
+      executeApi
+    }
+  }
+
+  function getPayoutsPartner() {
+    const usedGet = hotelsApi.getPayoutsPartner(hotelId.value)
+
+    const { execute, data } = usedGet
+
+    // custom execute api
+    const executeApi = async () => {
+      try {
+        // execute-> call api
+        await execute()
+        payouts.value = data.value.data
         paging.value = data.value.paging
         // push log
       } catch (e: any) {
@@ -72,13 +91,13 @@ const useReport = defineStore('report__useReport', () => {
   })
 
   return {
-    reports,
-    summary,
+    payouts,
     filter,
     calculatedPaging,
     page,
-    getReports
+    getPayoutsPartner,
+    getPayoutsAdmin
   }
 })
 
-export { useReport }
+export { useGetPayouts }

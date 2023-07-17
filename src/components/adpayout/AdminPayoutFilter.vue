@@ -21,8 +21,6 @@
     )
     Button.p-2.rounded-md.border.text-white.bg-green-500(type='button' @click='doSearch()') Tìm kiếm
 
-
-
 </template>
 
 <script setup lang="ts">
@@ -30,7 +28,7 @@ import { NSelect, NInput, NDatePicker } from 'naive-ui'
 import Button from '../shared/button/Button.vue'
 import dayjs from 'dayjs'
 
-const { filter } = storeToRefs(useReport())
+const { filter } = storeToRefs(useGetPayouts())
 
 const revenueType = ref<string | undefined>(undefined)
 
@@ -60,10 +58,6 @@ const revenueOptions = [
   {
     label: 'Đã yêu cầu',
     value: 'sent'
-  },
-  {
-    label: 'Chưa yêu cầu',
-    value: 'unsent'
   },
   {
     label: 'Đã thanh toán',

@@ -13,9 +13,12 @@
     SidebarItem(:activated='route.name==="voucher"' label='Voucher' page='voucher')
       template(#icon)
         icon-custom-voucher.w-6.h-6
-    SidebarItem(:activated='route.name==="user"' label='User' page='user')
+    SidebarItem(:activated='route.name==="user"' label='User' page='user' v-if='["ADMIN","SUPERADMIN"].includes(role)')
       template(#icon)
         icon-mdi:user.w-6.h-6
+    SidebarItem(:activated='route.name==="payout"' label='Payout' page='payout' v-if='["ADMIN","SUPERADMIN"].includes(role)')
+      template(#icon)
+        icon-ic:outline-request-page.w-6.h-6
     //- SidebarItem(:activated='route.name==="cmsr"' label='Tỉ lệ hoa hồng' page='cmsr')
     //-   template(#icon)
     //-     icon-custom-rate.w-6.h-6
@@ -31,6 +34,8 @@
 <script setup lang="ts">
 import SidebarItem from './SidebarItem.vue'
 const route = useRoute()
+
+const { role } = storeToRefs(useAccountsStore())
 </script>
 
 <style scoped></style>

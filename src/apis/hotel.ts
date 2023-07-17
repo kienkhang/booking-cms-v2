@@ -41,9 +41,15 @@ class Hotel {
     return usePost({ url, data, requiredToken: true })
   }
 
-  resolvePayout = (data: any | {}, payoutId: string) => {
+  resolvePayout = (payoutId: string) => {
     const url = `${admin}/payouts/${payoutId}`
-    return usePatch({ url, data, requiredToken: true })
+    return usePatch({
+      url,
+      data: {
+        resolve: true
+      },
+      requiredToken: true
+    })
   }
 
   getPayouts = (params: any | {}) => {
@@ -97,6 +103,22 @@ class Hotel {
   getRevenue = (params: any | {}) => {
     const url = `${path}/revenue`
     return useGet({ url, params, requiredToken: true })
+  }
+
+  getPayoutsPartner = (hotelId: string) => {
+    const url = `${path}/payouts/${hotelId}`
+    return useGet({
+      url,
+      requiredToken: true
+    })
+  }
+
+  getPayoutsAdmin = () => {
+    const url = `${admin}/payouts`
+    return useGet({
+      url,
+      requiredToken: true
+    })
   }
 }
 

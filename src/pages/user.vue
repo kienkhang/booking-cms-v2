@@ -14,6 +14,14 @@ div.h-full.w-full
 
 <script setup lang="ts">
 import UsersTable from '@/components/user/UsersTable.vue'
+
+const router = useRouter()
+const { role } = storeToRefs(useAccountsStore())
+onBeforeMount(() => {
+  if (!['ADMIN', 'SUPERADMIN'].includes(role.value)) {
+    router.push('/')
+  }
+})
 </script>
 
 <style scoped></style>
