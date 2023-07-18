@@ -77,8 +77,11 @@ watch(dateRange, () => {
   filter.value.to = dateRange.value[1]
 })
 
+// handle search
+const { getPayoutsAdmin } = useGetPayouts()
+const { executeApi: fetchPayoutsAdmin } = getPayoutsAdmin()
 function doSearch() {
-  console.log('filter', filter.value)
+  fetchPayoutsAdmin()
 }
 
 function getToday() {
