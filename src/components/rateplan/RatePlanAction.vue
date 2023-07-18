@@ -17,6 +17,7 @@ import { type IRatePlan } from '@/dtos'
 // Components
 import { NPopover } from 'naive-ui'
 import RatePlanModal from '../shared/modal/RatePlanModal.vue'
+import { rateplansApi } from '@/apis/rateplan'
 // Define Props
 const props = defineProps<{
   ratePlan: IRatePlan
@@ -31,8 +32,18 @@ const close = () => (show.value = false)
 const showEditModal = ref(false)
 const openEditModal = () => (showEditModal.value = true)
 
+const ratePlanId = computed(() => props.ratePlan.id)
+
+const { execute } = rateplansApi.updateRatePlan(
+  {
+    is_delete: true
+  },
+  ratePlanId.value
+)
+
 const deleteRatePlan = () => {
   console.log('delete action', props.ratePlan.id)
+  execute()
 }
 </script>
 
