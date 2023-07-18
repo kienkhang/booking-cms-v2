@@ -9,7 +9,11 @@ div.h-full.w-full
     div This is hotel page
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const router = useRouter()
+
+onMounted(() => router.push('/report'))
+</script>
 
 <route lang="yaml">
 meta:
