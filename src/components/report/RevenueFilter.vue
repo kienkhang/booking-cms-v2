@@ -44,7 +44,7 @@ const search = ref('')
 watchDebounced(
   search,
   () => {
-    filter.value.payout_id = search.value
+    filter.value.search = search.value
   },
   {
     debounce: 200
